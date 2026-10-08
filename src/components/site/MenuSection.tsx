@@ -26,22 +26,22 @@ export function MenuSection() {
   return (
     <section id="cardapio" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24">
       <div className="mb-8 text-center">
-        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-secondary">Cardápio Torre de Pizza</p>
-        <h2 className="mt-3 font-display text-3xl font-semibold text-foreground sm:text-4xl">Escolha o seu pedido</h2>
-        <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground">
-          Pizzas, hambúrgueres, Sub Torre, combos, pastéis, calzones, porções, bebidas e gelados.
+        <p className="text-xs font-bold uppercase tracking-[0.28em] text-[#b23a26] dark:text-[#f87171]">Cardápio Torre de Pizza</p>
+        <h2 className="mt-2 font-display text-3xl font-bold text-[#2f4a32] sm:text-4xl dark:text-[#faf5ec]">Escolha o seu pedido</h2>
+        <p className="mx-auto mt-3 max-w-lg text-sm text-[#6f6457] dark:text-[#c4b5a2]">
+          Pizzas artesanais, hambúrgueres, Sub Torre, combos, pastéis, calzones, porções, bebidas e gelados.
         </p>
       </div>
 
       <div className="relative mx-auto mb-6 max-w-xl">
-        <Search className="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+        <Search className="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-[#7a8450]" />
         <input
           type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Buscar no cardápio..."
           aria-label="Buscar no cardápio"
-          className="w-full rounded-full border border-border bg-card py-4 pl-14 pr-5 text-sm text-foreground shadow-soft outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/10"
+          className="w-full rounded-full border border-[#dccdb2] bg-[#faf5ec] py-4 pl-14 pr-5 text-sm text-[#2f4a32] shadow-sm outline-none transition focus:border-[#2f4a32] focus:ring-4 focus:ring-[#2f4a32]/10 dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#faf5ec]"
         />
       </div>
 
@@ -55,10 +55,10 @@ export function MenuSection() {
               setQuery("");
             }}
             className={cn(
-              "shrink-0 rounded-full border px-5 py-2.5 text-sm font-semibold",
+              "shrink-0 rounded-full border px-5 py-2.5 text-sm font-bold transition",
               active === category.id && !query
-                ? "border-transparent bg-gradient-primary text-primary-foreground shadow-soft"
-                : "border-border bg-card text-foreground/75 hover:border-primary/30 hover:text-primary",
+                ? "border-transparent bg-[#2f4a32] text-[#faf5ec] shadow-md"
+                : "border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] hover:border-[#2f4a32]/40 hover:bg-[#e8d9be]/50 dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#c4b5a2]",
             )}
           >
             {category.label}
@@ -67,14 +67,14 @@ export function MenuSection() {
       </div>
 
       {!query && active === "pizzas" && (
-        <div className="mb-7 rounded-3xl border border-gold/40 bg-accent/40 p-4">
+        <div className="mb-7 rounded-3xl border border-[#dccdb2] bg-[#e8d9be]/30 p-5 dark:bg-white/5 dark:border-[#382b24]">
           <div className="flex items-start gap-3">
-            <Info className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+            <Info className="mt-0.5 h-5 w-5 shrink-0 text-[#b23a26] dark:text-[#f87171]" />
             <div>
-              <p className="text-sm font-semibold text-foreground">Informações das pizzas</p>
+              <p className="text-sm font-bold text-[#2f4a32] dark:text-[#faf5ec]">Informações das pizzas</p>
               <div className="mt-1.5 space-y-1">
                 {pizzaNotices.map((notice) => (
-                  <p key={notice} className="text-xs leading-relaxed text-muted-foreground">• {notice}</p>
+                  <p key={notice} className="text-xs leading-relaxed text-[#6f6457] dark:text-[#c4b5a2]">• {notice}</p>
                 ))}
               </div>
             </div>
