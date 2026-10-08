@@ -169,6 +169,29 @@ export function CartDrawer() {
       cashAmount: paymentMethod === "Dinheiro" ? validCashValue : null,
     });
 
+    try {
+      const syncOrder = {
+        id: Math.floor(1000 + Math.random() * 9000),
+        customer: customerName,
+        channel: "Cardápio Digital",
+        items: items.map((i) => `${i.qty}x ${i.name}`),
+        payment: paymentMethod,
+        price: brl(totalForOrder),
+        minutes: 0,
+        status: "recebido" as const,
+        phone: "WhatsApp",
+        address: fulfillmentType === "delivery" ? `${address} (${complement})` : "Retirada no balcão",
+        neighborhood: fulfillmentType === "delivery" ? "Paciência" : "Loja",
+        notes: notes || "Pedido realizado pelo cardápio online.",
+        createdAt: new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
+      };
+      const existingList = JSON.parse(window.localStorage.getItem("bora-panel-orders") || "[]");
+      window.localStorage.setItem("bora-panel-orders", JSON.stringify([syncOrder, ...existingList]));
+      window.localStorage.setItem("bora-panel-repeat-order", JSON.stringify(syncOrder));
+    } catch {
+      // Ignora erro de localStorage
+    }
+
     window.open(
       whatsappLink(
         orderMessage(

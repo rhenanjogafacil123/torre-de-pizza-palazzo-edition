@@ -124,6 +124,10 @@
             </svg>
             <span>@pizzadojuca</span>
           </a>
+          <a href="painel/" class="flex items-center gap-1.5 rounded-full bg-[#b23a26]/10 px-3.5 py-1.5 text-xs font-bold text-[#b23a26] hover:bg-[#b23a26]/20 transition dark:bg-white/10 dark:text-[#f87171]">
+            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            <span>Painel</span>
+          </a>
         </nav>
 
         <!-- Botão Alternar Tema Claro/Escuro -->
@@ -162,6 +166,10 @@
       </a>
       <a href="#contato" onclick="closeMobileMenu()" class="block rounded-2xl px-4 py-3 text-sm font-bold text-[#2f4a32] hover:bg-[#e8d9be]/60 transition dark:text-[#faf5ec]">
         Contato
+      </a>
+      <a href="painel/" class="flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-bold text-[#b23a26] hover:bg-[#b23a26]/10 transition dark:text-[#f87171]">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        Área Interna / Painel da Loja
       </a>
       <a href="https://www.instagram.com/pizzadojuca/" target="_blank" rel="noreferrer" class="flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-bold text-[#b23a26] hover:bg-[#b23a26]/10 transition">
         <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -2783,6 +2791,30 @@ ${paymentMethod}
       if (paymentMethod === 'Dinheiro' && cashAmount) {
         msg += `💵 Paga com R$ ${cashAmount}
 `;
+      }
+
+      // Sincronização em tempo real com o Painel de Gestão (Kanban)
+      try {
+        const syncOrder = {
+          id: Math.floor(1000 + Math.random() * 9000),
+          customer: name,
+          channel: "WhatsApp",
+          items: cart.map(i => `${i.qty}x ${i.name}${i.details ? ' • ' + i.details : ''}`),
+          payment: paymentMethod,
+          price: `R$ ${subtotal.toFixed(2).replace('.', ',')}`,
+          minutes: 0,
+          status: "recebido",
+          phone: "WhatsApp",
+          address: fulfillmentType === 'delivery' ? `${address} (${complement})` : 'Retirada no balcão',
+          neighborhood: fulfillmentType === 'delivery' ? 'Paciência' : 'Loja',
+          notes: notes || 'Pedido realizado pelo cardápio online.',
+          createdAt: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+        };
+        const existingList = JSON.parse(localStorage.getItem('bora-panel-orders') || '[]');
+        localStorage.setItem('bora-panel-orders', JSON.stringify([syncOrder, ...existingList]));
+        localStorage.setItem('bora-panel-repeat-order', JSON.stringify(syncOrder));
+      } catch (err) {
+        console.error("Erro ao sincronizar pedido com o painel:", err);
       }
 
       const url = `https://api.whatsapp.com/send?phone=5521973142264&text=${encodeURIComponent(msg)}`;

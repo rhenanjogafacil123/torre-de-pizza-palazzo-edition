@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Área do Entregador | Pizza do Juca</title>
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../panel-data.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen bg-[#edf0f5] py-0 text-slate-950 sm:py-6 font-sans antialiased">
+  <div class="mx-auto min-h-screen w-full max-w-[430px] overflow-hidden bg-[#f7f8fb] shadow-[0_24px_80px_-30px_rgba(15,23,42,.32)] sm:min-h-[calc(100vh-48px)] sm:rounded-[30px] flex flex-col justify-between">
+    <div class="px-4 pb-4 pt-4">
+      <!-- Topo do App Mobile -->
+      <div class="flex items-center">
+        <a href="../" class="flex items-center gap-2">
+          <div class="grid h-9 w-9 place-items-center rounded-xl bg-white shadow-sm border border-slate-200/80 p-0.5">
+            <img src="/logo_juca.png" alt="Pizza do Juca" class="h-8 w-8 object-contain" onerror="this.src='/logo.png'">
+          </div>
+          <span class="text-xs font-extrabold text-slate-900">Pizza do Juca</span>
+        </a>
+
+        <!-- Notificações -->
+        <div class="relative ml-auto">
+          <button id="btn-notif" type="button" class="relative rounded-xl p-2.5 text-slate-500 hover:bg-slate-100">
+            <i data-lucide="bell" class="h-5 w-5"></i>
+            <span class="absolute right-0 top-0 grid h-4 min-w-4 place-items-center rounded-full bg-red-500 px-1 text-[9px] font-extrabold text-white">2</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Card do Motoboy & Switch Online -->
+      <div class="mt-6 flex items-center gap-3">
+        <button id="btn-open-profile-avatar" type="button" class="relative grid h-12 w-12 place-items-center rounded-full bg-gradient-to-br from-slate-800 to-slate-600 text-white shadow">
+          <i data-lucide="user-round" class="h-6 w-6"></i>
+          <span id="dot-online-status" class="absolute bottom-0 right-0 h-4 w-4 rounded-full border-2 border-[#f7f8fb] bg-emerald-500"></span>
+        </button>
+        <div>
+          <div class="text-base font-extrabold text-slate-900">Lucas Mendes</div>
+          <button id="btn-open-profile-link" type="button" class="text-xs text-slate-400 hover:text-slate-600">
+            Motoboy • ver perfil
+          </button>
+        </div>
+        <button id="btn-toggle-online" type="button" class="ml-auto inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-2 text-xs font-extrabold text-emerald-700 transition">
+          <span id="btn-dot-status" class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+          <span id="btn-label-status">Online</span>
+        </button>
+      </div>
+
+      <!-- Título -->
+      <div class="mt-6">
+        <h1 class="text-[30px] font-extrabold tracking-[-0.035em] text-slate-950">Minhas Entregas</h1>
+        <p class="mt-1 text-xs leading-5 text-slate-500">Aceite pedidos de pizza, navegue até o cliente e acompanhe seus ganhos do dia.</p>
+      </div>
+
+      <!-- 3 Métricas Rápidas -->
+      <div class="mt-4 grid grid-cols-3 gap-2.5">
+        <div class="rounded-2xl border border-slate-200/70 bg-white p-3 shadow-sm">
+          <div class="grid h-9 w-9 place-items-center rounded-xl bg-orange-50 text-orange-600">
+            <i data-lucide="wallet-cards" class="h-4.5 w-4.5"></i>
+          </div>
+          <div class="mt-3 text-[10px] font-semibold text-slate-500">Disponíveis</div>
+          <div id="count-available" class="mt-0.5 text-lg font-extrabold text-slate-900">3</div>
+        </div>
+
+        <div class="rounded-2xl border border-slate-200/70 bg-white p-3 shadow-sm">
+          <div class="grid h-9 w-9 place-items-center rounded-xl bg-blue-50 text-blue-600">
+            <i data-lucide="bike" class="h-4.5 w-4.5"></i>
+          </div>
+          <div class="mt-3 text-[10px] font-semibold text-slate-500">Em rota</div>
+          <div id="count-active" class="mt-0.5 text-lg font-extrabold text-slate-900">1</div>
+        </div>
+
+        <div class="rounded-2xl border border-slate-200/70 bg-white p-3 shadow-sm">
+          <div class="grid h-9 w-9 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+            <i data-lucide="circle-check" class="h-4.5 w-4.5"></i>
+          </div>
+          <div class="mt-3 text-[10px] font-semibold text-slate-500">Concluídas</div>
+          <div id="count-history" class="mt-0.5 text-lg font-extrabold text-slate-900">4</div>
+        </div>
+      </div>
+
+      <!-- Ganhos & Mapa Ilustrativo -->
+      <div class="mt-3 grid grid-cols-[1fr_1.08fr] gap-2.5">
+        <button id="btn-show-earnings" type="button" class="rounded-2xl border border-slate-200/70 bg-white p-4 text-left shadow-sm hover:border-slate-300 transition">
+          <div class="grid h-10 w-10 place-items-center rounded-xl bg-violet-50 text-violet-600">
+            <i data-lucide="chart-column" class="h-5 w-5"></i>
+          </div>
+          <div class="mt-3 text-[10px] font-semibold text-slate-500">Ganhos de hoje</div>
+          <div id="total-earnings" class="mt-1 text-xl font-extrabold text-slate-900">R$ 35,50</div>
+          <div class="mt-1 text-[10px] font-extrabold text-emerald-600">↑ 18% vs. ontem</div>
+        </button>
+
+        <button id="btn-show-map" type="button" class="relative min-h-[148px] overflow-hidden rounded-2xl border border-slate-200/70 bg-white text-left shadow-sm">
+          <div class="absolute inset-0 bg-[#eef2f7]">
+            <div class="absolute inset-0 opacity-60" style="background-image: linear-gradient(35deg, transparent 47%, #cbd5e1 48%, #cbd5e1 51%, transparent 52%), linear-gradient(125deg, transparent 47%, #dbe2ea 48%, #dbe2ea 51%, transparent 52%); background-size: 55px 55px;"></div>
+          </div>
+          <svg viewBox="0 0 280 160" class="absolute inset-0 h-full w-full">
+            <path d="M25 120 C75 35, 115 135, 165 88 S220 100, 260 45" fill="none" stroke="#3b82f6" stroke-width="7" stroke-linecap="round"></path>
+          </svg>
+          <div class="absolute left-4 top-[88px] grid h-8 w-8 place-items-center overflow-hidden rounded-full border-2 border-white bg-orange-500 shadow">
+            <img src="/logo_juca.png" alt="" class="h-full w-full bg-white object-contain p-1" onerror="this.src='/logo.png'">
+          </div>
+          <div class="absolute right-4 top-4 grid h-8 w-8 place-items-center rounded-full bg-red-500 text-white shadow">
+            <i data-lucide="home" class="h-4 w-4"></i>
+          </div>
+          <span class="absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-full bg-white px-3 py-2 text-[10px] font-extrabold text-slate-700 shadow">
+            Abrir rota <i data-lucide="arrow-right" class="h-3 w-3"></i>
+          </span>
+        </button>
+      </div>
+
+      <!-- Banner de Entrega Atual se houver -->
+      <div id="current-delivery-banner" class="mt-3"></div>
+
+      <!-- Abas [Disponíveis, Em andamento, Histórico] -->
+      <div class="mt-5 grid grid-cols-3 rounded-2xl bg-slate-200/60 p-1">
+        <button id="tab-btn-available" type="button" class="rounded-xl px-2 py-3 text-[10px] font-extrabold bg-white text-orange-600 shadow-sm transition">
+          Disponíveis (<span id="tab-count-avail">3</span>)
+        </button>
+        <button id="tab-btn-active" type="button" class="rounded-xl px-2 py-3 text-[10px] font-extrabold text-slate-500 transition">
+          Em andamento (<span id="tab-count-act">1</span>)
+        </button>
+        <button id="tab-btn-history" type="button" class="rounded-xl px-2 py-3 text-[10px] font-extrabold text-slate-500 transition">
+          Histórico (<span id="tab-count-hist">4</span>)
+        </button>
+      </div>
+
+      <!-- Conteúdo da Aba: Disponíveis -->
+      <div id="tab-content-available" class="mt-3 space-y-3"></div>
+
+      <!-- Conteúdo da Aba: Em andamento -->
+      <div id="tab-content-active" class="hidden mt-3 space-y-3"></div>
+
+      <!-- Conteúdo da Aba: Histórico -->
+      <div id="tab-content-history" class="hidden mt-3 space-y-3"></div>
+    </div>
+
+    <!-- Navegação Inferior Fixa -->
+    <nav class="sticky bottom-0 z-40 border-t border-slate-200 bg-white/95 px-2 py-2 backdrop-blur-xl">
+      <div class="grid grid-cols-4">
+        <button id="nav-home" type="button" class="flex flex-col items-center gap-1 rounded-xl py-2 text-[9px] font-extrabold text-slate-500">
+          <i data-lucide="home" class="h-5 w-5"></i> Início
+        </button>
+        <button id="nav-deliveries" type="button" class="flex flex-col items-center gap-1 rounded-xl py-2 text-[9px] font-extrabold bg-orange-50 text-orange-600">
+          <i data-lucide="bike" class="h-5 w-5"></i> Entregas
+        </button>
+        <button id="nav-earnings" type="button" class="flex flex-col items-center gap-1 rounded-xl py-2 text-[9px] font-extrabold text-slate-500">
+          <i data-lucide="chart-column" class="h-5 w-5"></i> Ganhos
+        </button>
+        <button id="nav-profile" type="button" class="flex flex-col items-center gap-1 rounded-xl py-2 text-[9px] font-extrabold text-slate-500">
+          <i data-lucide="user-round" class="h-5 w-5"></i> Perfil
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Bottom Sheet / Modal de Detalhes da Entrega -->
+  <div id="modal-delivery-details" class="hidden fixed inset-0 z-[80] flex items-end justify-center bg-slate-950/45 p-0 backdrop-blur-sm sm:items-center sm:p-5">
+    <div class="max-h-[92vh] w-full max-w-[430px] overflow-y-auto rounded-t-[30px] bg-white p-5 shadow-2xl sm:rounded-[30px]">
+      <div class="mx-auto mb-4 h-1 w-12 rounded-full bg-slate-200 sm:hidden"></div>
+      <div class="flex items-start gap-3">
+        <div class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-orange-50 text-orange-600">
+          <i data-lucide="bike" class="h-5 w-5"></i>
+        </div>
+        <div class="min-w-0 flex-1">
+          <div id="det-id" class="text-[10px] font-extrabold uppercase tracking-[0.12em] text-orange-500">Entrega #1048</div>
+          <div id="det-customer" class="mt-1 text-lg font-extrabold text-slate-900">João Silva</div>
+          <div id="det-sub" class="mt-1 text-[10px] text-slate-400">Paciência • 1,8 km</div>
+        </div>
+        <button id="btn-close-details" type="button" class="rounded-xl border border-slate-200 p-2 text-slate-500 hover:bg-slate-50">
+          <i data-lucide="x" class="h-4 w-4"></i>
+        </button>
+      </div>
+
+      <!-- Endereço & Contatos -->
+      <div class="mt-5 rounded-2xl bg-slate-50 p-4">
+        <div class="flex items-start gap-3">
+          <i data-lucide="map-pin" class="mt-0.5 h-4 w-4 shrink-0 text-orange-500"></i>
+          <div>
+            <div id="det-address" class="text-xs font-extrabold text-slate-900">Rua das Flores, 123</div>
+            <div id="det-neighborhood" class="mt-1 text-[10px] text-slate-400">Paciência</div>
+          </div>
+        </div>
+        <div class="mt-4 grid grid-cols-2 gap-2">
+          <a id="det-link-tel" href="#" class="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-3 py-2.5 text-[10px] font-extrabold text-slate-700 shadow-sm">
+            <i data-lucide="phone" class="h-3.5 w-3.5"></i> Ligar
+          </a>
+          <a id="det-link-wa" href="#" target="_blank" rel="noreferrer" class="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-500 px-3 py-2.5 text-[10px] font-extrabold text-white">
+            <i data-lucide="message-circle" class="h-3.5 w-3.5"></i> WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <!-- Itens do Pedido -->
+      <div class="mt-4 rounded-2xl border border-slate-100 p-4">
+        <div class="flex items-center gap-2">
+          <i data-lucide="package-check" class="h-4 w-4 text-orange-500"></i>
+          <div class="text-xs font-extrabold text-slate-900">Itens do pedido</div>
+        </div>
+        <div id="det-items" class="mt-3 space-y-2"></div>
+        <div id="det-notes" class="mt-3 rounded-xl bg-amber-50 px-3 py-2.5 text-[10px] font-semibold leading-5 text-amber-800"></div>
+      </div>
+
+      <!-- 3 Caixinhas de Resumo -->
+      <div class="mt-4 grid grid-cols-3 gap-2">
+        <div class="rounded-xl bg-slate-50 p-3 text-center">
+          <i data-lucide="wallet-cards" class="mx-auto h-4 w-4 text-slate-400"></i>
+          <div class="mt-2 text-[9px] text-slate-400">Pagamento</div>
+          <div id="det-payment" class="mt-1 text-[10px] font-extrabold text-slate-900">Pix</div>
+        </div>
+        <div class="rounded-xl bg-slate-50 p-3 text-center">
+          <i data-lucide="clock-3" class="mx-auto h-4 w-4 text-slate-400"></i>
+          <div class="mt-2 text-[9px] text-slate-400">Estimativa</div>
+          <div id="det-minutes" class="mt-1 text-[10px] font-extrabold text-slate-900">~ 12 min</div>
+        </div>
+        <div class="rounded-xl bg-slate-50 p-3 text-center">
+          <i data-lucide="circle-check" class="mx-auto h-4 w-4 text-slate-400"></i>
+          <div class="mt-2 text-[9px] text-slate-400">Ganho</div>
+          <div id="det-fee" class="mt-1 text-[10px] font-extrabold text-slate-900">R$ 7,50</div>
+        </div>
+      </div>
+
+      <!-- Ações Dinâmicas -->
+      <div id="det-actions" class="mt-5"></div>
+    </div>
+  </div>
+
+  <!-- Bottom Sheet / Modal do Perfil -->
+  <div id="modal-profile" class="hidden fixed inset-0 z-[85] flex items-end justify-center bg-slate-950/45 p-0 backdrop-blur-sm sm:items-center sm:p-5">
+    <div class="w-full max-w-[430px] rounded-t-[30px] bg-white p-5 shadow-2xl sm:rounded-[30px]">
+      <div class="mx-auto mb-4 h-1 w-12 rounded-full bg-slate-200 sm:hidden"></div>
+      <div class="flex items-start justify-between">
+        <div>
+          <div class="text-[10px] font-extrabold uppercase tracking-[0.12em] text-orange-500">Meu perfil</div>
+          <h2 class="mt-1 text-xl font-extrabold text-slate-900">Lucas Mendes</h2>
+        </div>
+        <button id="btn-close-profile" type="button" class="rounded-xl border border-slate-200 p-2 text-slate-500 hover:bg-slate-50">
+          <i data-lucide="x" class="h-4 w-4"></i>
+        </button>
+      </div>
+
+      <div class="mt-5 grid grid-cols-3 gap-2">
+        <div class="rounded-2xl bg-slate-50 p-3 text-center">
+          <div id="profile-history-count" class="text-lg font-extrabold text-slate-900">4</div>
+          <div class="mt-1 text-[9px] text-slate-400">entregas hoje</div>
+        </div>
+        <div class="rounded-2xl bg-slate-50 p-3 text-center">
+          <div class="text-lg font-extrabold text-slate-900">4,9</div>
+          <div class="mt-1 text-[9px] text-slate-400">avaliação</div>
+        </div>
+        <div class="rounded-2xl bg-slate-50 p-3 text-center">
+          <div class="text-lg font-extrabold text-slate-900">96%</div>
+          <div class="mt-1 text-[9px] text-slate-400">conclusão</div>
+        </div>
+      </div>
+
+      <div class="mt-4 rounded-2xl border border-slate-100 p-4">
+        <div class="flex items-center gap-3">
+          <div class="grid h-10 w-10 place-items-center rounded-xl bg-blue-50 text-blue-600">
+            <i data-lucide="bike" class="h-5 w-5"></i>
+          </div>
+          <div>
+            <div class="text-xs font-extrabold text-slate-900">Honda CG 160 Fan</div>
+            <div class="mt-1 text-[10px] text-slate-400">Moto cadastrada • RJK-2A44</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4 rounded-2xl border border-slate-100 p-4">
+        <div class="text-xs font-extrabold text-slate-900">Turno de hoje</div>
+        <div class="mt-3 flex items-center justify-between text-[10px] text-slate-500">
+          <span>Início</span>
+          <span class="font-extrabold text-slate-800">19:00</span>
+        </div>
+        <div class="mt-2 flex items-center justify-between text-[10px] text-slate-500">
+          <span>Tempo online</span>
+          <span class="font-extrabold text-slate-800">3h 42min</span>
+        </div>
+      </div>
+
+      <button id="btn-toggle-online-profile" type="button" class="mt-5 w-full rounded-xl px-4 py-3 text-xs font-extrabold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+        Ficar offline
+      </button>
+    </div>
+  </div>
+
+  <!-- Script Lógico do Motoboy -->
+  <script>
+    let isOnline = JucaPanel.getStorage("bora-courier-online", true);
+    let available = JucaPanel.getStorage("bora-courier-available", JucaPanel.DEFAULT_COURIER_AVAILABLE);
+    let active = JucaPanel.getStorage("bora-courier-active", JucaPanel.DEFAULT_COURIER_ACTIVE);
+    let history = JucaPanel.getStorage("bora-courier-history", JucaPanel.DEFAULT_COURIER_HISTORY);
+    let activeTab = "available";
+    let currentDetailsOrder = null;
+
+    const stageConfig = {
+      retirada: { label: "Retirar na loja", button: "Pedido retirado", next: "Confirme que pegou a pizza quente no balcão." },
+      a_caminho: { label: "A caminho", button: "Cheguei no endereço", next: "Siga a rota segura e confirme quando chegar." },
+      cheguei: { label: "No endereço", button: "Confirmar entrega", next: "Entregue a pizza ao cliente e finalize." }
+    };
+
+    function updateOnlineUI() {
+      const dot1 = document.getElementById("dot-online-status");
+      const dot2 = document.getElementById("btn-dot-status");
+      const btn = document.getElementById("btn-toggle-online");
+      const lbl = document.getElementById("btn-label-status");
+      const btnProf = document.getElementById("btn-toggle-online-profile");
+
+      if (isOnline) {
+        dot1.className = "absolute bottom-0 right-0 h-4 w-4 rounded-full border-2 border-[#f7f8fb] bg-emerald-500";
+        dot2.className = "h-2.5 w-2.5 rounded-full bg-emerald-500";
+        btn.className = "ml-auto inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-2 text-xs font-extrabold text-emerald-700 transition";
+        lbl.textContent = "Online";
+        btnProf.className = "mt-5 w-full rounded-xl px-4 py-3 text-xs font-extrabold bg-slate-100 text-slate-700 hover:bg-slate-200 transition";
+        btnProf.textContent = "Ficar offline";
+      } else {
+        dot1.className = "absolute bottom-0 right-0 h-4 w-4 rounded-full border-2 border-[#f7f8fb] bg-slate-400";
+        dot2.className = "h-2.5 w-2.5 rounded-full bg-slate-400";
+        btn.className = "ml-auto inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-2 text-xs font-extrabold text-slate-500 transition";
+        lbl.textContent = "Offline";
+        btnProf.className = "mt-5 w-full rounded-xl px-4 py-3 text-xs font-extrabold bg-emerald-500 text-white hover:bg-emerald-600 transition";
+        btnProf.textContent = "Ficar online";
+      }
+    }
+
+    function toggleOnline() {
+      isOnline = !isOnline;
+      JucaPanel.setStorage("bora-courier-online", isOnline);
+      updateOnlineUI();
+      JucaPanel.showToast(isOnline ? "Você está Online!" : "Você está Offline.");
+    }
+
+    document.getElementById("btn-toggle-online").onclick = toggleOnline;
+    document.getElementById("btn-toggle-online-profile").onclick = () => {
+      toggleOnline();
+      document.getElementById("modal-profile").classList.add("hidden");
+    };
+
+    function renderCourierApp() {
+      // Atualiza contadores
+      document.getElementById("count-available").textContent = available.length;
+      document.getElementById("count-active").textContent = active.length;
+      document.getElementById("count-history").textContent = history.length;
+      document.getElementById("tab-count-avail").textContent = available.length;
+      document.getElementById("tab-count-act").textContent = active.length;
+      document.getElementById("tab-count-hist").textContent = history.length;
+      document.getElementById("profile-history-count").textContent = history.length;
+
+      // Calcula ganhos totais
+      const total = [...history, ...active].reduce((acc, curr) => {
+        const val = Number(curr.fee.replace("R$", "").replace(".", "").replace(",", ".").trim()) || 0;
+        return acc + val;
+      }, 0);
+      document.getElementById("total-earnings").textContent = total.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+      // Banner da entrega atual
+      const bannerEl = document.getElementById("current-delivery-banner");
+      if (active.length > 0) {
+        const first = active[0];
+        const stage = first.stage || "retirada";
+        bannerEl.innerHTML = `
+          <button type="button" onclick="openDetails(${first.id})" class="flex w-full items-center gap-3 rounded-2xl border border-blue-100 bg-blue-50 p-3 text-left">
+            <div class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-blue-500 text-white">
+              <i data-lucide="route" class="h-5 w-5"></i>
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="text-[10px] font-extrabold uppercase tracking-[0.12em] text-blue-500">Entrega atual</div>
+              <div class="mt-1 truncate text-xs font-extrabold text-slate-900">#${first.id} • ${first.customer}</div>
+              <div class="mt-1 text-[10px] text-blue-700">${stageConfig[stage].next}</div>
+            </div>
+            <i data-lucide="arrow-right" class="h-4 w-4 text-blue-500"></i>
+          </button>
+        `;
+      } else {
+        bannerEl.innerHTML = "";
+      }
+
+      // Render Aba Disponíveis
+      const availEl = document.getElementById("tab-content-available");
+      if (available.length === 0) {
+        availEl.innerHTML = `<div class="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-xs font-semibold text-slate-400">Nenhuma entrega disponível agora.</div>`;
+      } else {
+        availEl.innerHTML = available.map(ord => `
+          <article class="rounded-2xl border border-slate-200 bg-white p-3.5 shadow-sm">
+            <button type="button" onclick="openDetails(${ord.id})" class="w-full text-left">
+              <div class="flex gap-3">
+                <div class="h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-orange-50 border border-slate-100">
+                  <img src="${ord.image}" alt="" class="h-full w-full object-cover" onerror="this.src='/logo_juca.png'">
+                </div>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs font-extrabold text-slate-900">#${ord.id}</span>
+                    <span class="rounded-full bg-orange-50 px-2 py-1 text-[8px] font-extrabold text-orange-600">Novo</span>
+                  </div>
+                  <div class="mt-1 text-xs font-extrabold text-slate-900">${ord.customer}</div>
+                  <div class="mt-2 flex items-center gap-1.5 text-[10px] text-slate-500">
+                    <i data-lucide="map-pin" class="h-3 w-3"></i> ${ord.neighborhood} • ${ord.distance}
+                  </div>
+                </div>
+                <i data-lucide="arrow-right" class="mt-1 h-4 w-4 text-slate-300"></i>
+              </div>
+            </button>
+            <div class="mt-3 flex items-center rounded-xl bg-slate-50 p-3">
+              <div>
+                <div class="text-sm font-extrabold text-slate-900">${ord.fee}</div>
+                <div class="mt-1 flex items-center gap-1.5 text-[10px] text-slate-500">
+                  <i data-lucide="wallet-cards" class="h-3 w-3"></i> ${ord.payment}
+                </div>
+              </div>
+              <div class="ml-5 flex items-center gap-1.5 text-[10px] text-slate-500">
+                <i data-lucide="clock-3" class="h-3 w-3"></i>~ ${ord.minutes} min
+              </div>
+              <button type="button" onclick="acceptDelivery(${ord.id})" class="ml-auto rounded-xl bg-orange-500 px-5 py-2.5 text-xs font-extrabold text-white shadow-md shadow-orange-500/20 hover:bg-orange-600 transition">
+                Aceitar
+              </button>
+            </div>
+          </article>
+        `).join("");
+      }
+
+      // Render Aba Em andamento
+      const actEl = document.getElementById("tab-content-active");
+      if (active.length === 0) {
+        actEl.innerHTML = `<div class="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-xs font-semibold text-slate-400">Você não tem entregas em andamento.</div>`;
+      } else {
+        actEl.innerHTML = active.map(ord => {
+          const stage = ord.stage || "retirada";
+          return `
+            <article class="rounded-2xl border border-slate-200 bg-white p-3.5 shadow-sm">
+              <button type="button" onclick="openDetails(${ord.id})" class="w-full text-left">
+                <div class="flex gap-3">
+                  <div class="h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-blue-50 border border-slate-100">
+                    <img src="${ord.image}" alt="" class="h-full w-full object-cover" onerror="this.src='/logo_juca.png'">
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-2">
+                      <span class="text-xs font-extrabold text-slate-900">#${ord.id}</span>
+                      <span class="rounded-full bg-blue-50 px-2 py-1 text-[8px] font-extrabold text-blue-600">${stageConfig[stage].label}</span>
+                    </div>
+                    <div class="mt-1 text-xs font-extrabold text-slate-900">${ord.customer}</div>
+                    <div class="mt-2 flex items-center gap-1.5 text-[10px] text-slate-500">
+                      <i data-lucide="map-pin" class="h-3 w-3"></i> ${ord.address}
+                    </div>
+                  </div>
+                  <i data-lucide="arrow-right" class="mt-1 h-4 w-4 text-slate-300"></i>
+                </div>
+              </button>
+              <div class="mt-3 grid grid-cols-2 gap-2">
+                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ord.address + ', ' + ord.neighborhood + ', Rio de Janeiro')}" target="_blank" rel="noreferrer" class="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-50 px-3 py-3 text-[11px] font-extrabold text-blue-600 hover:bg-blue-100 transition">
+                  <i data-lucide="navigation" class="h-4 w-4"></i> Abrir rota
+                </a>
+                <button type="button" onclick="advanceDeliveryStage(${ord.id})" class="rounded-xl bg-orange-500 px-3 py-3 text-[11px] font-extrabold text-white hover:bg-orange-600 transition">
+                  ${stageConfig[stage].button}
+                </button>
+              </div>
+            </article>
+          `;
+        }).join("");
+      }
+
+      // Render Aba Histórico
+      const histEl = document.getElementById("tab-content-history");
+      histEl.innerHTML = `
+        <div class="grid grid-cols-2 gap-2.5">
+          <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div class="grid h-9 w-9 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+              <i data-lucide="circle-check" class="h-4 w-4"></i>
+            </div>
+            <div class="mt-3 text-[10px] font-semibold text-slate-500">Entregues hoje</div>
+            <div class="mt-1 text-xl font-extrabold text-slate-900">${history.length}</div>
+          </div>
+          <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div class="grid h-9 w-9 place-items-center rounded-xl bg-violet-50 text-violet-600">
+              <i data-lucide="wallet-cards" class="h-4 w-4"></i>
+            </div>
+            <div class="mt-3 text-[10px] font-semibold text-slate-500">Ganhos registrados</div>
+            <div class="mt-1 text-xl font-extrabold text-slate-900">${total.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</div>
+          </div>
+        </div>
+
+        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div class="flex items-center gap-2">
+            <i data-lucide="trending-up" class="h-4 w-4 text-orange-500"></i>
+            <div class="text-xs font-extrabold text-slate-900">Resumo do turno</div>
+          </div>
+          <div class="mt-4 grid grid-cols-3 gap-2 text-center">
+            <div class="rounded-xl bg-slate-50 p-3">
+              <div class="text-base font-extrabold text-slate-900">2,4 km</div>
+              <div class="mt-1 text-[9px] text-slate-400">média/rota</div>
+            </div>
+            <div class="rounded-xl bg-slate-50 p-3">
+              <div class="text-base font-extrabold text-slate-900">15 min</div>
+              <div class="mt-1 text-[9px] text-slate-400">tempo médio</div>
+            </div>
+            <div class="rounded-xl bg-slate-50 p-3">
+              <div class="text-base font-extrabold text-slate-900">4,9</div>
+              <div class="mt-1 text-[9px] text-slate-400">avaliação</div>
+            </div>
+          </div>
+        </div>
+
+        ${history.map(ord => `
+          <button type="button" onclick="openDetails(${ord.id})" class="flex w-full items-center gap-3 rounded-2xl border border-slate-200 bg-white p-3.5 text-left shadow-sm hover:border-slate-300 transition">
+            <div class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+              <i data-lucide="check" class="h-5 w-5"></i>
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="text-xs font-extrabold text-slate-900">#${ord.id} • ${ord.customer}</div>
+              <div class="mt-1 truncate text-[10px] text-slate-400">${ord.neighborhood} • entregue ${ord.deliveredAt}</div>
+            </div>
+            <div class="text-right">
+              <div class="text-xs font-extrabold text-slate-900">${ord.fee}</div>
+              <div class="mt-1 text-[9px] text-emerald-600 font-bold">Concluída</div>
+            </div>
+          </button>
+        `).join("")}
+      `;
+
+      lucide.createIcons();
+    }
+
+    // Ações de Entregas
+    window.acceptDelivery = function(id) {
+      if (!isOnline) {
+        JucaPanel.showToast("Fique online para aceitar entregas.");
+        return;
+      }
+      const ord = available.find(o => o.id === id);
+      if (!ord) return;
+      available = available.filter(o => o.id !== id);
+      ord.stage = "retirada";
+      active.push(ord);
+      JucaPanel.setStorage("bora-courier-available", available);
+      JucaPanel.setStorage("bora-courier-active", active);
+      switchTab("active");
+      JucaPanel.showToast(`Entrega #${id} aceita.`);
+    };
+
+    window.advanceDeliveryStage = function(id) {
+      const ord = active.find(o => o.id === id);
+      if (!ord) return;
+      const st = ord.stage || "retirada";
+      if (st === "retirada") {
+        ord.stage = "a_caminho";
+        ord.minutes = 0;
+        JucaPanel.showToast("Pizza retirada na loja. Boa rota!");
+      } else if (st === "a_caminho") {
+        ord.stage = "cheguei";
+        ord.minutes = 0;
+        JucaPanel.showToast("Chegada registrada no endereço.");
+      } else {
+        ord.stage = "cheguei";
+        ord.deliveredAt = "Agora";
+        active = active.filter(o => o.id !== id);
+        history.unshift(ord);
+        JucaPanel.setStorage("bora-courier-history", history);
+        document.getElementById("modal-delivery-details").classList.add("hidden");
+        switchTab("history");
+        JucaPanel.showToast(`Entrega #${id} concluída com sucesso!`);
+      }
+      JucaPanel.setStorage("bora-courier-active", active);
+      if (currentDetailsOrder && currentDetailsOrder.id === id) {
+        openDetails(id);
+      }
+      renderCourierApp();
+    };
+
+    // Alternador de Abas
+    function switchTab(tab) {
+      activeTab = tab;
+      const btnAvail = document.getElementById("tab-btn-available");
+      const btnAct = document.getElementById("tab-btn-active");
+      const btnHist = document.getElementById("tab-btn-history");
+      const conAvail = document.getElementById("tab-content-available");
+      const conAct = document.getElementById("tab-content-active");
+      const conHist = document.getElementById("tab-content-history");
+
+      btnAvail.className = tab === "available" ? "rounded-xl px-2 py-3 text-[10px] font-extrabold bg-white text-orange-600 shadow-sm transition" : "rounded-xl px-2 py-3 text-[10px] font-extrabold text-slate-500 transition";
+      btnAct.className = tab === "active" ? "rounded-xl px-2 py-3 text-[10px] font-extrabold bg-white text-orange-600 shadow-sm transition" : "rounded-xl px-2 py-3 text-[10px] font-extrabold text-slate-500 transition";
+      btnHist.className = tab === "history" ? "rounded-xl px-2 py-3 text-[10px] font-extrabold bg-white text-orange-600 shadow-sm transition" : "rounded-xl px-2 py-3 text-[10px] font-extrabold text-slate-500 transition";
+
+      conAvail.classList.toggle("hidden", tab !== "available");
+      conAct.classList.toggle("hidden", tab !== "active");
+      conHist.classList.toggle("hidden", tab !== "history");
+      renderCourierApp();
+    }
+
+    document.getElementById("tab-btn-available").onclick = () => switchTab("available");
+    document.getElementById("tab-btn-active").onclick = () => switchTab("active");
+    document.getElementById("tab-btn-history").onclick = () => switchTab("history");
+    document.getElementById("btn-show-earnings").onclick = () => switchTab("history");
+    document.getElementById("btn-show-map").onclick = () => {
+      switchTab("active");
+      if (active[0]) openDetails(active[0].id);
+    };
+
+    // Bottom Navigation
+    document.getElementById("nav-home").onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
+    document.getElementById("nav-deliveries").onclick = () => switchTab("active");
+    document.getElementById("nav-earnings").onclick = () => switchTab("history");
+    document.getElementById("nav-profile").onclick = () => document.getElementById("modal-profile").classList.remove("hidden");
+
+    // Modal de Detalhes
+    window.openDetails = function(id) {
+      const ord = active.find(o => o.id === id) || available.find(o => o.id === id) || history.find(o => o.id === id);
+      if (!ord) return;
+      currentDetailsOrder = ord;
+      document.getElementById("det-id").textContent = `Entrega #${ord.id}`;
+      document.getElementById("det-customer").textContent = ord.customer;
+      document.getElementById("det-sub").textContent = `${ord.neighborhood} • ${ord.distance}`;
+      document.getElementById("det-address").textContent = ord.address;
+      document.getElementById("det-neighborhood").textContent = ord.neighborhood;
+      document.getElementById("det-payment").textContent = ord.payment;
+      document.getElementById("det-minutes").textContent = `~ ${ord.minutes} min`;
+      document.getElementById("det-fee").textContent = ord.fee;
+
+      document.getElementById("det-link-tel").href = `tel:${ord.phone.replace(/\D/g, '')}`;
+      document.getElementById("det-link-wa").href = `https://wa.me/55${ord.phone.replace(/\D/g, '')}`;
+
+      document.getElementById("det-items").innerHTML = ord.items.map(it => `
+        <div class="rounded-xl bg-slate-50 px-3 py-2.5 text-[10px] font-semibold text-slate-600">${it}</div>
+      `).join("");
+
+      const notesEl = document.getElementById("det-notes");
+      if (ord.notes) {
+        notesEl.classList.remove("hidden");
+        notesEl.textContent = `Obs.: ${ord.notes}`;
+      } else {
+        notesEl.classList.add("hidden");
+      }
+
+      // Ações
+      const actContainer = document.getElementById("det-actions");
+      if (active.some(o => o.id === ord.id)) {
+        const curStage = ord.stage || "retirada";
+        const stages = ["retirada", "a_caminho", "cheguei"];
+        const curIdx = stages.indexOf(curStage);
+        actContainer.innerHTML = `
+          <div class="text-xs font-extrabold text-slate-900">Etapas da rota</div>
+          <div class="mt-4 flex items-start">
+            ${stages.map((st, idx) => {
+              const isDone = idx <= curIdx;
+              return `
+                <div class="flex flex-1 items-start last:flex-none">
+                  <div class="text-center">
+                    <span class="mx-auto grid h-8 w-8 place-items-center rounded-full text-[10px] font-extrabold ${isDone ? 'bg-orange-500 text-white' : 'bg-slate-100 text-slate-400'}">
+                      ${isDone ? '✓' : idx + 1}
+                    </span>
+                    <div class="mt-2 max-w-[82px] text-[9px] font-bold text-slate-500">${stageConfig[st].label}</div>
+                  </div>
+                  ${idx < 2 ? `<div class="mt-4 h-0.5 flex-1 ${idx < curIdx ? 'bg-orange-300' : 'bg-slate-200'}"></div>` : ''}
+                </div>
+              `;
+            }).join("")}
+          </div>
+          <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ord.address + ', ' + ord.neighborhood)}" target="_blank" rel="noreferrer" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-50 px-4 py-3 text-xs font-extrabold text-blue-600 hover:bg-blue-100 transition">
+            <i data-lucide="navigation" class="h-4 w-4"></i> Abrir rota no mapa
+          </a>
+          <button type="button" onclick="advanceDeliveryStage(${ord.id})" class="mt-2 w-full rounded-xl bg-orange-500 px-4 py-3 text-xs font-extrabold text-white shadow-lg shadow-orange-500/20 hover:bg-orange-600 transition">
+            ${stageConfig[curStage].button}
+          </button>
+        `;
+      } else if (available.some(o => o.id === ord.id)) {
+        actContainer.innerHTML = `
+          <button type="button" onclick="acceptDelivery(${ord.id})" class="mt-2 w-full rounded-xl bg-orange-500 px-4 py-3 text-xs font-extrabold text-white hover:bg-orange-600 transition">
+            Aceitar esta entrega
+          </button>
+        `;
+      } else {
+        actContainer.innerHTML = `
+          <div class="flex items-center justify-center gap-2 rounded-xl bg-emerald-50 px-4 py-3 text-xs font-extrabold text-emerald-700">
+            <i data-lucide="circle-check" class="h-4 w-4"></i> Entrega concluída
+          </div>
+        `;
+      }
+
+      document.getElementById("modal-delivery-details").classList.remove("hidden");
+      lucide.createIcons();
+    };
+
+    document.getElementById("btn-close-details").onclick = () => {
+      document.getElementById("modal-delivery-details").classList.add("hidden");
+    };
+
+    // Modal Perfil
+    document.getElementById("btn-open-profile-avatar").onclick = () => document.getElementById("modal-profile").classList.remove("hidden");
+    document.getElementById("btn-open-profile-link").onclick = () => document.getElementById("modal-profile").classList.remove("hidden");
+    document.getElementById("btn-close-profile").onclick = () => document.getElementById("modal-profile").classList.add("hidden");
+
+    // Inicialização
+    updateOnlineUI();
+    renderCourierApp();
+  </script>
+</body>
+</html>

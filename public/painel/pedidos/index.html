@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Central de Pedidos (Kanban) | Pizza do Juca</title>
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../panel-data.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen bg-[#f4f6fa] text-slate-950 font-sans antialiased">
+  <!-- Aviso para telas menores que 1280px -->
+  <div class="grid min-h-screen place-items-center bg-[#f5f7fb] px-5 xl:hidden">
+    <div class="max-w-sm rounded-3xl border border-slate-200 bg-white p-7 text-center shadow-[0_24px_80px_-50px_rgba(15,23,42,.55)]">
+      <div class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-orange-50 text-orange-600">
+        <i data-lucide="monitor-smartphone" class="h-7 w-7"></i>
+      </div>
+      <h1 class="mt-5 text-xl font-extrabold tracking-tight text-slate-950">Painel feito para computador</h1>
+      <p class="mt-2 text-sm leading-6 text-slate-500">
+        A central de pedidos usa um Kanban largo com 4 etapas simultâneas. Abra em uma tela de pelo menos 1280px para gerenciar confortavelmente.
+      </p>
+      <a href="../" class="mt-5 inline-flex items-center gap-2 rounded-xl bg-slate-950 px-4 py-3 text-sm font-bold text-white transition hover:bg-slate-800">
+        Voltar para os painéis <i data-lucide="arrow-right" class="h-4 w-4"></i>
+      </a>
+    </div>
+  </div>
+
+  <!-- Layout Desktop Principal -->
+  <div class="hidden min-h-screen xl:block">
+    <!-- Barra Lateral Fixa -->
+    <aside class="fixed inset-y-0 left-0 z-40 flex w-[248px] flex-col border-r border-slate-200/80 bg-white px-4 py-5">
+      <a href="../" class="mb-7 flex items-center gap-3 px-2">
+        <div class="grid h-11 w-11 place-items-center rounded-2xl bg-orange-50 p-1 border border-orange-100 shadow-sm">
+          <img src="/logo_juca.png" alt="Pizza do Juca" class="h-9 w-9 object-contain" onerror="this.src='/logo.png'">
+        </div>
+        <div class="leading-none">
+          <div class="text-[16px] font-extrabold tracking-tight text-slate-950">Pizza do Juca</div>
+          <div class="mt-1.5 text-[9px] font-extrabold uppercase tracking-[0.18em] text-orange-500">Painel de gestão</div>
+        </div>
+      </a>
+
+      <!-- Menu de Navegação -->
+      <div class="space-y-6 overflow-y-auto pr-1">
+        <div>
+          <div class="mb-2 px-3 text-[10px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Visão geral</div>
+          <nav class="space-y-1">
+            <a href="../admin/" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-950 transition">
+              <i data-lucide="layout-dashboard" class="h-[17px] w-[17px]"></i>
+              <span class="flex-1">Dashboard</span>
+            </a>
+            <a href="./" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-bold bg-orange-50 text-orange-600 transition">
+              <i data-lucide="clipboard-list" class="h-[17px] w-[17px]"></i>
+              <span class="flex-1">Pedidos</span>
+              <span id="badge-total-pedidos" class="rounded-full bg-red-500 px-2 py-0.5 text-[10px] font-extrabold text-white">10</span>
+            </a>
+          </nav>
+        </div>
+
+        <div>
+          <div class="mb-2 px-3 text-[10px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Operação</div>
+          <nav class="space-y-1">
+            <a href="../admin/" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-950 transition">
+              <i data-lucide="package" class="h-[17px] w-[17px]"></i>
+              <span class="flex-1">Pizzas & Itens</span>
+            </a>
+            <a href="../admin/" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-950 transition">
+              <i data-lucide="boxes" class="h-[17px] w-[17px]"></i>
+              <span class="flex-1">Categorias</span>
+            </a>
+            <a href="../admin/" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-950 transition">
+              <i data-lucide="tag" class="h-[17px] w-[17px]"></i>
+              <span class="flex-1">Promoções</span>
+            </a>
+            <a href="../motoboy/" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-950 transition">
+              <i data-lucide="bike" class="h-[17px] w-[17px]"></i>
+              <span class="flex-1">Motoboys</span>
+            </a>
+            <a href="../admin/" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-950 transition">
+              <i data-lucide="contact-round" class="h-[17px] w-[17px]"></i>
+              <span class="flex-1">Clientes</span>
+            </a>
+            <a href="./" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-950 transition">
+              <i data-lucide="users" class="h-[17px] w-[17px]"></i>
+              <span class="flex-1">Atendentes</span>
+            </a>
+          </nav>
+        </div>
+
+        <div>
+          <div class="mb-2 px-3 text-[10px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Gestão</div>
+          <nav class="space-y-1">
+            <a href="../admin/" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-950 transition">
+              <i data-lucide="circle-dollar-sign" class="h-[17px] w-[17px]"></i>
+              <span class="flex-1">Financeiro</span>
+            </a>
+            <a href="../admin/" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-950 transition">
+              <i data-lucide="chart-no-axes-combined" class="h-[17px] w-[17px]"></i>
+              <span class="flex-1">Relatórios</span>
+            </a>
+            <a href="../" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-950 transition">
+              <i data-lucide="settings" class="h-[17px] w-[17px]"></i>
+              <span class="flex-1">Configurações</span>
+            </a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Rodapé Sidebar -->
+      <div class="mt-auto rounded-2xl border border-orange-100 bg-gradient-to-br from-orange-50 via-white to-amber-50 p-4">
+        <div class="text-[11px] font-extrabold uppercase tracking-[0.12em] text-orange-600">Pizza do Juca</div>
+        <div class="mt-2 text-xs leading-5 text-slate-500">
+          Operação em Paciência - RJ. Atendimento, delivery e balcão ativos.
+        </div>
+        <a href="/" class="mt-3 inline-flex items-center text-xs font-extrabold text-slate-800 hover:text-orange-600 transition">
+          Ver cardápio <i data-lucide="arrow-right" class="ml-1 h-3.5 w-3.5"></i>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Área de Conteúdo -->
+    <div class="pl-[248px]">
+      <!-- Header Superior com Busca e Notificações -->
+      <header class="sticky top-0 z-30 border-b border-slate-200/70 bg-white/92 backdrop-blur-xl">
+        <div class="flex h-[70px] items-center gap-4 px-6 xl:px-8">
+          <div class="relative max-w-[620px] flex-1">
+            <i data-lucide="search" class="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"></i>
+            <input id="input-search" type="text" placeholder="Buscar por pedido, cliente, sabor, pagamento ou motoboy..." class="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/70 pl-11 pr-4 text-sm outline-none transition focus:border-orange-300 focus:bg-white focus:ring-4 focus:ring-orange-100">
+          </div>
+
+          <div class="ml-auto flex items-center gap-3">
+            <button id="btn-notif" type="button" class="relative rounded-xl border border-transparent p-2.5 text-slate-500 transition hover:border-slate-200 hover:bg-slate-50">
+              <i data-lucide="bell" class="h-5 w-5"></i>
+              <span class="absolute right-1 top-1 grid h-4 min-w-4 place-items-center rounded-full bg-red-500 px-1 text-[9px] font-extrabold text-white">3</span>
+            </button>
+
+            <div class="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-white px-2.5 py-2 shadow-sm">
+              <div class="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-orange-500 to-amber-400 text-xs font-extrabold text-white">
+                CO
+              </div>
+              <div class="min-w-[112px] text-left">
+                <div class="text-xs font-extrabold text-slate-900">Camila Oliveira</div>
+                <div class="text-[10px] text-slate-400">Atendente</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Conteúdo Principal da Central -->
+      <main class="mx-auto w-full max-w-[1680px] p-6 2xl:p-8">
+        <!-- Topo: Título e Botões -->
+        <div class="flex items-end justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <p class="text-[10px] font-extrabold uppercase tracking-[0.18em] text-orange-500">Operação em tempo real</p>
+              <span class="rounded-full bg-slate-100 px-2 py-1 text-[9px] font-extrabold uppercase tracking-[0.12em] text-slate-500">Operação ativa</span>
+            </div>
+            <h1 class="mt-1 text-[34px] font-extrabold tracking-[-0.035em] text-slate-950">Central de Pedidos</h1>
+            <p class="mt-1.5 text-sm text-slate-500">Confirme, prepare, despache e acompanhe cada pizza sem sair desta tela.</p>
+          </div>
+
+          <div class="flex gap-2">
+            <button id="btn-config-kanban" type="button" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-extrabold text-slate-600 shadow-sm hover:border-slate-300 transition">
+              <i data-lucide="settings-2" class="h-4 w-4"></i> Configurar Kanban
+            </button>
+            <button id="btn-new-order" type="button" class="inline-flex items-center gap-2 rounded-xl bg-orange-500 px-4 py-2.5 text-xs font-extrabold text-white shadow-lg shadow-orange-500/20 transition hover:bg-orange-600">
+              <i data-lucide="plus" class="h-4 w-4"></i> Criar pedido manual
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Cards de Resumo -->
+        <div class="mt-6 grid grid-cols-4 gap-4">
+          <section class="rounded-2xl border border-slate-200/75 bg-white p-4 shadow-[0_18px_48px_-36px_rgba(15,23,42,0.30)]">
+            <div class="flex items-center gap-3">
+              <div class="grid h-11 w-11 place-items-center rounded-2xl bg-emerald-50 text-emerald-600">
+                <i data-lucide="shopping-bag" class="h-5 w-5"></i>
+              </div>
+              <div>
+                <div class="text-xs font-semibold text-slate-500">Novos pedidos</div>
+                <div class="mt-0.5 flex items-baseline gap-2">
+                  <span id="count-recebido" class="text-xl font-extrabold text-slate-950">3</span>
+                  <span class="text-[10px] font-semibold text-slate-400">Entraram agora</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="rounded-2xl border border-slate-200/75 bg-white p-4 shadow-[0_18px_48px_-36px_rgba(15,23,42,0.30)]">
+            <div class="flex items-center gap-3">
+              <div class="grid h-11 w-11 place-items-center rounded-2xl bg-orange-50 text-orange-600">
+                <i data-lucide="chef-hat" class="h-5 w-5"></i>
+              </div>
+              <div>
+                <div class="text-xs font-semibold text-slate-500">No forno / preparo</div>
+                <div class="mt-0.5 flex items-baseline gap-2">
+                  <span id="count-preparando" class="text-xl font-extrabold text-slate-950">3</span>
+                  <span class="text-[10px] font-semibold text-slate-400">Na cozinha</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="rounded-2xl border border-slate-200/75 bg-white p-4 shadow-[0_18px_48px_-36px_rgba(15,23,42,0.30)]">
+            <div class="flex items-center gap-3">
+              <div class="grid h-11 w-11 place-items-center rounded-2xl bg-violet-50 text-violet-600">
+                <i data-lucide="package-check" class="h-5 w-5"></i>
+              </div>
+              <div>
+                <div class="text-xs font-semibold text-slate-500">Prontos</div>
+                <div class="mt-0.5 flex items-baseline gap-2">
+                  <span id="count-pronto" class="text-xl font-extrabold text-slate-950">2</span>
+                  <span class="text-[10px] font-semibold text-slate-400">Aguardando saída</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="rounded-2xl border border-slate-200/75 bg-white p-4 shadow-[0_18px_48px_-36px_rgba(15,23,42,0.30)]">
+            <div class="flex items-center gap-3">
+              <div class="grid h-11 w-11 place-items-center rounded-2xl bg-blue-50 text-blue-600">
+                <i data-lucide="bike" class="h-5 w-5"></i>
+              </div>
+              <div>
+                <div class="text-xs font-semibold text-slate-500">Em entrega</div>
+                <div class="mt-0.5 flex items-baseline gap-2">
+                  <span id="count-entrega" class="text-xl font-extrabold text-slate-950">2</span>
+                  <span class="text-[10px] font-semibold text-slate-400">Com motoboy</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Banner de busca ativa -->
+        <div id="search-banner" class="hidden mt-4 flex items-center justify-between rounded-xl border border-blue-100 bg-blue-50 px-4 py-3 text-xs text-blue-700">
+          <span><strong id="search-count">0</strong> pedido(s) encontrado(s) para “<span id="search-text"></span>”.</span>
+          <button id="btn-clear-search" type="button" class="font-extrabold hover:underline">Limpar busca</button>
+        </div>
+
+        <!-- Colunas do Kanban -->
+        <div id="kanban-grid" class="mt-4 grid grid-cols-4 gap-4">
+          <!-- Coluna 1: Recebido -->
+          <section id="col-recebido" class="rounded-2xl border border-slate-200/75 bg-white shadow-[0_18px_48px_-36px_rgba(15,23,42,0.30)] overflow-hidden">
+            <div class="flex items-center border-b border-slate-100 px-4 py-3.5">
+              <span class="mr-2 h-2.5 w-2.5 rounded-full bg-slate-400"></span>
+              <h2 class="text-sm font-extrabold text-slate-900">Recebido</h2>
+              <span id="col-count-recebido" class="ml-1 text-xs font-bold text-slate-400">(0)</span>
+              <span class="ml-auto text-[10px] font-bold text-slate-300">Mais antigos</span>
+            </div>
+            <div id="list-recebido" class="max-h-[620px] min-h-[470px] space-y-3 overflow-y-auto bg-slate-50/65 p-3"></div>
+          </section>
+
+          <!-- Coluna 2: Preparando -->
+          <section id="col-preparando" class="rounded-2xl border border-slate-200/75 bg-white shadow-[0_18px_48px_-36px_rgba(15,23,42,0.30)] overflow-hidden">
+            <div class="flex items-center border-b border-slate-100 px-4 py-3.5">
+              <span class="mr-2 h-2.5 w-2.5 rounded-full bg-amber-400"></span>
+              <h2 class="text-sm font-extrabold text-slate-900">Preparando</h2>
+              <span id="col-count-preparando" class="ml-1 text-xs font-bold text-slate-400">(0)</span>
+              <span class="ml-auto text-[10px] font-bold text-slate-300">Mais antigos</span>
+            </div>
+            <div id="list-preparando" class="max-h-[620px] min-h-[470px] space-y-3 overflow-y-auto bg-slate-50/65 p-3"></div>
+          </section>
+
+          <!-- Coluna 3: Pronto -->
+          <section id="col-pronto" class="rounded-2xl border border-slate-200/75 bg-white shadow-[0_18px_48px_-36px_rgba(15,23,42,0.30)] overflow-hidden">
+            <div class="flex items-center border-b border-slate-100 px-4 py-3.5">
+              <span class="mr-2 h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+              <h2 class="text-sm font-extrabold text-slate-900">Pronto</h2>
+              <span id="col-count-pronto" class="ml-1 text-xs font-bold text-slate-400">(0)</span>
+              <span class="ml-auto text-[10px] font-bold text-slate-300">Mais antigos</span>
+            </div>
+            <div id="list-pronto" class="max-h-[620px] min-h-[470px] space-y-3 overflow-y-auto bg-slate-50/65 p-3"></div>
+          </section>
+
+          <!-- Coluna 4: Em entrega -->
+          <section id="col-entrega" class="rounded-2xl border border-slate-200/75 bg-white shadow-[0_18px_48px_-36px_rgba(15,23,42,0.30)] overflow-hidden">
+            <div class="flex items-center border-b border-slate-100 px-4 py-3.5">
+              <span class="mr-2 h-2.5 w-2.5 rounded-full bg-blue-500"></span>
+              <h2 class="text-sm font-extrabold text-slate-900">Em entrega</h2>
+              <span id="col-count-entrega" class="ml-1 text-xs font-bold text-slate-400">(0)</span>
+              <span class="ml-auto text-[10px] font-bold text-slate-300">Mais antigos</span>
+            </div>
+            <div id="list-entrega" class="max-h-[620px] min-h-[470px] space-y-3 overflow-y-auto bg-slate-50/65 p-3"></div>
+          </section>
+        </div>
+
+        <!-- Seção Inferior: Motoboys e Produtos Esgotados -->
+        <div class="mt-4 grid grid-cols-2 gap-4">
+          <!-- Motoboys disponíveis -->
+          <section class="rounded-2xl border border-slate-200/75 bg-white p-5 shadow-[0_18px_48px_-36px_rgba(15,23,42,0.30)]">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <i data-lucide="bike" class="h-5 w-5 text-orange-500"></i>
+                <h2 class="font-extrabold text-slate-900">Motoboys na escala</h2>
+              </div>
+              <span class="text-[10px] font-extrabold text-slate-400">Atualização visual</span>
+            </div>
+            <div id="motoboys-list" class="mt-4 divide-y divide-slate-100"></div>
+          </section>
+
+          <!-- Itens esgotados -->
+          <section class="rounded-2xl border border-slate-200/75 bg-white p-5 shadow-[0_18px_48px_-36px_rgba(15,23,42,0.30)]">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <i data-lucide="package" class="h-5 w-5 text-orange-500"></i>
+                <h2 class="font-extrabold text-slate-900">Itens pausados / esgotados</h2>
+              </div>
+              <span id="badge-sold-out-count" class="rounded-full bg-red-50 px-2.5 py-1 text-[10px] font-extrabold text-red-600">3 itens</span>
+            </div>
+            <div id="sold-out-list" class="mt-4 divide-y divide-slate-100"></div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Drawer Lateral de Detalhes do Pedido -->
+  <div id="order-drawer" class="hidden fixed inset-0 z-[85] flex justify-end bg-slate-950/35 backdrop-blur-sm">
+    <div class="h-full w-full max-w-[590px] overflow-y-auto bg-white shadow-2xl">
+      <div class="sticky top-0 z-10 border-b border-slate-100 bg-white/95 px-6 py-5 backdrop-blur-xl">
+        <div class="flex items-start gap-4">
+          <div class="grid h-11 w-11 place-items-center rounded-2xl bg-orange-50 text-orange-600">
+            <i data-lucide="receipt-text" class="h-5 w-5"></i>
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="text-[10px] font-extrabold uppercase tracking-[0.16em] text-orange-500">Detalhes do pedido</div>
+            <div class="mt-1 flex items-center gap-2">
+              <h2 id="drawer-order-id" class="text-xl font-extrabold text-slate-900">#1048</h2>
+              <span id="drawer-order-status" class="rounded-full bg-slate-100 px-2.5 py-1 text-[9px] font-extrabold text-slate-500">Recebido</span>
+            </div>
+          </div>
+          <button id="btn-close-drawer" type="button" class="rounded-xl border border-slate-200 p-2 text-slate-500 hover:bg-slate-50">
+            <i data-lucide="x" class="h-4 w-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="space-y-5 p-6">
+        <!-- Card Cliente -->
+        <section class="rounded-2xl border border-slate-200/75 bg-white p-5 shadow-sm">
+          <div class="flex items-center gap-3">
+            <div id="drawer-customer-avatar" class="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-orange-400 to-amber-300 text-xs font-extrabold text-white">JS</div>
+            <div class="min-w-0 flex-1">
+              <div id="drawer-customer-name" class="text-sm font-extrabold text-slate-900">João Silva</div>
+              <div class="mt-1 flex items-center gap-1.5 text-[10px] text-slate-400">
+                <i data-lucide="phone" class="h-3 w-3"></i>
+                <span id="drawer-customer-phone">(21) 99142-7730</span>
+              </div>
+            </div>
+            <span id="drawer-customer-channel" class="rounded-full bg-slate-100 px-2.5 py-1 text-[9px] font-extrabold text-slate-500">WhatsApp</span>
+          </div>
+
+          <div class="mt-5 grid grid-cols-2 gap-3">
+            <div class="rounded-2xl bg-slate-50 p-4">
+              <div class="flex items-center gap-2 text-[10px] font-bold text-slate-400">
+                <i data-lucide="map-pin" class="h-3.5 w-3.5"></i> Endereço
+              </div>
+              <div id="drawer-order-address" class="mt-2 text-xs font-extrabold leading-5 text-slate-900">Rua das Flores, 123</div>
+              <div id="drawer-order-neighborhood" class="mt-1 text-[10px] text-slate-400">Paciência</div>
+            </div>
+            <div class="rounded-2xl bg-slate-50 p-4">
+              <div class="flex items-center gap-2 text-[10px] font-bold text-slate-400">
+                <i data-lucide="clock-3" class="h-3.5 w-3.5"></i> Entrada
+              </div>
+              <div id="drawer-order-created" class="mt-2 text-xs font-extrabold text-slate-900">19:32</div>
+              <div id="drawer-order-minutes" class="mt-1 text-[10px] text-slate-400">Há 2 min nesta etapa</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Card Itens -->
+        <section class="rounded-2xl border border-slate-200/75 bg-white p-5 shadow-sm">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i data-lucide="package-check" class="h-5 w-5 text-orange-500"></i>
+              <h3 class="font-extrabold text-slate-900">Pizzas e adicionais</h3>
+            </div>
+            <button id="btn-open-edit-order" type="button" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-2 text-[10px] font-extrabold text-slate-600 hover:border-orange-200 hover:text-orange-600">
+              <i data-lucide="pencil" class="h-3.5 w-3.5"></i> Editar
+            </button>
+          </div>
+          <div id="drawer-order-items" class="mt-4 space-y-2"></div>
+          <div class="mt-4 flex items-center border-t border-slate-100 pt-4">
+            <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500">
+              <i data-lucide="circle-dollar-sign" class="h-4 w-4"></i>
+              <span id="drawer-order-payment">Pix</span>
+            </span>
+            <span id="drawer-order-price" class="ml-auto text-lg font-extrabold text-slate-900">R$ 58,00</span>
+          </div>
+        </section>
+
+        <!-- Card Observações -->
+        <section class="rounded-2xl border border-slate-200/75 bg-white p-5 shadow-sm">
+          <div class="flex items-center gap-2">
+            <i data-lucide="message-square" class="h-5 w-5 text-orange-500"></i>
+            <h3 class="font-extrabold text-slate-900">Observações</h3>
+          </div>
+          <p id="drawer-order-notes" class="mt-3 rounded-2xl bg-amber-50 p-4 text-xs font-semibold leading-6 text-amber-900">
+            Sem cebola. Massa bem assada.
+          </p>
+        </section>
+
+        <!-- Linha do Tempo -->
+        <section class="rounded-2xl border border-slate-200/75 bg-white p-5 shadow-sm">
+          <div class="flex items-center gap-2">
+            <i data-lucide="clock-3" class="h-5 w-5 text-orange-500"></i>
+            <h3 class="font-extrabold text-slate-900">Linha do tempo</h3>
+          </div>
+          <div id="drawer-timeline" class="mt-5 space-y-0"></div>
+        </section>
+
+        <!-- Ações do Pedido -->
+        <div class="grid grid-cols-2 gap-3">
+          <button id="btn-print-receipt" type="button" class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-3 text-xs font-extrabold text-slate-700 hover:border-orange-200 transition">
+            <i data-lucide="printer" class="h-4 w-4"></i> Comprovante
+          </button>
+          <button id="btn-edit-order-drawer" type="button" class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-3 text-xs font-extrabold text-slate-700 hover:border-orange-200 transition">
+            <i data-lucide="pencil" class="h-4 w-4"></i> Editar pedido
+          </button>
+        </div>
+
+        <button id="btn-cancel-order" type="button" class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-rose-50 px-4 py-3 text-xs font-extrabold text-rose-700 hover:bg-rose-100 transition">
+          <i data-lucide="trash-2" class="h-4 w-4"></i> Cancelar pedido
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Comprovante Térmico -->
+  <div id="modal-receipt" class="hidden fixed inset-0 z-[110] grid place-items-center bg-slate-950/50 p-6 backdrop-blur-sm">
+    <div class="w-full max-w-[410px] rounded-[28px] bg-white p-6 shadow-2xl">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <div class="text-[10px] font-extrabold uppercase tracking-[0.16em] text-orange-500">Comprovante para Impressão</div>
+          <h2 id="receipt-title" class="mt-1 text-xl font-extrabold text-slate-900">Pedido #1048</h2>
+        </div>
+        <button id="btn-close-receipt" type="button" class="rounded-xl p-2 text-slate-400 hover:bg-slate-100">
+          <i data-lucide="x" class="h-5 w-5"></i>
+        </button>
+      </div>
+
+      <div id="receipt-content" class="mt-5 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-5 font-mono text-[11px] leading-6 text-slate-700"></div>
+
+      <div class="mt-4 grid grid-cols-2 gap-2">
+        <button id="btn-close-receipt-btn" type="button" class="rounded-xl border border-slate-200 px-4 py-3 text-xs font-extrabold text-slate-600 hover:bg-slate-50">Fechar</button>
+        <button id="btn-do-print" type="button" class="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 py-3 text-xs font-extrabold text-white hover:bg-slate-800">
+          <i data-lucide="printer" class="h-4 w-4"></i> Imprimir
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Editar Pedido -->
+  <div id="modal-edit" class="hidden fixed inset-0 z-[105] grid place-items-center bg-slate-950/45 p-6 backdrop-blur-sm">
+    <form id="form-edit-order" class="w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <div class="text-[10px] font-extrabold uppercase tracking-[0.16em] text-orange-500">Editar pedido</div>
+          <h2 id="edit-modal-title" class="mt-1 text-xl font-extrabold text-slate-900">#1048</h2>
+        </div>
+        <button id="btn-close-edit" type="button" class="rounded-xl p-2 text-slate-400 hover:bg-slate-100">
+          <i data-lucide="x" class="h-5 w-5"></i>
+        </button>
+      </div>
+
+      <div class="mt-6 space-y-4">
+        <label class="block">
+          <span class="text-xs font-extrabold text-slate-700">Itens — um por linha</span>
+          <textarea id="edit-input-items" rows="5" class="mt-2 w-full rounded-xl border border-slate-200 p-3 text-sm leading-6 outline-none focus:border-orange-300 focus:ring-4 focus:ring-orange-100"></textarea>
+        </label>
+        <label class="block">
+          <span class="text-xs font-extrabold text-slate-700">Observações</span>
+          <textarea id="edit-input-notes" rows="3" class="mt-2 w-full rounded-xl border border-slate-200 p-3 text-sm outline-none focus:border-orange-300 focus:ring-4 focus:ring-orange-100"></textarea>
+        </label>
+        <div class="grid grid-cols-2 gap-3">
+          <label class="block">
+            <span class="text-xs font-extrabold text-slate-700">Pagamento</span>
+            <select id="edit-input-payment" class="mt-2 h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm">
+              <option>Pix</option>
+              <option>Cartão</option>
+              <option>Dinheiro</option>
+            </select>
+          </label>
+          <label class="block">
+            <span class="text-xs font-extrabold text-slate-700">Valor</span>
+            <input id="edit-input-price" type="text" class="mt-2 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm">
+          </label>
+        </div>
+      </div>
+
+      <div class="mt-6 flex gap-2">
+        <button id="btn-cancel-edit" type="button" class="flex-1 rounded-xl border border-slate-200 px-4 py-3 text-sm font-extrabold text-slate-600">Voltar</button>
+        <button type="submit" class="flex-1 rounded-xl bg-orange-500 px-4 py-3 text-sm font-extrabold text-white">Salvar alterações</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Modal Novo Pedido Manual -->
+  <div id="modal-manual" class="hidden fixed inset-0 z-[70] grid place-items-center bg-slate-950/35 p-6 backdrop-blur-sm">
+    <form id="form-manual-order" class="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-extrabold tracking-tight text-slate-900">Novo pedido manual</h2>
+          <p class="mt-1 text-xs leading-5 text-slate-500">Cadastre rapidamente um pedido feito no balcão, telefone ou WhatsApp.</p>
+        </div>
+        <button id="btn-close-manual" type="button" class="rounded-xl p-2 text-slate-400 hover:bg-slate-100">
+          <i data-lucide="x" class="h-5 w-5"></i>
+        </button>
+      </div>
+
+      <div class="mt-6 space-y-4">
+        <label class="block">
+          <span class="text-xs font-extrabold text-slate-700">Cliente</span>
+          <input id="manual-customer" required placeholder="Nome do cliente" class="mt-2 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-orange-300 focus:ring-4 focus:ring-orange-100">
+        </label>
+        <label class="block">
+          <span class="text-xs font-extrabold text-slate-700">Item principal</span>
+          <input id="manual-item" required placeholder="Ex.: Pizza Calabresa Especial (Grande)" class="mt-2 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-orange-300 focus:ring-4 focus:ring-orange-100">
+        </label>
+        <div class="grid grid-cols-2 gap-3">
+          <label class="block">
+            <span class="text-xs font-extrabold text-slate-700">Canal</span>
+            <select id="manual-channel" class="mt-2 h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm">
+              <option>Balcão</option>
+              <option>WhatsApp</option>
+              <option>Telefone</option>
+            </select>
+          </label>
+          <label class="block">
+            <span class="text-xs font-extrabold text-slate-700">Pagamento</span>
+            <select id="manual-payment" class="mt-2 h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm">
+              <option>Pix</option>
+              <option>Cartão</option>
+              <option>Dinheiro</option>
+            </select>
+          </label>
+        </div>
+        <label class="block">
+          <span class="text-xs font-extrabold text-slate-700">Valor</span>
+          <input id="manual-price" required placeholder="58,00" class="mt-2 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-orange-300 focus:ring-4 focus:ring-orange-100">
+        </label>
+      </div>
+
+      <div class="mt-6 flex gap-2">
+        <button id="btn-cancel-manual" type="button" class="flex-1 rounded-xl border border-slate-200 px-4 py-3 text-sm font-extrabold text-slate-600">Cancelar</button>
+        <button type="submit" class="flex-1 rounded-xl bg-orange-500 px-4 py-3 text-sm font-extrabold text-white">Criar pedido</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Modal Atribuir Motoboy -->
+  <div id="modal-courier" class="hidden fixed inset-0 z-[70] grid place-items-center bg-slate-950/35 p-6 backdrop-blur-sm">
+    <div class="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-extrabold tracking-tight text-slate-900">Atribuir motoboy</h2>
+          <p id="courier-modal-sub" class="mt-1 text-xs leading-5 text-slate-500">Selecione o entregador disponível</p>
+        </div>
+        <button id="btn-close-courier" type="button" class="rounded-xl p-2 text-slate-400 hover:bg-slate-100">
+          <i data-lucide="x" class="h-5 w-5"></i>
+        </button>
+      </div>
+      <div id="courier-modal-list" class="mt-5 space-y-2"></div>
+    </div>
+  </div>
+
+  <!-- Modal Configurar Kanban -->
+  <div id="modal-kanban-cfg" class="hidden fixed inset-0 z-[70] grid place-items-center bg-slate-950/35 p-6 backdrop-blur-sm">
+    <div class="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-extrabold tracking-tight text-slate-900">Configurar Kanban</h2>
+          <p class="mt-1 text-xs leading-5 text-slate-500">Escolha quais etapas quer visualizar.</p>
+        </div>
+        <button id="btn-close-kanban-cfg" type="button" class="rounded-xl p-2 text-slate-400 hover:bg-slate-100">
+          <i data-lucide="x" class="h-5 w-5"></i>
+        </button>
+      </div>
+      <div class="mt-5 space-y-2">
+        <label class="flex items-center gap-3 rounded-xl border border-slate-200 p-3">
+          <input type="checkbox" id="cfg-recebido" checked class="h-4 w-4 rounded text-orange-500">
+          <span class="text-sm font-bold text-slate-800">1. Recebido</span>
+        </label>
+        <label class="flex items-center gap-3 rounded-xl border border-slate-200 p-3">
+          <input type="checkbox" id="cfg-preparando" checked class="h-4 w-4 rounded text-orange-500">
+          <span class="text-sm font-bold text-slate-800">2. Preparando</span>
+        </label>
+        <label class="flex items-center gap-3 rounded-xl border border-slate-200 p-3">
+          <input type="checkbox" id="cfg-pronto" checked class="h-4 w-4 rounded text-orange-500">
+          <span class="text-sm font-bold text-slate-800">3. Pronto</span>
+        </label>
+        <label class="flex items-center gap-3 rounded-xl border border-slate-200 p-3">
+          <input type="checkbox" id="cfg-entrega" checked class="h-4 w-4 rounded text-orange-500">
+          <span class="text-sm font-bold text-slate-800">4. Em entrega</span>
+        </label>
+      </div>
+      <button id="btn-apply-kanban-cfg" type="button" class="mt-6 w-full rounded-xl bg-slate-950 px-4 py-3 text-sm font-extrabold text-white">
+        Concluir
+      </button>
+    </div>
+  </div>
+
+  <!-- Script Lógico da Central -->
+  <script>
+    let orders = JucaPanel.getStorage("bora-panel-orders", JucaPanel.DEFAULT_ORDERS);
+    let soldOut = JucaPanel.getStorage("bora-panel-sold-out", JucaPanel.DEFAULT_SOLD_OUT);
+    let selectedOrder = null;
+    let pendingAssignOrder = null;
+    let searchQuery = "";
+
+    // Sincroniza novo pedido vindo do cardápio
+    function checkIncomingOrder() {
+      try {
+        const itemStr = localStorage.getItem("bora-panel-repeat-order");
+        if (itemStr) {
+          const item = JSON.parse(itemStr);
+          if (!orders.some(o => o.id === item.id)) {
+            orders.unshift(item);
+            JucaPanel.setStorage("bora-panel-orders", orders);
+            renderKanban();
+          }
+          localStorage.removeItem("bora-panel-repeat-order");
+        }
+      } catch(e) {}
+    }
+    checkIncomingOrder();
+    window.addEventListener("storage", checkIncomingOrder);
+
+    // Renderiza o Kanban
+    function renderKanban() {
+      const q = searchQuery.trim().toLowerCase();
+      const filtered = orders.filter(o => {
+        if (!q) return true;
+        return [o.id, o.customer, o.channel, o.payment, o.price, o.courier || "", ...(o.items || [])]
+          .join(" ").toLowerCase().includes(q);
+      });
+
+      // Atualiza contadores
+      const counts = {
+        recebido: orders.filter(o => o.status === "recebido").length,
+        preparando: orders.filter(o => o.status === "preparando").length,
+        pronto: orders.filter(o => o.status === "pronto").length,
+        entrega: orders.filter(o => o.status === "entrega").length,
+      };
+      document.getElementById("count-recebido").textContent = counts.recebido;
+      document.getElementById("count-preparando").textContent = counts.preparando;
+      document.getElementById("count-pronto").textContent = counts.pronto;
+      document.getElementById("count-entrega").textContent = counts.entrega;
+      document.getElementById("badge-total-pedidos").textContent = orders.length;
+
+      document.getElementById("col-count-recebido").textContent = `(${filtered.filter(o => o.status === "recebido").length})`;
+      document.getElementById("col-count-preparando").textContent = `(${filtered.filter(o => o.status === "preparando").length})`;
+      document.getElementById("col-count-pronto").textContent = `(${filtered.filter(o => o.status === "pronto").length})`;
+      document.getElementById("col-count-entrega").textContent = `(${filtered.filter(o => o.status === "entrega").length})`;
+
+      // Renderiza cada coluna
+      ["recebido", "preparando", "pronto", "entrega"].forEach(status => {
+        const listEl = document.getElementById("list-" + status);
+        const colOrders = filtered.filter(o => o.status === status);
+        if (colOrders.length === 0) {
+          listEl.innerHTML = `<div class="grid min-h-36 place-items-center rounded-2xl border border-dashed border-slate-200 bg-white text-center text-xs font-semibold text-slate-400">Nenhum pedido nesta etapa.</div>`;
+          return;
+        }
+
+        listEl.innerHTML = colOrders.map(o => {
+          let actionLabel = "Confirmar pedido";
+          let actionBtnClass = "bg-emerald-500 text-white hover:bg-emerald-600";
+          if (o.status === "preparando") {
+            actionLabel = "Marcar pronto";
+            actionBtnClass = "bg-amber-100 text-amber-700 hover:bg-amber-200";
+          } else if (o.status === "pronto") {
+            actionLabel = "Atribuir motoboy";
+            actionBtnClass = "bg-blue-100 text-blue-700 hover:bg-blue-200";
+          } else if (o.status === "entrega") {
+            actionLabel = "Finalizar";
+            actionBtnClass = "bg-slate-900 text-white hover:bg-slate-800";
+          }
+
+          return `
+            <article class="rounded-2xl border border-slate-200 bg-white p-3.5 shadow-sm transition hover:border-slate-300">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <div class="text-xs font-extrabold text-slate-900">#${o.id}</div>
+                  <div class="mt-1 text-sm font-extrabold text-slate-900">${o.customer}</div>
+                </div>
+                <div class="text-[10px] font-extrabold ${o.status === 'entrega' ? 'text-blue-500' : 'text-red-500'}">
+                  ${o.status === 'entrega' ? 'Saiu há ' : 'Há '}${o.minutes} min
+                </div>
+              </div>
+
+              <div class="mt-2 flex items-center gap-1.5 text-[10px] font-semibold text-slate-400">
+                <i data-lucide="store" class="h-3.5 w-3.5"></i> ${o.channel}
+                ${o.courier ? `<span class="ml-auto font-bold text-blue-600">🛵 ${o.courier}</span>` : ''}
+              </div>
+
+              <div class="mt-3 flex items-center text-xs">
+                <span class="inline-flex items-center gap-1.5 text-slate-500">
+                  <i data-lucide="circle-dollar-sign" class="h-3.5 w-3.5"></i> ${o.payment}
+                </span>
+                <span class="ml-auto font-extrabold text-slate-900">${o.price}</span>
+              </div>
+
+              <button type="button" onclick="openDrawer(${o.id})" class="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-[10px] font-extrabold text-slate-600 transition hover:border-orange-200 hover:bg-orange-50 hover:text-orange-600">
+                <i data-lucide="receipt-text" class="h-3.5 w-3.5"></i> Ver detalhes
+              </button>
+
+              <button type="button" onclick="advanceOrderStatus(${o.id})" class="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-[11px] font-extrabold transition ${actionBtnClass}">
+                ${actionLabel}
+              </button>
+            </article>
+          `;
+        }).join("");
+      });
+
+      renderMotoboys();
+      renderSoldOut();
+      lucide.createIcons();
+    }
+
+    // Avança o status do pedido
+    window.advanceOrderStatus = function(id) {
+      const order = orders.find(o => o.id === id);
+      if (!order) return;
+      if (order.status === "recebido") {
+        order.status = "preparando";
+        order.minutes = 0;
+      } else if (order.status === "preparando") {
+        order.status = "pronto";
+        order.minutes = 0;
+      } else if (order.status === "pronto") {
+        openAssignCourierModal(order);
+        return;
+      } else if (order.status === "entrega") {
+        orders = orders.filter(o => o.id !== id);
+        JucaPanel.showToast(`Pedido #${id} finalizado!`);
+      }
+      JucaPanel.setStorage("bora-panel-orders", orders);
+      renderKanban();
+    };
+
+    // Modal de Atribuição de Motoboy
+    function openAssignCourierModal(order) {
+      pendingAssignOrder = order;
+      document.getElementById("courier-modal-sub").textContent = `Pedido #${order.id} • ${order.customer}`;
+      const listEl = document.getElementById("courier-modal-list");
+      listEl.innerHTML = JucaPanel.DEFAULT_COURIERS.map(c => {
+        const isAvail = c.status === "Disponível";
+        return `
+          <button type="button" ${isAvail ? '' : 'disabled'} onclick="confirmAssignCourier('${c.name}')" class="flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left transition ${isAvail ? 'border-slate-200 hover:border-blue-200 hover:bg-blue-50' : 'cursor-not-allowed border-slate-100 bg-slate-50 opacity-55'}">
+            <div class="grid h-9 w-9 place-items-center rounded-full bg-slate-100">
+              <i data-lucide="user-round" class="h-4 w-4 text-slate-500"></i>
+            </div>
+            <div class="flex-1">
+              <div class="text-xs font-extrabold text-slate-900">${c.name}</div>
+              <div class="mt-1 text-[10px] font-semibold ${isAvail ? 'text-emerald-600' : 'text-amber-600'}">● ${c.status}</div>
+            </div>
+            <span class="text-[10px] font-semibold text-slate-400">${c.deliveries}</span>
+          </button>
+        `;
+      }).join("");
+      document.getElementById("modal-courier").classList.remove("hidden");
+      lucide.createIcons();
+    }
+
+    window.confirmAssignCourier = function(courierName) {
+      if (!pendingAssignOrder) return;
+      pendingAssignOrder.status = "entrega";
+      pendingAssignOrder.courier = courierName;
+      pendingAssignOrder.channel = "Delivery";
+      pendingAssignOrder.minutes = 0;
+      JucaPanel.setStorage("bora-panel-orders", orders);
+      document.getElementById("modal-courier").classList.add("hidden");
+      JucaPanel.showToast(`Pedido #${pendingAssignOrder.id} atribuído a ${courierName}.`);
+      renderKanban();
+    };
+
+    document.getElementById("btn-close-courier").onclick = () => {
+      document.getElementById("modal-courier").classList.add("hidden");
+    };
+
+    // Abre Drawer de Detalhes
+    window.openDrawer = function(id) {
+      selectedOrder = orders.find(o => o.id === id);
+      if (!selectedOrder) return;
+      document.getElementById("drawer-order-id").textContent = `#${selectedOrder.id}`;
+      document.getElementById("drawer-order-status").textContent = selectedOrder.status.toUpperCase();
+      document.getElementById("drawer-customer-avatar").textContent = selectedOrder.customer.split(" ").slice(0, 2).map(w => w[0]).join("");
+      document.getElementById("drawer-customer-name").textContent = selectedOrder.customer;
+      document.getElementById("drawer-customer-phone").textContent = selectedOrder.phone || "Não informado";
+      document.getElementById("drawer-customer-channel").textContent = selectedOrder.channel;
+      document.getElementById("drawer-order-address").textContent = selectedOrder.address || "Retirada no balcão";
+      document.getElementById("drawer-order-neighborhood").textContent = selectedOrder.neighborhood || "Paciência";
+      document.getElementById("drawer-order-created").textContent = selectedOrder.createdAt || "Agora";
+      document.getElementById("drawer-order-minutes").textContent = `Há ${selectedOrder.minutes} min nesta etapa`;
+      document.getElementById("drawer-order-payment").textContent = selectedOrder.payment;
+      document.getElementById("drawer-order-price").textContent = selectedOrder.price;
+      document.getElementById("drawer-order-notes").textContent = selectedOrder.notes || "Nenhuma observação neste pedido.";
+
+      document.getElementById("drawer-order-items").innerHTML = selectedOrder.items.map(it => `
+        <div class="rounded-xl bg-slate-50 px-3 py-3 text-xs font-semibold text-slate-700">${it}</div>
+      `).join("");
+
+      // Linha do tempo
+      const steps = [
+        ["recebido", "Pedido recebido", "Entrou na central de pedidos"],
+        ["preparando", "No forno / preparo", "Pizza sendo montada e assada"],
+        ["pronto", "Pedido pronto", "Embalado aguardando saída"],
+        ["entrega", "Em rota de entrega", selectedOrder.courier ? `Com motoboy ${selectedOrder.courier}` : "Aguardando motoboy"]
+      ];
+      const curIdx = ["recebido", "preparando", "pronto", "entrega"].indexOf(selectedOrder.status);
+      document.getElementById("drawer-timeline").innerHTML = steps.map(([st, title, sub], idx) => {
+        const isDone = idx <= curIdx;
+        return `
+          <div class="flex gap-3">
+            <div class="flex flex-col items-center">
+              <span class="grid h-7 w-7 place-items-center rounded-full text-[10px] font-extrabold ${isDone ? 'bg-orange-500 text-white' : 'bg-slate-100 text-slate-400'}">
+                ${isDone ? '✓' : idx + 1}
+              </span>
+              ${idx < 3 ? `<span class="h-9 w-px ${idx < curIdx ? 'bg-orange-300' : 'bg-slate-200'}"></span>` : ''}
+            </div>
+            <div class="pt-1">
+              <div class="text-xs font-extrabold ${isDone ? 'text-slate-900' : 'text-slate-400'}">${title}</div>
+              <div class="mt-1 text-[10px] text-slate-400">${sub}</div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      document.getElementById("order-drawer").classList.remove("hidden");
+      lucide.createIcons();
+    };
+
+    document.getElementById("btn-close-drawer").onclick = () => {
+      document.getElementById("order-drawer").classList.add("hidden");
+    };
+
+    // Cancelar Pedido
+    document.getElementById("btn-cancel-order").onclick = () => {
+      if (!selectedOrder) return;
+      orders = orders.filter(o => o.id !== selectedOrder.id);
+      JucaPanel.setStorage("bora-panel-orders", orders);
+      document.getElementById("order-drawer").classList.add("hidden");
+      JucaPanel.showToast(`Pedido #${selectedOrder.id} cancelado.`);
+      renderKanban();
+    };
+
+    // Comprovante Térmico
+    document.getElementById("btn-print-receipt").onclick = () => {
+      if (!selectedOrder) return;
+      document.getElementById("receipt-title").textContent = `Pedido #${selectedOrder.id}`;
+      document.getElementById("receipt-content").innerHTML = `
+        <div class="text-center">
+          <img src="/logo_juca.png" alt="Pizza do Juca" class="mx-auto h-12 w-12 object-contain" onerror="this.src='/logo.png'">
+          <div class="mt-2 font-bold text-slate-900">PIZZA DO JUCA</div>
+          <div class="text-[10px] text-slate-500">Paciência - Rio de Janeiro - RJ</div>
+          <div class="text-[10px] text-slate-500">WhatsApp: (21) 97314-2264</div>
+          <div class="mt-1 font-bold">Pedido #${selectedOrder.id} • ${selectedOrder.createdAt || 'Hoje'}</div>
+        </div>
+        <div class="my-4 border-t border-dashed border-slate-300"></div>
+        <div><strong>Cliente:</strong> ${selectedOrder.customer}</div>
+        <div><strong>Telefone:</strong> ${selectedOrder.phone || 'Não informado'}</div>
+        <div><strong>Canal:</strong> ${selectedOrder.channel}</div>
+        <div><strong>Endereço:</strong> ${selectedOrder.address || 'Balcão'} (${selectedOrder.neighborhood || 'Paciência'})</div>
+        <div><strong>Pagamento:</strong> ${selectedOrder.payment}</div>
+        <div class="my-4 border-t border-dashed border-slate-300"></div>
+        <div class="font-bold mb-1">ITENS DO PEDIDO:</div>
+        ${selectedOrder.items.map(it => `<div>• ${it}</div>`).join("")}
+        <div class="my-4 border-t border-dashed border-slate-300"></div>
+        <div class="flex justify-between text-sm font-bold text-slate-900">
+          <span>TOTAL A PAGAR</span>
+          <span>${selectedOrder.price}</span>
+        </div>
+        ${selectedOrder.notes ? `<div class="my-4 border-t border-dashed border-slate-300"></div><div><strong>Obs.:</strong> ${selectedOrder.notes}</div>` : ''}
+      `;
+      document.getElementById("modal-receipt").classList.remove("hidden");
+    };
+
+    document.getElementById("btn-close-receipt").onclick = () => document.getElementById("modal-receipt").classList.add("hidden");
+    document.getElementById("btn-close-receipt-btn").onclick = () => document.getElementById("modal-receipt").classList.add("hidden");
+    document.getElementById("btn-do-print").onclick = () => {
+      window.print();
+      JucaPanel.showToast("Janela de impressão aberta.");
+    };
+
+    // Modal de Edição
+    function openEditModal(order) {
+      document.getElementById("edit-modal-title").textContent = `#${order.id} • ${order.customer}`;
+      document.getElementById("edit-input-items").value = order.items.join("\n");
+      document.getElementById("edit-input-notes").value = order.notes || "";
+      document.getElementById("edit-input-payment").value = order.payment;
+      document.getElementById("edit-input-price").value = order.price;
+      document.getElementById("modal-edit").classList.remove("hidden");
+    }
+
+    document.getElementById("btn-open-edit-order").onclick = () => openEditModal(selectedOrder);
+    document.getElementById("btn-edit-order-drawer").onclick = () => openEditModal(selectedOrder);
+    document.getElementById("btn-close-edit").onclick = () => document.getElementById("modal-edit").classList.add("hidden");
+    document.getElementById("btn-cancel-edit").onclick = () => document.getElementById("modal-edit").classList.add("hidden");
+
+    document.getElementById("form-edit-order").onsubmit = (e) => {
+      e.preventDefault();
+      if (!selectedOrder) return;
+      const newItems = document.getElementById("edit-input-items").value.split("\n").map(s => s.trim()).filter(Boolean);
+      if (newItems.length > 0) selectedOrder.items = newItems;
+      selectedOrder.notes = document.getElementById("edit-input-notes").value.trim();
+      selectedOrder.payment = document.getElementById("edit-input-payment").value;
+      const rawP = document.getElementById("edit-input-price").value.trim();
+      selectedOrder.price = rawP.startsWith("R$") ? rawP : "R$ " + rawP;
+
+      JucaPanel.setStorage("bora-panel-orders", orders);
+      document.getElementById("modal-edit").classList.add("hidden");
+      openDrawer(selectedOrder.id);
+      renderKanban();
+      JucaPanel.showToast(`Pedido #${selectedOrder.id} atualizado.`);
+    };
+
+    // Modal de Pedido Manual
+    document.getElementById("btn-new-order").onclick = () => {
+      document.getElementById("modal-manual").classList.remove("hidden");
+    };
+    document.getElementById("btn-close-manual").onclick = () => document.getElementById("modal-manual").classList.add("hidden");
+    document.getElementById("btn-cancel-manual").onclick = () => document.getElementById("modal-manual").classList.add("hidden");
+
+    document.getElementById("form-manual-order").onsubmit = (e) => {
+      e.preventDefault();
+      const nextId = Math.max(...orders.map(o => o.id), 1051) + 1;
+      const cust = document.getElementById("manual-customer").value.trim();
+      const it = document.getElementById("manual-item").value.trim();
+      const ch = document.getElementById("manual-channel").value;
+      const pay = document.getElementById("manual-payment").value;
+      const rawP = document.getElementById("manual-price").value.trim();
+      const pr = rawP.startsWith("R$") ? rawP : "R$ " + rawP;
+
+      const newOrd = {
+        id: nextId,
+        customer: cust,
+        channel: ch,
+        items: [`1x ${it}`],
+        payment: pay,
+        price: pr,
+        minutes: 0,
+        status: "recebido",
+        phone: "Não informado",
+        address: ch === "Balcão" ? "Retirada no balcão" : "Paciência - RJ",
+        neighborhood: "Paciência",
+        notes: "Pedido criado manualmente no balcão.",
+        createdAt: "Agora"
+      };
+
+      orders.unshift(newOrd);
+      JucaPanel.setStorage("bora-panel-orders", orders);
+      document.getElementById("modal-manual").classList.add("hidden");
+      document.getElementById("form-manual-order").reset();
+      renderKanban();
+      JucaPanel.showToast(`Pedido #${nextId} cadastrado!`);
+    };
+
+    // Configurar Kanban
+    document.getElementById("btn-config-kanban").onclick = () => {
+      document.getElementById("modal-kanban-cfg").classList.remove("hidden");
+    };
+    document.getElementById("btn-close-kanban-cfg").onclick = () => document.getElementById("modal-kanban-cfg").classList.add("hidden");
+    document.getElementById("btn-apply-kanban-cfg").onclick = () => {
+      const showRec = document.getElementById("cfg-recebido").checked;
+      const showPrep = document.getElementById("cfg-preparando").checked;
+      const showPro = document.getElementById("cfg-pronto").checked;
+      const showEnt = document.getElementById("cfg-entrega").checked;
+
+      document.getElementById("col-recebido").classList.toggle("hidden", !showRec);
+      document.getElementById("col-preparando").classList.toggle("hidden", !showPrep);
+      document.getElementById("col-pronto").classList.toggle("hidden", !showPro);
+      document.getElementById("col-entrega").classList.toggle("hidden", !showEnt);
+
+      const activeCount = [showRec, showPrep, showPro, showEnt].filter(Boolean).length;
+      document.getElementById("kanban-grid").className = `mt-4 grid gap-4 grid-cols-${Math.max(activeCount, 1)}`;
+      document.getElementById("modal-kanban-cfg").classList.add("hidden");
+    };
+
+    // Busca ao vivo
+    document.getElementById("input-search").oninput = (e) => {
+      searchQuery = e.target.value;
+      const banner = document.getElementById("search-banner");
+      if (searchQuery.trim()) {
+        banner.classList.remove("hidden");
+        document.getElementById("search-text").textContent = searchQuery;
+      } else {
+        banner.classList.add("hidden");
+      }
+      renderKanban();
+    };
+
+    document.getElementById("btn-clear-search").onclick = () => {
+      searchQuery = "";
+      document.getElementById("input-search").value = "";
+      document.getElementById("search-banner").classList.add("hidden");
+      renderKanban();
+    };
+
+    // Render Motoboys e Esgotados
+    function renderMotoboys() {
+      document.getElementById("motoboys-list").innerHTML = JucaPanel.DEFAULT_COURIERS.map(c => `
+        <div class="flex items-center gap-3 py-3">
+          <div class="grid h-9 w-9 place-items-center rounded-full bg-slate-100">
+            <i data-lucide="user-round" class="h-4 w-4 text-slate-500"></i>
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="text-xs font-extrabold text-slate-900">${c.name}</div>
+            <div class="mt-1 text-[10px] font-semibold ${c.tone === 'green' ? 'text-emerald-600' : 'text-amber-600'}">● ${c.status}</div>
+          </div>
+          <div class="text-[10px] font-semibold text-slate-400">${c.deliveries}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderSoldOut() {
+      document.getElementById("badge-sold-out-count").textContent = `${soldOut.length} itens`;
+      if (soldOut.length === 0) {
+        document.getElementById("sold-out-list").innerHTML = `<div class="py-8 text-center text-xs font-semibold text-emerald-600">Todos os produtos estão disponíveis.</div>`;
+        return;
+      }
+      document.getElementById("sold-out-list").innerHTML = soldOut.map(it => `
+        <div class="flex items-center gap-3 py-3">
+          <div class="grid h-10 w-10 place-items-center rounded-xl bg-orange-50 p-1">
+            <img src="/logo_juca.png" alt="" class="h-8 w-8 object-contain" onerror="this.src='/logo.png'">
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="text-xs font-extrabold text-slate-900">${it}</div>
+            <div class="mt-1 text-[10px] text-slate-400">Indisponível para novos pedidos</div>
+          </div>
+          <span class="rounded-full bg-red-50 px-2 py-1 text-[9px] font-extrabold text-red-600">Pausado</span>
+          <button type="button" onclick="restockItem('${it}')" class="rounded-lg bg-slate-100 px-3 py-2 text-[10px] font-extrabold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 transition">Repor</button>
+        </div>
+      `).join("");
+    }
+
+    window.restockItem = function(it) {
+      soldOut = soldOut.filter(i => i !== it);
+      JucaPanel.setStorage("bora-panel-sold-out", soldOut);
+      renderSoldOut();
+      JucaPanel.showToast(`${it} reposto no cardápio!`);
+    };
+
+    // Inicialização
+    renderKanban();
+  </script>
+</body>
+</html>

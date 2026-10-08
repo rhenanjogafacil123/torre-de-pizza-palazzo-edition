@@ -10,6 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PainelIndexRouteImport } from './routes/painel/index'
+import { Route as PainelAdminRouteImport } from './routes/painel/admin'
+import { Route as PainelPedidosRouteImport } from './routes/painel/pedidos'
+import { Route as PainelMotoboyRouteImport } from './routes/painel/motoboy'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -17,26 +21,76 @@ const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 
+const PainelIndexRoute = PainelIndexRouteImport.update({
+  id: '/painel/',
+  path: '/painel/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+
+const PainelAdminRoute = PainelAdminRouteImport.update({
+  id: '/painel/admin',
+  path: '/painel/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+
+const PainelPedidosRoute = PainelPedidosRouteImport.update({
+  id: '/painel/pedidos',
+  path: '/painel/pedidos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+
+const PainelMotoboyRoute = PainelMotoboyRouteImport.update({
+  id: '/painel/motoboy',
+  path: '/painel/motoboy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/painel': typeof PainelIndexRoute
+  '/painel/admin': typeof PainelAdminRoute
+  '/painel/pedidos': typeof PainelPedidosRoute
+  '/painel/motoboy': typeof PainelMotoboyRoute
 }
+
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/painel': typeof PainelIndexRoute
+  '/painel/admin': typeof PainelAdminRoute
+  '/painel/pedidos': typeof PainelPedidosRoute
+  '/painel/motoboy': typeof PainelMotoboyRoute
 }
+
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/painel/': typeof PainelIndexRoute
+  '/painel/admin': typeof PainelAdminRoute
+  '/painel/pedidos': typeof PainelPedidosRoute
+  '/painel/motoboy': typeof PainelMotoboyRoute
 }
+
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/painel' | '/painel/admin' | '/painel/pedidos' | '/painel/motoboy'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/painel' | '/painel/admin' | '/painel/pedidos' | '/painel/motoboy'
+  id:
+    | '__root__'
+    | '/'
+    | '/painel/'
+    | '/painel/admin'
+    | '/painel/pedidos'
+    | '/painel/motoboy'
   fileRoutesById: FileRoutesById
 }
+
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PainelIndexRoute: typeof PainelIndexRoute
+  PainelAdminRoute: typeof PainelAdminRoute
+  PainelPedidosRoute: typeof PainelPedidosRoute
+  PainelMotoboyRoute: typeof PainelMotoboyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,12 +102,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/painel/': {
+      id: '/painel/'
+      path: '/painel'
+      fullPath: '/painel'
+      preLoaderRoute: typeof PainelIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel/admin': {
+      id: '/painel/admin'
+      path: '/painel/admin'
+      fullPath: '/painel/admin'
+      preLoaderRoute: typeof PainelAdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel/pedidos': {
+      id: '/painel/pedidos'
+      path: '/painel/pedidos'
+      fullPath: '/painel/pedidos'
+      preLoaderRoute: typeof PainelPedidosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel/motoboy': {
+      id: '/painel/motoboy'
+      path: '/painel/motoboy'
+      fullPath: '/painel/motoboy'
+      preLoaderRoute: typeof PainelMotoboyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PainelIndexRoute: PainelIndexRoute,
+  PainelAdminRoute: PainelAdminRoute,
+  PainelPedidosRoute: PainelPedidosRoute,
+  PainelMotoboyRoute: PainelMotoboyRoute,
 }
+
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()

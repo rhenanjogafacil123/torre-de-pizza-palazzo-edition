@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard do Administrador | Pizza do Juca</title>
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen bg-[#f4f6fa] text-slate-950 font-sans antialiased">
+  <!-- Aviso para telas menores que 1280px -->
+  <div class="grid min-h-screen place-items-center bg-[#f5f7fb] px-5 xl:hidden">
+    <div class="max-w-sm rounded-3xl border border-slate-200 bg-white p-7 text-center shadow-[0_24px_80px_-50px_rgba(15,23,42,.55)]">
+      <div class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-orange-50 text-orange-600">
+        <i data-lucide="monitor-smartphone" class="h-7 w-7"></i>
+      </div>
+      <h1 class="mt-5 text-xl font-extrabold tracking-tight text-slate-950">Painel feito para computador</h1>
+      <p class="mt-2 text-sm leading-6 text-slate-500">
+        A administração e a central de pedidos usam bastante informação ao mesmo tempo. Abra em uma tela desktop com pelo menos 1280px para manter tudo legível.
+      </p>
+      <a href="../" class="mt-5 inline-flex items-center gap-2 rounded-xl bg-slate-950 px-4 py-3 text-sm font-bold text-white transition hover:bg-slate-800">
+        Voltar para os painéis <i data-lucide="arrow-right" class="h-4 w-4"></i>
+      </a>
+    </div>
+  </div>
+
+  <!-- Layout Desktop Principal -->
+  <div class="hidden min-h-screen xl:block">
+    <!-- Barra Lateral Fixa -->
+    <aside class="fixed inset-y-0 left-0 z-40 flex w-[248px] flex-col border-r border-slate-200/80 bg-white px-4 py-5">
+      <a href="../" class="mb-7 flex items-center gap-3 px-2">
+        <div class="grid h-11 w-11 place-items-center rounded-2xl bg-orange-50 p-1 border border-orange-100 shadow-sm">
+          <img src="/logo_juca.png" alt="Pizza do Juca" class="h-9 w-9 object-contain" onerror="this.src='/logo.png'">
+        </div>
+        <div class="leading-none">
+          <div class="text-[16px] font-extrabold tracking-tight text-slate-950">Pizza do Juca</div>
+          <div class="mt-1.5 text-[9px] font-extrabold uppercase tracking-[0.18em] text-orange-500">Painel de gestão</div>
+        </div>
+      </a>
+
+      <!-- Menu de Navegação -->
+      <div class="space-y-6 overflow-y-auto pr-1">
+        <div>
+          <div class="mb-2 px-3 text-[10px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Visão geral</div>
+          <nav class="space-y-1">
+            <a href="./" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-bold bg-orange-50 text-orange-600 transition">
+              <i data-lucide="layout-dashboard" class="h-[17px] w-[17px]"></i>
+              <span class="flex-1">Dashboard</span>
+            </a>
+            <a href="../pedidos/" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-950 transition">
+              <i data-lucide="clipboard-list" class="h-[17px] w-[17px]"></i>
+              <span class="flex-1">Pedidos</span>
+              <span class="rounded-full bg-red-500 px-2 py-0.5 text-[10px] font-extrabold text-white">10</span>
+            </a>
+          </nav>
+        </div>
+
+        <div>
+          <div class="mb-2 px-3 text-[10px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Operação</div>
+          <nav class="space-y-1">
+            <a href="./" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-950 transition">
+              <i data-lucide="package" class="h-[17px] w-[17px]"></i>
+              <span class="flex-1">Pizzas & Itens</span>
+            </a>
+            <a href="./" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-950 transition">
+              <i data-lucide="boxes" class="h-[17px] w-[17px]"></i>
+              <span class="flex-1">Categorias</span>
+            </a>
+            <a href="./" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-950 transition">
+              <i data-lucide="tag" class="h-[17px] w-[17px]"></i>
+              <span class="flex-1">Promoções</span>
+            </a>
+            <a href="../motoboy/" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-950 transition">
+              <i data-lucide="bike" class="h-[17px] w-[17px]"></i>
+              <span class="flex-1">Motoboys</span>
+            </a>
+            <a href="./" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-950 transition">
+              <i data-lucide="contact-round" class="h-[17px] w-[17px]"></i>
+              <span class="flex-1">Clientes</span>
+            </a>
+            <a href="../pedidos/" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-950 transition">
+              <i data-lucide="users" class="h-[17px] w-[17px]"></i>
+              <span class="flex-1">Atendentes</span>
+            </a>
+          </nav>
+        </div>
+
+        <div>
+          <div class="mb-2 px-3 text-[10px] font-extrabold uppercase tracking-[0.16em] text-slate-400">Gestão</div>
+          <nav class="space-y-1">
+            <a href="./" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-950 transition">
+              <i data-lucide="circle-dollar-sign" class="h-[17px] w-[17px]"></i>
+              <span class="flex-1">Financeiro</span>
+            </a>
+            <a href="./" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-950 transition">
+              <i data-lucide="chart-no-axes-combined" class="h-[17px] w-[17px]"></i>
+              <span class="flex-1">Relatórios</span>
+            </a>
+            <a href="../" class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-950 transition">
+              <i data-lucide="settings" class="h-[17px] w-[17px]"></i>
+              <span class="flex-1">Configurações</span>
+            </a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Rodapé Sidebar -->
+      <div class="mt-auto rounded-2xl border border-orange-100 bg-gradient-to-br from-orange-50 via-white to-amber-50 p-4">
+        <div class="text-[11px] font-extrabold uppercase tracking-[0.12em] text-orange-600">Pizza do Juca</div>
+        <div class="mt-2 text-xs leading-5 text-slate-500">
+          Operação em Paciência - RJ. Atendimento, delivery e balcão ativos.
+        </div>
+        <a href="/" class="mt-3 inline-flex items-center text-xs font-extrabold text-slate-800 hover:text-orange-600 transition">
+          Ver cardápio <i data-lucide="arrow-right" class="ml-1 h-3.5 w-3.5"></i>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Área de Conteúdo -->
+    <div class="pl-[248px]">
+      <!-- Header Superior -->
+      <header class="sticky top-0 z-30 border-b border-slate-200/70 bg-white/92 backdrop-blur-xl">
+        <div class="flex h-[70px] items-center gap-4 px-6 xl:px-8">
+          <div class="flex items-center gap-2 text-xs font-semibold text-slate-400">
+            <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            Operação interna • Pizza do Juca • Paciência - RJ
+          </div>
+
+          <!-- Ações Header Direito -->
+          <div class="ml-auto flex items-center gap-3">
+            <!-- Botão Notificações -->
+            <div class="relative">
+              <button id="btn-notif" type="button" class="relative rounded-xl border border-transparent p-2.5 text-slate-500 transition hover:border-slate-200 hover:bg-slate-50">
+                <i data-lucide="bell" class="h-5 w-5"></i>
+                <span class="absolute right-1 top-1 grid h-4 min-w-4 place-items-center rounded-full bg-red-500 px-1 text-[9px] font-extrabold text-white">3</span>
+              </button>
+
+              <!-- Dropdown Notificações -->
+              <div id="drop-notif" class="hidden absolute right-0 top-13 z-50 w-[330px] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl">
+                <div class="flex items-center justify-between border-b border-slate-100 px-4 py-3">
+                  <div>
+                    <div class="text-xs font-extrabold text-slate-900">Notificações</div>
+                    <div class="mt-0.5 text-[10px] text-slate-400">3 itens precisam de atenção</div>
+                  </div>
+                  <span class="rounded-full bg-orange-50 px-2 py-1 text-[9px] font-extrabold text-orange-600">Agora</span>
+                </div>
+                <div class="divide-y divide-slate-100">
+                  <a href="../pedidos/" class="flex w-full gap-3 px-4 py-3 text-left transition hover:bg-slate-50">
+                    <span class="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full bg-emerald-500"></span>
+                    <span>
+                      <span class="block text-xs font-extrabold text-slate-800">Pedido #1053</span>
+                      <span class="mt-1 block text-[10px] leading-4 text-slate-400">Novo pedido de Pizza Calabresa recebido há 1 minuto.</span>
+                    </span>
+                  </a>
+                  <a href="../pedidos/" class="flex w-full gap-3 px-4 py-3 text-left transition hover:bg-slate-50">
+                    <span class="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full bg-amber-400"></span>
+                    <span>
+                      <span class="block text-xs font-extrabold text-slate-800">Item pausado</span>
+                      <span class="mt-1 block text-[10px] leading-4 text-slate-400">Borda de Catupiry marcada como indisponível.</span>
+                    </span>
+                  </a>
+                  <a href="../motoboy/" class="flex w-full gap-3 px-4 py-3 text-left transition hover:bg-slate-50">
+                    <span class="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full bg-red-500"></span>
+                    <span>
+                      <span class="block text-xs font-extrabold text-slate-800">Entrega em rota</span>
+                      <span class="mt-1 block text-[10px] leading-4 text-slate-400">Pedido #1043 em entrega para Paciência há 18 minutos.</span>
+                    </span>
+                  </a>
+                </div>
+                <a href="../pedidos/" class="flex items-center justify-center border-t border-slate-100 px-4 py-3 text-[10px] font-extrabold text-orange-600 hover:bg-orange-50 transition">
+                  Abrir central de pedidos
+                </a>
+              </div>
+            </div>
+
+            <!-- Perfil Usuário -->
+            <div class="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-white px-2.5 py-2 shadow-sm">
+              <div class="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-orange-500 to-amber-400 text-xs font-extrabold text-white">
+                JO
+              </div>
+              <div class="min-w-[112px] text-left">
+                <div class="text-xs font-extrabold text-slate-900">Juca Oliveira</div>
+                <div class="text-[10px] text-slate-400">Administrador</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Conteúdo do Dashboard -->
+      <main class="mx-auto w-full max-w-[1680px] p-6 2xl:p-8">
+        <!-- Título e Subtítulo -->
+        <div class="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <p class="text-xs font-bold uppercase tracking-[0.16em] text-orange-500">Visão do negócio</p>
+              <span class="rounded-full bg-slate-100 px-2 py-1 text-[9px] font-extrabold uppercase tracking-[0.12em] text-slate-500">Painel ativo</span>
+            </div>
+            <h1 class="mt-1 text-3xl font-extrabold tracking-tight sm:text-4xl text-slate-950">Dashboard</h1>
+            <p class="mt-2 text-sm text-slate-500">Acompanhe a operação e as vendas da Pizza do Juca em tempo real.</p>
+          </div>
+          <a href="../pedidos/" class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-extrabold text-slate-600 shadow-sm transition hover:border-orange-200 hover:text-orange-600">
+            Hoje • ver pedidos ao vivo
+          </a>
+        </div>
+
+        <!-- 4 Cards de Métricas -->
+        <div class="mt-4 grid grid-cols-4 gap-4">
+          <section class="rounded-2xl border border-slate-200/75 bg-white p-5 shadow-[0_18px_48px_-36px_rgba(15,23,42,0.30)]">
+            <div class="flex items-start gap-4">
+              <div class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-emerald-50 text-emerald-600">
+                <i data-lucide="trending-up" class="h-5 w-5"></i>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-slate-500">Faturamento hoje</p>
+                <p class="mt-1 text-2xl font-extrabold tracking-tight text-slate-950">R$ 3.840,00</p>
+                <p class="mt-2 text-xs font-semibold text-emerald-600">↑ 14% em relação a ontem</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="rounded-2xl border border-slate-200/75 bg-white p-5 shadow-[0_18px_48px_-36px_rgba(15,23,42,0.30)]">
+            <div class="flex items-start gap-4">
+              <div class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-blue-50 text-blue-600">
+                <i data-lucide="shopping-cart" class="h-5 w-5"></i>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-slate-500">Pedidos hoje</p>
+                <p class="mt-1 text-2xl font-extrabold tracking-tight text-slate-950">74</p>
+                <p class="mt-2 text-xs font-semibold text-emerald-600">↑ 18% em relação a ontem</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="rounded-2xl border border-slate-200/75 bg-white p-5 shadow-[0_18px_48px_-36px_rgba(15,23,42,0.30)]">
+            <div class="flex items-start gap-4">
+              <div class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-violet-50 text-violet-600">
+                <i data-lucide="receipt-text" class="h-5 w-5"></i>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-slate-500">Ticket médio</p>
+                <p class="mt-1 text-2xl font-extrabold tracking-tight text-slate-950">R$ 51,89</p>
+                <p class="mt-2 text-xs font-semibold text-emerald-600">↑ 8% em relação a ontem</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="rounded-2xl border border-slate-200/75 bg-white p-5 shadow-[0_18px_48px_-36px_rgba(15,23,42,0.30)]">
+            <div class="flex items-start gap-4">
+              <div class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-orange-50 text-orange-600">
+                <i data-lucide="clock-3" class="h-5 w-5"></i>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-slate-500">Pedidos em andamento</p>
+                <p class="mt-1 text-2xl font-extrabold tracking-tight text-slate-950">14</p>
+                <p class="mt-2 text-xs font-semibold text-emerald-600">Em preparo e entrega</p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Gráfico Semanal e Formas de Pagamento -->
+        <div class="mt-4 grid grid-cols-[minmax(0,1.55fr)_minmax(310px,0.85fr)] gap-4">
+          <!-- Gráfico -->
+          <section class="rounded-2xl border border-slate-200/75 bg-white p-5 sm:p-6 shadow-[0_18px_48px_-36px_rgba(15,23,42,0.30)]">
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <div class="flex items-center gap-2">
+                  <i data-lucide="trending-up" class="h-5 w-5 text-orange-500"></i>
+                  <h2 class="font-extrabold text-slate-900">Faturamento da semana</h2>
+                </div>
+                <div class="mt-3 flex flex-wrap items-baseline gap-3">
+                  <span class="text-3xl font-extrabold tracking-tight text-slate-950">R$ 18.940,00</span>
+                  <span class="text-xs font-bold text-emerald-600">↑ 26% na comparação anterior</span>
+                </div>
+              </div>
+              <span class="rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-500">
+                Últimos 7 dias • Paciência - RJ
+              </span>
+            </div>
+
+            <div class="mt-7 overflow-hidden rounded-2xl bg-gradient-to-b from-orange-50/70 to-transparent px-2 pt-3">
+              <svg viewBox="0 0 700 240" class="h-[240px] w-full" role="img" aria-label="Gráfico de faturamento semanal">
+                <line x1="20" y1="40" x2="680" y2="40" stroke="#e2e8f0" stroke-width="1"></line>
+                <line x1="20" y1="90" x2="680" y2="90" stroke="#e2e8f0" stroke-width="1"></line>
+                <line x1="20" y1="140" x2="680" y2="140" stroke="#e2e8f0" stroke-width="1"></line>
+                <line x1="20" y1="190" x2="680" y2="190" stroke="#e2e8f0" stroke-width="1"></line>
+                <defs>
+                  <linearGradient id="admin-chart-fill" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stop-color="#fb923c" stop-opacity="0.28"></stop>
+                    <stop offset="100%" stop-color="#fb923c" stop-opacity="0"></stop>
+                  </linearGradient>
+                </defs>
+                <path d="M35,185 C90,170 115,145 145,148 C190,151 215,112 250,110 C300,107 320,143 355,136 C410,125 430,95 475,90 C530,84 555,58 610,56 C640,54 660,40 675,32 L675,220 L35,220 Z" fill="url(#admin-chart-fill)"></path>
+                <path d="M35,185 C90,170 115,145 145,148 C190,151 215,112 250,110 C300,107 320,143 355,136 C410,125 430,95 475,90 C530,84 555,58 610,56 C640,54 660,40 675,32" fill="none" stroke="#f97316" stroke-width="4" stroke-linecap="round"></path>
+                <circle cx="35" cy="185" r="5.5" fill="#fff" stroke="#f97316" stroke-width="3"></circle>
+                <circle cx="145" cy="148" r="5.5" fill="#fff" stroke="#f97316" stroke-width="3"></circle>
+                <circle cx="250" cy="110" r="5.5" fill="#fff" stroke="#f97316" stroke-width="3"></circle>
+                <circle cx="355" cy="136" r="5.5" fill="#fff" stroke="#f97316" stroke-width="3"></circle>
+                <circle cx="475" cy="90" r="5.5" fill="#fff" stroke="#f97316" stroke-width="3"></circle>
+                <circle cx="610" cy="56" r="5.5" fill="#fff" stroke="#f97316" stroke-width="3"></circle>
+                <circle cx="675" cy="32" r="5.5" fill="#fff" stroke="#f97316" stroke-width="3"></circle>
+              </svg>
+              <div class="-mt-2 grid grid-cols-7 pb-3 text-center text-[11px] font-semibold text-slate-400">
+                <span>Seg</span>
+                <span>Ter</span>
+                <span>Qua</span>
+                <span>Qui</span>
+                <span>Sex</span>
+                <span>Sáb</span>
+                <span>Dom</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Formas de Pagamento -->
+          <section class="rounded-2xl border border-slate-200/75 bg-white p-5 sm:p-6 shadow-[0_18px_48px_-36px_rgba(15,23,42,0.30)]">
+            <div class="flex items-center gap-2">
+              <i data-lucide="wallet-cards" class="h-5 w-5 text-orange-500"></i>
+              <h2 class="font-extrabold text-slate-900">Formas de pagamento</h2>
+            </div>
+
+            <div class="mt-7 grid place-items-center">
+              <div class="relative grid h-44 w-44 place-items-center rounded-full" style="background: conic-gradient(#22c55e 0 54%, #3b82f6 54% 86%, #f59e0b 86% 100%)">
+                <div class="grid h-28 w-28 place-items-center rounded-full bg-white text-center shadow-inner">
+                  <div>
+                    <div class="text-base font-extrabold text-slate-950">R$ 3.840,00</div>
+                    <div class="mt-1 text-[11px] text-slate-400">total hoje</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 space-y-3 text-sm">
+              <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
+                <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+                <span class="font-semibold text-slate-700">Pix</span>
+                <span class="ml-auto text-xs font-bold text-slate-400">54%</span>
+                <span class="w-24 text-right text-xs font-bold text-slate-700">R$ 2.073,60</span>
+              </div>
+              <div class="flex items-center gap-3 border-b border-slate-100 pb-3">
+                <span class="h-2.5 w-2.5 rounded-full bg-blue-500"></span>
+                <span class="font-semibold text-slate-700">Cartão</span>
+                <span class="ml-auto text-xs font-bold text-slate-400">32%</span>
+                <span class="w-24 text-right text-xs font-bold text-slate-700">R$ 1.228,80</span>
+              </div>
+              <div class="flex items-center gap-3 pb-3">
+                <span class="h-2.5 w-2.5 rounded-full bg-amber-400"></span>
+                <span class="font-semibold text-slate-700">Dinheiro</span>
+                <span class="ml-auto text-xs font-bold text-slate-400">14%</span>
+                <span class="w-24 text-right text-xs font-bold text-slate-700">R$ 537,60</span>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Produtos Mais Vendidos e Status dos Pedidos -->
+        <div class="mt-4 grid grid-cols-2 gap-4">
+          <!-- Produtos Mais Vendidos -->
+          <section class="rounded-2xl border border-slate-200/75 bg-white p-5 shadow-[0_18px_48px_-36px_rgba(15,23,42,0.30)]">
+            <div class="flex items-center gap-2">
+              <i data-lucide="award" class="h-5 w-5 text-orange-500"></i>
+              <h2 class="font-extrabold text-slate-900">Pizzas mais vendidas</h2>
+            </div>
+            <div class="mt-4 space-y-3">
+              <div class="flex items-center gap-3 rounded-xl p-2 transition hover:bg-slate-50">
+                <span class="grid h-7 w-7 place-items-center rounded-full bg-amber-50 text-[11px] font-extrabold text-amber-600">1</span>
+                <img src="/combo-calabresa-guarana.webp" alt="" class="h-10 w-10 rounded-xl bg-orange-50 object-cover border border-slate-100" onerror="this.src='/logo_juca.png'">
+                <div class="min-w-0 flex-1">
+                  <div class="truncate text-xs font-bold text-slate-900">Pizza Calabresa Especial (Grande)</div>
+                  <div class="mt-0.5 text-[10px] text-slate-400">54 vendas</div>
+                </div>
+                <div class="text-xs font-extrabold text-slate-900">R$ 2.430,00</div>
+              </div>
+
+              <div class="flex items-center gap-3 rounded-xl p-2 transition hover:bg-slate-50">
+                <span class="grid h-7 w-7 place-items-center rounded-full bg-amber-50 text-[11px] font-extrabold text-amber-600">2</span>
+                <img src="/hero-pizza.webp" alt="" class="h-10 w-10 rounded-xl bg-orange-50 object-cover border border-slate-100" onerror="this.src='/logo_juca.png'">
+                <div class="min-w-0 flex-1">
+                  <div class="truncate text-xs font-bold text-slate-900">Pizza Quatro Queijos (Grande)</div>
+                  <div class="mt-0.5 text-[10px] text-slate-400">46 vendas</div>
+                </div>
+                <div class="text-xs font-extrabold text-slate-900">R$ 2.208,00</div>
+              </div>
+
+              <div class="flex items-center gap-3 rounded-xl p-2 transition hover:bg-slate-50">
+                <span class="grid h-7 w-7 place-items-center rounded-full bg-amber-50 text-[11px] font-extrabold text-amber-600">3</span>
+                <img src="/fatia-calabresa-catupiry.webp" alt="" class="h-10 w-10 rounded-xl bg-orange-50 object-cover border border-slate-100" onerror="this.src='/logo_juca.png'">
+                <div class="min-w-0 flex-1">
+                  <div class="truncate text-xs font-bold text-slate-900">Pizza Frango com Catupiry (Grande)</div>
+                  <div class="mt-0.5 text-[10px] text-slate-400">41 vendas</div>
+                </div>
+                <div class="text-xs font-extrabold text-slate-900">R$ 1.968,00</div>
+              </div>
+
+              <div class="flex items-center gap-3 rounded-xl p-2 transition hover:bg-slate-50">
+                <span class="grid h-7 w-7 place-items-center rounded-full bg-amber-50 text-[11px] font-extrabold text-amber-600">4</span>
+                <img src="/hero-calabresa-catupiry.webp" alt="" class="h-10 w-10 rounded-xl bg-orange-50 object-cover border border-slate-100" onerror="this.src='/logo_juca.png'">
+                <div class="min-w-0 flex-1">
+                  <div class="truncate text-xs font-bold text-slate-900">Pizza Portuguesa Tradicional (Grande)</div>
+                  <div class="mt-0.5 text-[10px] text-slate-400">35 vendas</div>
+                </div>
+                <div class="text-xs font-extrabold text-slate-900">R$ 1.680,00</div>
+              </div>
+
+              <div class="flex items-center gap-3 rounded-xl p-2 transition hover:bg-slate-50">
+                <span class="grid h-7 w-7 place-items-center rounded-full bg-amber-50 text-[11px] font-extrabold text-amber-600">5</span>
+                <img src="/logo_juca.png" alt="" class="h-10 w-10 rounded-xl bg-orange-50 object-cover border border-slate-100" onerror="this.src='/logo.png'">
+                <div class="min-w-0 flex-1">
+                  <div class="truncate text-xs font-bold text-slate-900">Coca-Cola 2 Litros</div>
+                  <div class="mt-0.5 text-[10px] text-slate-400">52 vendas</div>
+                </div>
+                <div class="text-xs font-extrabold text-slate-900">R$ 676,00</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Status dos Pedidos -->
+          <section class="rounded-2xl border border-slate-200/75 bg-white p-5 shadow-[0_18px_48px_-36px_rgba(15,23,42,0.30)]">
+            <div class="flex items-center gap-2">
+              <i data-lucide="credit-card" class="h-5 w-5 text-orange-500"></i>
+              <h2 class="font-extrabold text-slate-900">Status dos pedidos</h2>
+            </div>
+            <div class="mt-5 space-y-5">
+              <div>
+                <div class="mb-2 flex items-center text-xs">
+                  <span class="font-semibold text-slate-700">Concluído</span>
+                  <span class="ml-auto font-extrabold text-slate-900">36</span>
+                  <span class="ml-3 w-8 text-right text-[10px] text-slate-400">48%</span>
+                </div>
+                <div class="h-2 overflow-hidden rounded-full bg-slate-100">
+                  <div class="h-full rounded-full bg-emerald-500" style="width: 48%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="mb-2 flex items-center text-xs">
+                  <span class="font-semibold text-slate-700">Em entrega</span>
+                  <span class="ml-auto font-extrabold text-slate-900">14</span>
+                  <span class="ml-3 w-8 text-right text-[10px] text-slate-400">19%</span>
+                </div>
+                <div class="h-2 overflow-hidden rounded-full bg-slate-100">
+                  <div class="h-full rounded-full bg-blue-500" style="width: 19%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="mb-2 flex items-center text-xs">
+                  <span class="font-semibold text-slate-700">Em preparo</span>
+                  <span class="ml-auto font-extrabold text-slate-900">12</span>
+                  <span class="ml-3 w-8 text-right text-[10px] text-slate-400">16%</span>
+                </div>
+                <div class="h-2 overflow-hidden rounded-full bg-slate-100">
+                  <div class="h-full rounded-full bg-amber-400" style="width: 16%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="mb-2 flex items-center text-xs">
+                  <span class="font-semibold text-slate-700">Recebido</span>
+                  <span class="ml-auto font-extrabold text-slate-900">8</span>
+                  <span class="ml-3 w-8 text-right text-[10px] text-slate-400">11%</span>
+                </div>
+                <div class="h-2 overflow-hidden rounded-full bg-slate-100">
+                  <div class="h-full rounded-full bg-slate-400" style="width: 11%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="mb-2 flex items-center text-xs">
+                  <span class="font-semibold text-slate-700">Cancelado</span>
+                  <span class="ml-auto font-extrabold text-slate-900">4</span>
+                  <span class="ml-3 w-8 text-right text-[10px] text-slate-400">6%</span>
+                </div>
+                <div class="h-2 overflow-hidden rounded-full bg-slate-100">
+                  <div class="h-full rounded-full bg-red-500" style="width: 6%"></div>
+                </div>
+              </div>
+            </div>
+
+            <a href="../pedidos/" class="mt-6 flex items-center gap-2 text-xs font-bold text-orange-600 hover:text-orange-700 transition">
+              Acessar Kanban de pedidos <i data-lucide="arrow-up-right" class="h-3.5 w-3.5"></i>
+            </a>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+    const btnNotif = document.getElementById("btn-notif");
+    const dropNotif = document.getElementById("drop-notif");
+    if (btnNotif && dropNotif) {
+      btnNotif.onclick = () => dropNotif.classList.toggle("hidden");
+    }
+  </script>
+</body>
+</html>
