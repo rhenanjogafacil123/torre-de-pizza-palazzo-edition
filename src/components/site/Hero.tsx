@@ -18,7 +18,7 @@ import { business } from "@/data/business";
 const serviceIcons = [Bike, ShoppingBag, Store];
 
 const developerWhatsappMessage =
-  "Olá, Rhenan! Vi o site que você desenvolveu para a Torre de Pizza e gostaria de conversarmos sobre um design baseado na identidade visual da minha empresa gratuitamente, e já ter informação sobre o preço. Sem compromisso, enrolação e perda de tempo!";
+  "Olá, Rhenan! Vi o site que você desenvolveu para a Pizza do Juca e gostaria de conversarmos sobre um design baseado na identidade visual da minha empresa gratuitamente, e já ter informação sobre o preço. Sem compromisso, enrolação e perda de tempo!";
 const developerWhatsappUrl = `https://wa.me/5521973152056?text=${encodeURIComponent(developerWhatsappMessage)}`;
 
 function WhatsappIcon({ className = "h-4 w-4" }: { className?: string }) {
@@ -43,7 +43,7 @@ function InformationModal({ open, onClose }: { open: boolean; onClose: () => voi
   if (!open) return null;
 
   const whatsappMessage = encodeURIComponent(
-    "Olá! Gostaria de mais informações sobre a Torre de Pizza.",
+    "Olá! Gostaria de mais informações sobre a Pizza do Juca.",
   );
   const whatsappUrl = `https://wa.me/${business.whatsapp}?text=${whatsappMessage}`;
 
@@ -69,7 +69,7 @@ function InformationModal({ open, onClose }: { open: boolean; onClose: () => voi
               Informações
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-[#6f6457]">
-              Fale com a Torre de Pizza, acesse o Instagram ou abra a rota direto no Google Maps.
+              Fale com a Pizza do Juca, acesse o Instagram ou abra a rota direto no Google Maps.
             </p>
           </div>
 
@@ -127,7 +127,7 @@ function InformationModal({ open, onClose }: { open: boolean; onClose: () => voi
             </span>
             <span className="min-w-0 flex-1">
               <span className="block text-sm font-semibold text-[#2f4a32]">Como chegar</span>
-              <span className="block truncate text-sm text-[#6f6457]">Campo Grande, Rio de Janeiro - RJ</span>
+              <span className="block truncate text-sm text-[#6f6457]">Paciência, Rio de Janeiro - RJ</span>
             </span>
             <span className="text-xs font-semibold text-[#2f4a32]">Rota</span>
           </a>
@@ -190,7 +190,7 @@ export function Hero() {
 
         <div className="relative mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:min-h-[660px] lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-8">
           
-          {/* Coluna Esquerda: Conteúdo, Badges e Botões da Torre de Pizza */}
+          {/* Coluna Esquerda: Conteúdo, Badges e Botões da Pizza do Juca */}
           <div className="relative z-10 animate-surgir">
             
             {/* Top Branding & Status Tag */}
@@ -225,7 +225,7 @@ export function Hero() {
 
             {/* Descrição */}
             <p className="mt-5 max-w-xl text-base leading-relaxed text-[#4e3220]/90 sm:text-lg">
-              Massa artesanal, ingredientes frescos e aquele sabor que transforma qualquer noite em Campo Grande.
+              Massa artesanal, ingredientes frescos e aquele sabor que transforma qualquer noite em Paciência.
             </p>
 
             {/* Badges de Avaliação, Cidade e Horário (Preservados do Print) */}
@@ -315,7 +315,7 @@ export function Hero() {
             {/* Pizza Artesanal em Rotação Contínua 360° (animate-girar) */}
             <div className="absolute inset-[4%] animate-girar">
               <img
-                alt="Pizza artesanal da Torre de Pizza"
+                alt="Pizza artesanal da Pizza do Juca"
                 width="1024"
                 height="1024"
                 decoding="async"
@@ -334,7 +334,7 @@ export function Hero() {
                 <circle cx="100" cy="100" r="58" fill="none" stroke="currentColor" strokeWidth="1" />
                 <text fill="currentColor" fontSize="14" fontWeight="700" letterSpacing="3" className="font-sans uppercase">
                   <textPath href="#selo-torre" textLength="473.5" lengthAdjust="spacing">
-                    TORRE DE PIZZA • SABOR E TRADIÇÃO • CAMPO GRANDE • 
+                    pizza do juca • SABOR E TRADIÇÃO • paciência • 
                   </textPath>
                 </text>
               </svg>

@@ -15,8 +15,8 @@ const LazyCartDrawer = lazy(async () => {
   return { default: module.CartDrawer };
 });
 
-const title="Torre de Pizza | Pizzaria artesanal em Campo Grande – RJ";
-const description="Cardápio digital da Torre de Pizza: pizzas artesanais no forno a lenha, combos e sobremesas. Delivery, retirada e atendimento no local em Campo Grande – RJ.";
+const title="Pizza do Juca | Pizzaria artesanal em Paciência – RJ";
+const description="Cardápio digital da Pizza do Juca: pizzas artesanais no forno a lenha, combos e sobremesas. Delivery, retirada e atendimento no local em Paciência – RJ.";
 export const Route=createFileRoute("/")({head:()=>({meta:[{title},{name:"description",content:description},{property:"og:title",content:title},{property:"og:description",content:description},{property:"og:type",content:"restaurant"},{name:"twitter:card",content:"summary_large_image"}]}),component:Index});
 
 function PageContent(){

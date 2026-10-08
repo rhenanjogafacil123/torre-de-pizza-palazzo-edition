@@ -26,7 +26,7 @@ export function MenuSection() {
   return (
     <section id="cardapio" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24">
       <div className="mb-8 text-center">
-        <p className="text-xs font-bold uppercase tracking-[0.28em] text-[#b23a26] dark:text-[#f87171]">Cardápio Torre de Pizza</p>
+        <p className="text-xs font-bold uppercase tracking-[0.28em] text-[#b23a26] dark:text-[#f87171]">Cardápio Pizza do Juca</p>
         <h2 className="mt-2 font-display text-3xl font-bold text-[#2f4a32] sm:text-4xl dark:text-[#faf5ec]">Escolha o seu pedido</h2>
         <p className="mx-auto mt-3 max-w-lg text-sm text-[#6f6457] dark:text-[#c4b5a2]">
           Pizzas artesanais, hambúrgueres, Sub Torre, combos, pastéis, calzones, porções, bebidas e gelados.
