@@ -28,8 +28,11 @@ export function ProductCard({ product, featured = false }: { product: Product; f
   const [customizing, setCustomizing] = useState(false);
   const [flavor, setFlavor] = useState("");
   const [groupSelections, setGroupSelections] = useState<Record<string, string[]>>({});
-  const [variantId, setVariantId] = useState(isCustomizable ? "" : product.variants?.[0]?.id ?? "");
+  const [variantId, setVariantId] = useState(
+    product.variants?.find((v) => v.id === "grande")?.id ?? product.variants?.[0]?.id ?? "",
+  );
   const [customQty, setCustomQty] = useState(1);
+  const [itemNotes, setItemNotes] = useState("");
 
   const selectedVariant = useMemo(
     () => product.variants?.find((variant) => variant.id === variantId),
@@ -103,8 +106,9 @@ export function ProductCard({ product, featured = false }: { product: Product; f
   const resetCustomization = () => {
     setFlavor("");
     setGroupSelections({});
-    setVariantId("");
+    setVariantId(product.variants?.find((v) => v.id === "grande")?.id ?? product.variants?.[0]?.id ?? "");
     setCustomQty(1);
+    setItemNotes("");
   };
 
   const closeCustomization = () => {
@@ -115,7 +119,11 @@ export function ProductCard({ product, featured = false }: { product: Product; f
   const confirmCustomization = () => {
     if (!canAddCustom) return;
 
-    const details = selectedCustomDetails.join(" • ") || undefined;
+    const detailsList = [...selectedCustomDetails];
+    if (itemNotes.trim()) {
+      detailsList.push(`Obs: ${itemNotes.trim()}`);
+    }
+    const details = detailsList.join(" • ") || undefined;
     for (let i = 0; i < customQty; i += 1) {
       add(productWithImage(product), selectedVariant, details, extrasPrice);
     }
@@ -272,11 +280,7 @@ export function ProductCard({ product, featured = false }: { product: Product; f
                               index > 0 && "border-t border-border",
                             )}
                           >
-                            <p className="text-sm font-medium text-foreground">
-                              {product.category === "pizzas" && variant.id === "grande"
-                                ? `${variant.label} — + Refri 2L GRÁTIS`
-                                : variant.label}
-                            </p>
+                            <p className="text-sm font-medium text-foreground">{variant.label}</p>
                             <div className="flex items-center gap-3">
                               <span className="text-sm font-medium text-foreground">{brl(variant.price)}</span>
                               {optionControl(checked, true, false)}
@@ -320,19 +324,25 @@ export function ProductCard({ product, featured = false }: { product: Product; f
                   </section>
                 )}
 
-                {product.category === "pizzas" && variantId === "grande" && (
-                  <div className="border-b-[8px] border-muted/70 bg-primary/10 px-5 py-4">
-                    <div className="flex items-center gap-3 rounded-2xl border border-primary/20 bg-background px-4 py-3.5 shadow-soft">
-                      <span className="text-xl leading-none">🎁</span>
-                      <div className="min-w-0">
-                        <p className="text-sm font-semibold text-foreground">Você ganhou 1 Refri 2L</p>
-                        <p className="text-xs text-muted-foreground">Escolha Kuat ou Convenção abaixo</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
                 {customGroups.map(renderGroup)}
+
+                <section className="border-b-[8px] border-muted/70 bg-background px-5 py-5">
+                  <div className="mb-3">
+                    <h4 className="text-base font-semibold leading-snug text-foreground">
+                      Observações deste item
+                    </h4>
+                    <p className="mt-1 text-sm leading-snug text-muted-foreground">
+                      Alguma observação para este item? (opcional)
+                    </p>
+                  </div>
+                  <textarea
+                    rows={2}
+                    value={itemNotes}
+                    onChange={(e) => setItemNotes(e.target.value)}
+                    placeholder="Ex: sem cebola, bem assada, etc..."
+                    className="w-full resize-none rounded-xl border border-border bg-background p-3 text-sm text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  />
+                </section>
               </div>
 
               <footer className="border-t border-border bg-background p-4">
@@ -428,15 +438,6 @@ export function ProductCard({ product, featured = false }: { product: Product; f
             </button>
           )}
 
-          {product.category === "pizzas" && (
-            <div className="mt-3 flex items-center gap-2.5 rounded-2xl bg-gradient-to-r from-primary/10 to-accent/60 px-3.5 py-2.5">
-              <span className="text-lg leading-none">🎁</span>
-              <div className="min-w-0">
-                <p className="text-xs font-semibold text-foreground">Pizza GRANDE ganha Refri 2L</p>
-                <p className="text-[11px] text-muted-foreground">Kuat ou Convenção</p>
-              </div>
-            </div>
-          )}
 
           {showCardVariants && (
             <div className="mt-4">

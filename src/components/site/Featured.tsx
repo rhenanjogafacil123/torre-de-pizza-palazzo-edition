@@ -1,6 +1,6 @@
 import { Flame } from "lucide-react";
 import { brl } from "@/data/business";
-import { products } from "@/data/menu";
+import { featuredProducts } from "@/data/menu";
 import { useCart } from "@/hooks/useCart";
 import { productImage, productWithImage } from "@/lib/product-image";
 import { productOptionGroups } from "@/lib/product-options";
@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 export function Featured() {
   const { add } = useCart();
-  const featured = products.filter((product) => product.featured);
+  const featured = featuredProducts;
 
   return (
     <section className="relative overflow-hidden bg-primary py-16 md:py-20">
@@ -19,7 +19,7 @@ export function Featured() {
               <Flame className="h-4 w-4" /> Destaques do cardápio
             </p>
             <h2 className="mt-3 font-display text-3xl font-semibold text-primary-foreground sm:text-4xl">
-              Algumas opções da Torre
+              As mais pedidas do Juca
             </h2>
           </div>
           <a href="#cardapio" className="hidden shrink-0 rounded-full border border-primary-foreground/25 px-5 py-2.5 text-sm font-semibold text-primary-foreground sm:inline-flex">

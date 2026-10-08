@@ -628,8 +628,9 @@
   <!-- ==================== MODAL DE ESCOLHA DE TAMANHO / OPÇÃO ==================== -->
   <div id="product-modal" class="hidden fixed inset-0 z-[100] flex items-end justify-center p-4 sm:items-center">
     <div onclick="closeProductModal()" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
-    <div class="animate-surgir relative z-10 w-full max-w-lg rounded-[2rem] border border-[#dccdb2] bg-[#faf5ec] p-6 shadow-2xl dark:bg-[#1a1412] dark:border-[#382b24]">
-      <div class="flex items-start justify-between gap-4">
+    <div class="animate-surgir relative z-10 w-full max-w-lg max-h-[92vh] flex flex-col rounded-[2rem] border border-[#dccdb2] bg-[#faf5ec] shadow-2xl dark:bg-[#1a1412] dark:border-[#382b24] overflow-hidden">
+      <!-- Modal Header -->
+      <div class="p-5 border-b border-[#dccdb2] flex items-start justify-between gap-4 dark:border-[#382b24]">
         <div>
           <span id="modal-category-badge" class="text-xs font-bold uppercase tracking-wider text-[#b23a26]">Pizza</span>
           <h3 id="modal-product-name" class="font-display text-2xl font-bold text-[#2f4a32] dark:text-[#faf5ec]">Nome da Pizza</h3>
@@ -638,44 +639,193 @@
         <button onclick="closeProductModal()" class="h-9 w-9 rounded-full bg-[#e8d9be] text-[#2f4a32] grid place-items-center font-bold dark:bg-white/10 dark:text-[#faf5ec]">✕</button>
       </div>
 
-      <!-- Escolha de Tamanho -->
-      <div id="modal-variants-section" class="mt-5">
-        <p class="text-xs font-bold uppercase tracking-wider text-[#6f6457] dark:text-[#c4b5a2] mb-2.5">Escolha o tamanho:</p>
-        <div id="modal-variants-list" class="grid grid-cols-3 gap-2"></div>
-      </div>
-
-      <!-- Escolha de Borda Recheada Opcional -->
-      <div id="modal-borda-section" class="mt-4">
-        <p class="text-xs font-bold uppercase tracking-wider text-[#6f6457] dark:text-[#c4b5a2] mb-2">Deseja borda recheada?</p>
-        <div class="grid grid-cols-3 gap-2">
-          <button id="borda-opt-none" onclick="selectModalBorda('none')" class="p-2 rounded-xl border text-center transition border-[#2f4a32] bg-[#2f4a32] text-white">
-            <span class="block text-[11px] font-bold">Sem borda</span>
-            <span class="block text-[10px] mt-0.5">R$ 0,00</span>
-          </button>
-          <button id="borda-opt-catupiry" onclick="selectModalBorda('catupiry')" class="p-2 rounded-xl border text-center transition border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#faf5ec]">
-            <span class="block text-[11px] font-bold">Catupiry</span>
-            <span class="block text-[10px] mt-0.5">+ R$ 12,00</span>
-          </button>
-          <button id="borda-opt-cheddar" onclick="selectModalBorda('cheddar')" class="p-2 rounded-xl border text-center transition border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#faf5ec]">
-            <span class="block text-[11px] font-bold">Cheddar</span>
-            <span class="block text-[10px] mt-0.5">+ R$ 12,00</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="mt-6 pt-4 border-t border-[#dccdb2] dark:border-[#382b24] flex items-center justify-between">
+      <!-- Modal Body com Scroll -->
+      <div class="flex-1 overflow-y-auto p-5 space-y-5">
+        <!-- Escolha de Tamanho -->
         <div>
-          <span class="block text-xs text-[#6f6457] dark:text-[#c4b5a2]">Total</span>
-          <span id="modal-total-price" class="font-display text-2xl font-bold text-[#b23a26] dark:text-[#f87171]">R$ 0,00</span>
+          <div class="flex items-center justify-between mb-2.5">
+            <p class="text-xs font-bold uppercase tracking-wider text-[#6f6457] dark:text-[#c4b5a2]">Escolha o tamanho:</p>
+            <span class="text-[10px] bg-[#b23a26]/10 text-[#b23a26] px-2 py-0.5 rounded-full font-bold">Obrigatório</span>
+          </div>
+          <div id="modal-variants-list" class="grid grid-cols-3 gap-2"></div>
         </div>
-        <button onclick="confirmModalAddToCart()" class="px-6 py-3 rounded-full bg-[#2f4a32] text-[#faf5ec] font-bold text-sm shadow hover:bg-[#243a26] transition active:scale-95">
-          Adicionar ao Carrinho
+
+        <!-- Escolha de Borda Recheada Opcional -->
+        <div id="modal-borda-section">
+          <div class="flex items-center justify-between mb-2">
+            <p class="text-xs font-bold uppercase tracking-wider text-[#6f6457] dark:text-[#c4b5a2]">Borda recheada externa:</p>
+            <span class="text-[10px] bg-[#e8d9be] text-[#4e3220] px-2 py-0.5 rounded-full font-semibold dark:bg-white/10 dark:text-[#c4b5a2]">Opcional</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2">
+            <button id="borda-opt-none" onclick="selectModalBorda('none')" class="p-2.5 rounded-xl border text-center transition border-[#2f4a32] bg-[#2f4a32] text-white shadow">
+              <span class="block text-[11px] font-bold">Sem borda</span>
+              <span class="block text-[10px] mt-0.5">R$ 0,00</span>
+            </button>
+            <button id="borda-opt-catupiry" onclick="selectModalBorda('catupiry')" class="p-2.5 rounded-xl border text-center transition border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#faf5ec]">
+              <span class="block text-[11px] font-bold">Catupiry</span>
+              <span class="block text-[10px] mt-0.5">+ R$ 12,00</span>
+            </button>
+            <button id="borda-opt-cheddar" onclick="selectModalBorda('cheddar')" class="p-2.5 rounded-xl border text-center transition border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#faf5ec]">
+              <span class="block text-[11px] font-bold">Cheddar</span>
+              <span class="block text-[10px] mt-0.5">+ R$ 12,00</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Ingredientes para retirar (O que você quer retirar?) -->
+        <div id="modal-removals-section" class="border-t border-[#dccdb2] pt-4 dark:border-[#382b24]">
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <p class="text-xs font-bold uppercase tracking-wider text-[#6f6457] dark:text-[#c4b5a2]">O que você quer retirar?</p>
+              <p class="text-[11px] text-[#6f6457] dark:text-[#c4b5a2]">Selecione os ingredientes que você NÃO quer no pedido</p>
+            </div>
+            <span class="text-[10px] bg-red-100 text-red-600 dark:bg-red-950/40 dark:text-red-400 px-2 py-0.5 rounded-full font-semibold">Opcional</span>
+          </div>
+          <div id="modal-removals-list" class="space-y-1.5 mt-2"></div>
+        </div>
+
+        <!-- Observações deste item -->
+        <div class="border-t border-[#dccdb2] pt-4 dark:border-[#382b24]">
+          <p class="text-xs font-bold uppercase tracking-wider text-[#6f6457] dark:text-[#c4b5a2] mb-1">Observações deste item:</p>
+          <p class="text-[11px] text-[#6f6457] dark:text-[#c4b5a2] mb-2">Alguma observação para este item? (opcional)</p>
+          <textarea id="modal-item-notes" rows="2" placeholder="Ex: sem cebola, bem assada, cortar em 12 fatias..." class="w-full resize-none p-3 rounded-xl border border-[#dccdb2] bg-[#faf5ec] text-xs text-[#2f4a32] outline-none focus:border-[#2f4a32] dark:bg-[#251d18] dark:border-[#382b24] dark:text-[#faf5ec]"></textarea>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 border-t border-[#dccdb2] bg-[#f1e7d5]/40 flex items-center justify-between gap-3 dark:border-[#382b24] dark:bg-white/5">
+        <div class="flex items-center rounded-xl border border-[#dccdb2] bg-[#faf5ec] dark:bg-[#1a1412] dark:border-[#382b24]">
+          <button type="button" onclick="changeModalQty(-1)" class="w-10 h-11 text-lg font-bold text-[#2f4a32] dark:text-[#faf5ec]">-</button>
+          <span id="modal-qty-val" class="min-w-7 text-center text-sm font-bold text-[#2f4a32] dark:text-[#faf5ec]">1</span>
+          <button type="button" onclick="changeModalQty(1)" class="w-10 h-11 text-lg font-bold text-[#2f4a32] dark:text-[#faf5ec]">+</button>
+        </div>
+        <button id="modal-submit-btn" onclick="confirmModalAddToCart()" class="flex-1 py-3.5 px-4 rounded-xl bg-[#2f4a32] text-[#faf5ec] font-bold text-sm shadow hover:bg-[#243a26] transition active:scale-95 text-center">
+          Adicionar • R$ 55,00
         </button>
       </div>
     </div>
   </div>
 
   <!-- ==================== CARRINHO DRAWER LATERAL ==================== -->
+  <div id="cart-drawer-overlay" class="hidden fixed inset-0 z-[90] bg-black/60 backdrop-blur-sm" onclick="closeCart()"></div>
+  <aside id="cart-drawer" class="fixed top-0 right-0 z-[100] h-full w-full max-w-lg transform translate-x-full transition-transform duration-300 ease-in-out bg-[#faf5ec] border-l border-[#dccdb2] shadow-2xl flex flex-col dark:bg-[#1a1412] dark:border-[#382b24]">
+    <div class="p-5 border-b border-[#dccdb2] flex items-center justify-between dark:border-[#382b24]">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-[#b23a26]">Finalizar pedido</p>
+        <h3 class="font-display text-xl font-bold text-[#2f4a32] dark:text-[#faf5ec]">Confira antes de enviar</h3>
+      </div>
+      <button onclick="closeCart()" class="h-9 w-9 rounded-full bg-[#e8d9be] text-[#2f4a32] grid place-items-center font-bold hover:bg-[#dccdb2] transition dark:bg-white/10 dark:text-[#faf5ec]">
+        ✕
+      </button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto p-5 space-y-5">
+      <!-- Seção Itens do Pedido -->
+      <section>
+        <h4 class="font-bold text-sm text-[#2f4a32] dark:text-[#faf5ec] mb-3">Seu pedido</h4>
+        <div id="cart-items" class="space-y-3">
+          <div id="cart-empty-state" class="text-center py-10">
+            <span class="text-5xl">🍕</span>
+            <p class="mt-4 font-bold text-[#2f4a32] dark:text-[#faf5ec]">Seu carrinho está vazio</p>
+            <p class="mt-1 text-xs text-[#6f6457] dark:text-[#c4b5a2]">Escolha pizzas deliciosas no cardápio!</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 1. Como vai receber? -->
+      <section class="rounded-2xl border border-[#dccdb2] bg-white/70 p-4 dark:bg-[#251d18] dark:border-[#382b24]">
+        <div class="mb-3">
+          <h4 class="font-bold text-sm text-[#2f4a32] dark:text-[#faf5ec]">1. Como vai receber? <span class="text-[#b23a26]">*</span></h4>
+          <p class="text-xs text-[#6f6457] dark:text-[#c4b5a2]">Escolha entrega ou retirada no local.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" id="btn-receive-delivery" onclick="setFulfillment('delivery')" class="py-3 px-3 rounded-xl border border-[#2f4a32] bg-[#2f4a32] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition">
+            🛵 Entrega
+          </button>
+          <button type="button" id="btn-receive-pickup" onclick="setFulfillment('pickup')" class="py-3 px-3 rounded-xl border border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] font-bold text-xs flex items-center justify-center gap-1.5 transition dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#faf5ec]">
+            🏪 Retirar no local
+          </button>
+        </div>
+      </section>
+
+      <!-- 2. Dados do cliente -->
+      <section class="rounded-2xl border border-[#dccdb2] bg-white/70 p-4 space-y-3 dark:bg-[#251d18] dark:border-[#382b24]">
+        <div class="mb-1">
+          <h4 class="font-bold text-sm text-[#2f4a32] dark:text-[#faf5ec]">2. Dados do cliente <span class="text-[#b23a26]">*</span></h4>
+          <p class="text-xs text-[#6f6457] dark:text-[#c4b5a2]">Preencha os dados necessários.</p>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-[#2f4a32] dark:text-[#faf5ec]">Seu nome *</label>
+          <input id="customer-name" type="text" placeholder="Seu nome" class="w-full px-3.5 py-2.5 rounded-xl border border-[#dccdb2] bg-[#faf5ec] text-xs text-[#2f4a32] outline-none focus:border-[#2f4a32] dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#faf5ec]">
+        </div>
+        <div id="delivery-address-group" class="space-y-3">
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-[#2f4a32] dark:text-[#faf5ec]">Endereço de entrega *</label>
+            <input id="customer-address" type="text" placeholder="Rua, número e bairro" class="w-full px-3.5 py-2.5 rounded-xl border border-[#dccdb2] bg-[#faf5ec] text-xs text-[#2f4a32] outline-none focus:border-[#2f4a32] dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#faf5ec]">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-[#2f4a32] dark:text-[#faf5ec]">Complemento / Referência *</label>
+            <input id="customer-complement" type="text" placeholder="Ex: casa amarela, portão preto, apto 102..." class="w-full px-3.5 py-2.5 rounded-xl border border-[#dccdb2] bg-[#faf5ec] text-xs text-[#2f4a32] outline-none focus:border-[#2f4a32] dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#faf5ec]">
+          </div>
+        </div>
+        <div id="pickup-info-box" class="hidden p-3 rounded-xl bg-[#e8d9be]/30 border border-[#dccdb2] dark:bg-white/5 dark:border-[#382b24]">
+          <p class="text-xs font-bold text-[#2f4a32] dark:text-[#faf5ec]">Retirada no balcão:</p>
+          <p class="text-xs text-[#6f6457] dark:text-[#c4b5a2] mt-0.5">Av. Devanir José de Carvalho, 617 — Paciência, RJ</p>
+        </div>
+      </section>
+
+      <!-- 3. Forma de pagamento -->
+      <section class="rounded-2xl border border-[#dccdb2] bg-white/70 p-4 space-y-3 dark:bg-[#251d18] dark:border-[#382b24]">
+        <div class="mb-1">
+          <h4 class="font-bold text-sm text-[#2f4a32] dark:text-[#faf5ec]">3. Forma de pagamento <span class="text-[#b23a26]">*</span></h4>
+          <p class="text-xs text-[#6f6457] dark:text-[#c4b5a2]">Escolha uma opção.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" onclick="setPayment('PIX')" id="pay-opt-pix" class="py-2.5 px-3 rounded-xl border border-[#2f4a32] bg-[#2f4a32] text-white font-bold text-xs">PIX</button>
+          <button type="button" onclick="setPayment('Dinheiro')" id="pay-opt-dinheiro" class="py-2.5 px-3 rounded-xl border border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] font-bold text-xs dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#faf5ec]">Dinheiro</button>
+          <button type="button" onclick="setPayment('Cartão de crédito')" id="pay-opt-credito" class="py-2.5 px-3 rounded-xl border border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] font-bold text-xs dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#faf5ec]">Crédito</button>
+          <button type="button" onclick="setPayment('Cartão de débito')" id="pay-opt-debito" class="py-2.5 px-3 rounded-xl border border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] font-bold text-xs dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#faf5ec]">Débito</button>
+        </div>
+        <div id="troco-group" class="hidden p-3 rounded-xl border border-[#dccdb2] bg-[#faf5ec] dark:bg-[#1a1412] dark:border-[#382b24]">
+          <label class="block text-xs font-semibold mb-1 text-[#2f4a32] dark:text-[#faf5ec]">Vai pagar com quanto em dinheiro? (para troco)</label>
+          <input id="cash-amount" type="text" placeholder="Ex: 50,00 ou 100,00" class="w-full px-3 py-2 rounded-lg border border-[#dccdb2] bg-white text-xs text-[#2f4a32] outline-none dark:bg-[#251d18] dark:border-[#382b24] dark:text-[#faf5ec]">
+        </div>
+      </section>
+
+      <!-- 4. Observações -->
+      <section class="rounded-2xl border border-[#dccdb2] bg-white/70 p-4 dark:bg-[#251d18] dark:border-[#382b24]">
+        <div class="mb-2">
+          <h4 class="font-bold text-sm text-[#2f4a32] dark:text-[#faf5ec]">4. Observações <span class="text-xs font-normal text-[#6f6457] dark:text-[#c4b5a2]">(opcional)</span></h4>
+          <p class="text-xs text-[#6f6457] dark:text-[#c4b5a2]">Instruções de entrega, interfone ou detalhes gerais.</p>
+        </div>
+        <textarea id="order-notes" rows="2" placeholder="Ex.: tocar o interfone, sem cebola, portão ao lado..." class="w-full resize-none p-3 rounded-xl border border-[#dccdb2] bg-[#faf5ec] text-xs text-[#2f4a32] outline-none focus:border-[#2f4a32] dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#faf5ec]"></textarea>
+      </section>
+    </div>
+
+    <!-- Rodapé Checkout -->
+    <div id="cart-footer" class="p-5 border-t border-[#dccdb2] bg-[#f1e7d5]/50 space-y-3 dark:border-[#382b24] dark:bg-white/5">
+      <div class="flex justify-between items-center text-sm">
+        <span class="text-[#6f6457] dark:text-[#c4b5a2]">Subtotal:</span>
+        <span id="cart-subtotal" class="font-bold text-[#2f4a32] dark:text-[#faf5ec]">R$ 0,00</span>
+      </div>
+      <div id="cart-delivery-fee-row" class="flex justify-between items-center text-sm">
+        <span class="text-[#6f6457] dark:text-[#c4b5a2]">Taxa de entrega:</span>
+        <span id="cart-delivery-fee" class="font-bold text-[#2f4a32] dark:text-[#faf5ec]">A combinar</span>
+      </div>
+      <div class="flex justify-between items-center pt-2 border-t border-[#dccdb2] dark:border-[#382b24]">
+        <span class="font-bold text-[#2f4a32] dark:text-[#faf5ec]">Total:</span>
+        <span id="cart-total" class="font-display text-2xl font-bold text-[#b23a26] dark:text-[#f87171]">R$ 0,00</span>
+      </div>
+
+      <button onclick="checkoutWhatsApp()" class="w-full py-4 rounded-full bg-[#25D366] hover:brightness-95 text-white font-bold text-base flex items-center justify-center gap-2 shadow-lg transition active:scale-95">
+        <span>Finalizar no WhatsApp</span>
+        <span>💬</span>
+      </button>
+      <p class="text-center text-[11px] text-[#6f6457] dark:text-[#c4b5a2]">Confira os dados antes de enviar.</p>
+    </div>
+  </aside>
+
+  <!-- ==================== CATÁLOGO COMPLETO PIZZA DO JUCA ==================== -->
   <div id="cart-drawer-overlay" class="hidden fixed inset-0 z-[90] bg-black/60 backdrop-blur-sm" onclick="closeCart()"></div>
   <aside id="cart-drawer" class="fixed top-0 right-0 z-[100] h-full w-full max-w-md transform translate-x-full transition-transform duration-300 ease-in-out bg-[#faf5ec] border-l border-[#dccdb2] shadow-2xl flex flex-col dark:bg-[#1a1412] dark:border-[#382b24]">
     <div class="p-5 border-b border-[#dccdb2] flex items-center justify-between dark:border-[#382b24]">
@@ -2162,6 +2312,10 @@
     let modalProduct = null;
     let selectedSize = 'grande';
     let selectedBorda = 'none';
+    let selectedRemovals = [];
+    let modalQty = 1;
+    let fulfillmentType = 'delivery';
+    let paymentMethod = 'PIX';
 
     function renderProducts() {
       const grid = document.getElementById('products-grid');
@@ -2184,9 +2338,9 @@
       if (filtered.length === 0) {
         grid.innerHTML = `
           <div class="col-span-full mx-auto max-w-md rounded-3xl border border-dashed border-[#dccdb2] bg-[#faf5ec] px-8 py-14 text-center shadow-sm dark:bg-[#1a1412] dark:border-[#382b24]">
-            <span class="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-2xl bg-[#e8d9be] text-2xl text-[#2f4a32]">🍽️</span>
+            <span class="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-2xl bg-[#e8d9be]/50 text-2xl">🍕</span>
             <h3 class="font-display text-xl font-bold text-[#2f4a32] dark:text-[#faf5ec]">Nenhum item encontrado</h3>
-            <p class="mt-2 text-xs text-[#6f6457] dark:text-[#c4b5a2]">Tente buscar com outra palavra ou selecione outra categoria.</p>
+            <p class="mt-2 text-xs text-[#6f6457] dark:text-[#c4b5a2]">Tente buscar outro sabor ou escolha uma categoria acima.</p>
           </div>
         `;
         return;
@@ -2194,59 +2348,63 @@
 
       grid.innerHTML = filtered.map(p => {
         const isPizza = Boolean(p.prices);
-        const priceLabel = isPizza ? 'A partir de R$ ' + p.prices.broto.toFixed(2).replace('.', ',') : 'R$ ' + p.price.toFixed(2).replace('.', ',');
+        const startingPrice = isPizza ? p.prices.grande : p.price;
+        const priceLabel = isPizza ? `R$ ${startingPrice.toFixed(2).replace('.', ',')}` : `R$ ${p.price.toFixed(2).replace('.', ',')}`;
+        const subLabel = isPizza ? 'Tamanho Gigante (45cm)' : '';
 
         return `
-          <article class="flex flex-col rounded-3xl border border-[#dccdb2] bg-[#faf5ec] p-5 shadow-lg transition-all duration-300 hover:shadow-2xl dark:bg-[#1a1412] dark:border-[#382b24]">
-            <div class="relative aspect-video w-full overflow-hidden rounded-2xl bg-[#e8d9be]/30 dark:bg-white/5">
-              <img src="${p.image}" alt="${p.name}" class="h-full w-full object-cover transition-transform duration-500 hover:scale-105" loading="lazy" onerror="this.onerror=null; this.src='assets/hero-calabresa-catupiry.webp';">
-              ${p.badge ? `<span class="absolute top-3 right-3 rounded-full bg-[#b23a26] px-3 py-1 text-[11px] font-bold text-white shadow">${p.badge}</span>` : ''}
+          <div class="group flex flex-col overflow-hidden rounded-[2rem] border border-[#dccdb2] bg-[#faf5ec] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:bg-[#1a1412] dark:border-[#382b24]">
+            <div class="relative aspect-square overflow-hidden bg-black/5">
+              <img src="${p.image}" alt="${p.name}" loading="lazy" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" onerror="this.onerror=null; this.src='assets/hero-calabresa-catupiry.webp';">
+              ${p.badge ? `<span class="absolute left-3 top-3 rounded-full bg-[#b23a26] px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white shadow">${p.badge}</span>` : ''}
             </div>
-
-            <div class="mt-4 flex-1 flex flex-col">
-              <h3 class="font-display text-lg font-bold text-[#2f4a32] dark:text-[#faf5ec]">${p.name}</h3>
-              <p class="mt-1.5 text-xs text-[#6f6457] line-clamp-2 dark:text-[#c4b5a2] flex-1">${p.desc}</p>
-              
-              ${isPizza ? `
-                <div class="mt-3 flex items-center gap-2 rounded-xl bg-[#e8d9be]/40 px-3 py-1.5 border border-[#dccdb2] dark:bg-white/5 dark:border-[#382b24]">
-                  <span class="text-sm">🍕</span>
-                  <p class="text-[11px] font-bold text-[#2f4a32] dark:text-[#faf5ec]">Broto, Média ou Gigante 45cm</p>
-                </div>
-              ` : ''}
-
-              <div class="mt-4 flex items-end justify-between pt-3 border-t border-[#dccdb2]/60 dark:border-[#382b24]">
+            <div class="flex flex-1 flex-col p-5">
+              <h3 class="font-display text-lg font-bold leading-snug text-[#2f4a32] dark:text-[#faf5ec]">${p.name}</h3>
+              <p class="mt-1.5 text-xs leading-relaxed text-[#6f6457] dark:text-[#c4b5a2] line-clamp-2">${p.desc}</p>
+              <div class="mt-auto flex items-end justify-between pt-5">
                 <div>
-                  <span class="block text-[11px] text-[#6f6457] dark:text-[#c4b5a2]">${isPizza ? 'A partir de' : 'Valor'}</span>
+                  ${subLabel ? `<span class="block text-[10px] text-[#6f6457] dark:text-[#c4b5a2]">${subLabel}</span>` : ''}
                   <span class="font-display text-xl font-bold text-[#b23a26] dark:text-[#f87171]">${priceLabel}</span>
                 </div>
-                <button onclick="handleItemClick('${p.id}')" class="rounded-full bg-[#2f4a32] hover:bg-[#243a26] px-4 py-2.5 text-xs font-bold text-[#faf5ec] shadow transition active:scale-95 flex items-center gap-1.5">
-                  <span>+ ${isPizza ? 'Escolher tamanho' : 'Adicionar'}</span>
+                <button onclick="handleItemClick('${p.id}')" class="inline-flex items-center gap-1.5 rounded-full bg-[#2f4a32] px-4 py-2.5 text-xs font-bold text-[#faf5ec] shadow transition hover:bg-[#243a26] active:scale-95">
+                  ${isPizza ? 'Personalizar' : 'Adicionar +'}
                 </button>
               </div>
             </div>
-          </article>
+          </div>
         `;
       }).join('');
     }
 
-    function filterCategory(cat) {
-      currentCategory = cat;
+    function selectCategory(catId) {
+      currentCategory = catId;
       currentSearch = '';
       document.getElementById('search-input').value = '';
-
-      document.querySelectorAll('.cat-btn').forEach(btn => {
+      document.querySelectorAll('.cat-tab-btn').forEach(btn => {
         btn.classList.remove('border-transparent', 'bg-[#2f4a32]', 'text-[#faf5ec]', 'shadow-md', 'active');
-        btn.classList.add('border-[#dccdb2]', 'bg-[#faf5ec]', 'text-[#4e3220]');
+        btn.classList.add('border-[#dccdb2]', 'bg-[#faf5ec]', 'text-[#4e3220]', 'dark:bg-[#1a1412]', 'dark:border-[#382b24]', 'dark:text-[#c4b5a2]');
       });
-      event.target.classList.remove('border-[#dccdb2]', 'bg-[#faf5ec]', 'text-[#4e3220]');
+      event.target.classList.remove('border-[#dccdb2]', 'bg-[#faf5ec]', 'text-[#4e3220]', 'dark:bg-[#1a1412]', 'dark:border-[#382b24]', 'dark:text-[#c4b5a2]');
       event.target.classList.add('border-transparent', 'bg-[#2f4a32]', 'text-[#faf5ec]', 'shadow-md', 'active');
-
       renderProducts();
     }
 
     function handleSearch(val) {
       currentSearch = val.trim();
       renderProducts();
+    }
+
+    function extractIngredients(desc) {
+      if (!desc) return [];
+      const parts = desc.split(',');
+      const last = parts.pop() ?? '';
+      const tokens = [...parts, ...last.split(/ e (?=[^,]*$)/)];
+      return Array.from(new Set(
+        tokens
+          .flatMap(t => t.split(/\s+ou\s+|\s*\/\s*/i))
+          .map(i => i.trim().replace(/\.$/, '').trim())
+          .filter(i => i.length > 0 && !/massa|disco|fatias|sabor/i.test(i))
+      ));
     }
 
     function handleItemClick(productId) {
@@ -2257,11 +2415,20 @@
         modalProduct = p;
         selectedSize = 'grande';
         selectedBorda = 'none';
+        selectedRemovals = [];
+        modalQty = 1;
+        document.getElementById('modal-qty-val').textContent = '1';
+        document.getElementById('modal-item-notes').value = '';
+
         document.getElementById('modal-category-badge').textContent = p.category === 'doces' ? 'Pizza Doce' : 'Pizza Salgada';
         document.getElementById('modal-product-name').textContent = p.name;
         document.getElementById('modal-product-desc').textContent = p.desc;
+
         renderModalSizes();
         updateBordaButtons();
+        renderModalRemovals();
+        calculateModalTotal();
+
         document.getElementById('product-modal').classList.remove('hidden');
       } else {
         addToCartDirect({
@@ -2276,8 +2443,6 @@
 
     function renderModalSizes() {
       const container = document.getElementById('modal-variants-list');
-      const totalEl = document.getElementById('modal-total-price');
-
       const sizes = [
         { key: 'broto', label: 'Broto (18cm)', desc: '1 sabor · 4 fatias', price: modalProduct.prices.broto },
         { key: 'media', label: 'Média (30cm)', desc: 'até 2 sabores · 8 fatias', price: modalProduct.prices.media },
@@ -2291,13 +2456,12 @@
           <span class="block text-xs font-extrabold mt-1">R$ ${s.price.toFixed(2).replace('.', ',')}</span>
         </button>
       `).join('');
-
-      calculateModalTotal();
     }
 
     function selectModalSize(sizeKey) {
       selectedSize = sizeKey;
       renderModalSizes();
+      calculateModalTotal();
     }
 
     function selectModalBorda(bordaKey) {
@@ -2310,19 +2474,56 @@
       ['none', 'catupiry', 'cheddar'].forEach(b => {
         const btn = document.getElementById('borda-opt-' + b);
         if (selectedBorda === b) {
-          btn.className = 'p-2 rounded-xl border text-center transition border-[#2f4a32] bg-[#2f4a32] text-white shadow';
+          btn.className = 'p-2.5 rounded-xl border text-center transition border-[#2f4a32] bg-[#2f4a32] text-white shadow';
         } else {
-          btn.className = 'p-2 rounded-xl border text-center transition border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#faf5ec]';
+          btn.className = 'p-2.5 rounded-xl border text-center transition border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#faf5ec]';
         }
       });
+    }
+
+    function renderModalRemovals() {
+      const container = document.getElementById('modal-removals-list');
+      const section = document.getElementById('modal-removals-section');
+      const ings = extractIngredients(modalProduct.desc);
+
+      if (ings.length === 0) {
+        section.classList.add('hidden');
+        return;
+      }
+      section.classList.remove('hidden');
+
+      container.innerHTML = ings.map(ing => {
+        const checked = selectedRemovals.includes(ing);
+        return `
+          <button type="button" onclick="toggleRemoval('${ing}')" class="flex w-full items-center justify-between p-2.5 rounded-xl border transition ${checked ? 'border-red-400 bg-red-50 text-red-700 dark:bg-red-950/30 dark:border-red-800 dark:text-red-300' : 'border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#faf5ec]'}">
+            <span class="text-xs font-medium">${ing}</span>
+            <span class="text-xs font-bold ${checked ? 'text-red-600' : 'text-[#6f6457]'}">${checked ? '✕ Será retirado' : '✓ Normal'}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function toggleRemoval(ing) {
+      if (selectedRemovals.includes(ing)) {
+        selectedRemovals = selectedRemovals.filter(i => i !== ing);
+      } else {
+        selectedRemovals.push(ing);
+      }
+      renderModalRemovals();
+    }
+
+    function changeModalQty(delta) {
+      modalQty = Math.max(1, Math.min(20, modalQty + delta));
+      document.getElementById('modal-qty-val').textContent = modalQty;
+      calculateModalTotal();
     }
 
     function calculateModalTotal() {
       if (!modalProduct) return;
       const basePrice = modalProduct.prices[selectedSize];
       const bordaPrice = selectedBorda === 'none' ? 0 : 12;
-      const total = basePrice + bordaPrice;
-      document.getElementById('modal-total-price').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+      const total = (basePrice + bordaPrice) * modalQty;
+      document.getElementById('modal-submit-btn').textContent = `Adicionar • R$ ${total.toFixed(2).replace('.', ',')}`;
     }
 
     function closeProductModal() {
@@ -2338,22 +2539,31 @@
       };
       const bordaLabels = {
         none: '',
-        catupiry: ' + Borda Catupiry (+R$ 12)',
-        cheddar: ' + Borda Cheddar (+R$ 12)'
+        catupiry: 'Borda Catupiry (+R$ 12)',
+        cheddar: 'Borda Cheddar (+R$ 12)'
       };
 
       const basePrice = modalProduct.prices[selectedSize];
       const bordaPrice = selectedBorda === 'none' ? 0 : 12;
-      const finalPrice = basePrice + bordaPrice;
-      const detailStr = `${sizeLabels[selectedSize]}${bordaLabels[selectedBorda]}`;
+      const unitPrice = basePrice + bordaPrice;
 
-      addToCartDirect({
-        id: `${modalProduct.id}-${selectedSize}-${selectedBorda}`,
-        name: `${modalProduct.name} [${detailStr}]`,
-        price: finalPrice,
-        image: modalProduct.image,
-        details: detailStr
-      });
+      const detailsParts = [sizeLabels[selectedSize]];
+      if (selectedBorda !== 'none') detailsParts.push(bordaLabels[selectedBorda]);
+      if (selectedRemovals.length > 0) detailsParts.push('Retirar: ' + selectedRemovals.join(', '));
+      const note = document.getElementById('modal-item-notes').value.trim();
+      if (note) detailsParts.push('Obs: ' + note);
+
+      const detailStr = detailsParts.join(' • ');
+
+      for (let i = 0; i < modalQty; i++) {
+        addToCartDirect({
+          id: `${modalProduct.id}-${selectedSize}-${selectedBorda}-${selectedRemovals.sort().join('-')}-${note}`,
+          name: modalProduct.name,
+          price: unitPrice,
+          image: modalProduct.image,
+          details: detailStr
+        });
+      }
       closeProductModal();
     }
 
@@ -2384,6 +2594,7 @@
       const counter = document.getElementById('cart-counter');
       const itemsContainer = document.getElementById('cart-items');
       const subtotalEl = document.getElementById('cart-subtotal');
+      const totalEl = document.getElementById('cart-total');
 
       if (totalQty > 0) {
         counter.textContent = totalQty;
@@ -2393,10 +2604,11 @@
       }
 
       subtotalEl.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+      totalEl.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
 
       if (cart.length === 0) {
         itemsContainer.innerHTML = `
-          <div id="cart-empty-state" class="text-center py-12">
+          <div id="cart-empty-state" class="text-center py-10">
             <span class="text-5xl">🍕</span>
             <p class="mt-4 font-bold text-[#2f4a32] dark:text-[#faf5ec]">Seu carrinho está vazio</p>
             <p class="mt-1 text-xs text-[#6f6457] dark:text-[#c4b5a2]">Escolha pizzas deliciosas no cardápio!</p>
@@ -2404,19 +2616,69 @@
         `;
       } else {
         itemsContainer.innerHTML = cart.map(item => `
-          <div class="flex items-center gap-3 rounded-2xl border border-[#dccdb2] bg-[#faf5ec] p-3 dark:bg-[#251d18] dark:border-[#382b24]">
-            <img src="${item.image}" alt="${item.name}" class="size-14 rounded-xl object-cover" onerror="this.onerror=null; this.src='assets/hero-calabresa-catupiry.webp';">
+          <div class="flex items-start gap-3 rounded-2xl border border-[#dccdb2] bg-[#faf5ec] p-3.5 shadow-sm dark:bg-[#251d18] dark:border-[#382b24]">
+            <img src="${item.image}" alt="${item.name}" class="size-16 rounded-xl object-cover shrink-0" onerror="this.onerror=null; this.src='assets/hero-calabresa-catupiry.webp';">
             <div class="flex-1 min-w-0">
-              <h4 class="font-bold text-sm truncate text-[#2f4a32] dark:text-[#faf5ec]">${item.name}</h4>
-              <p class="text-xs font-bold text-[#b23a26] dark:text-[#f87171]">R$ ${(item.price * item.qty).toFixed(2).replace('.', ',')}</p>
-            </div>
-            <div class="flex items-center gap-2">
-              <button onclick="changeQty('${item.id}', -1)" class="size-7 rounded-full bg-[#e8d9be] text-[#2f4a32] grid place-items-center font-bold dark:bg-white/10 dark:text-[#faf5ec]">-</button>
-              <span class="text-xs font-bold">${item.qty}</span>
-              <button onclick="changeQty('${item.id}', 1)" class="size-7 rounded-full bg-[#e8d9be] text-[#2f4a32] grid place-items-center font-bold dark:bg-white/10 dark:text-[#faf5ec]">+</button>
+              <h4 class="font-bold text-sm text-[#2f4a32] dark:text-[#faf5ec]">${item.name}</h4>
+              ${item.details ? `<p class="text-[11px] text-[#6f6457] dark:text-[#c4b5a2] mt-0.5 leading-snug">${item.details}</p>` : ''}
+              <p class="text-xs font-bold text-[#b23a26] dark:text-[#f87171] mt-1">R$ ${(item.price * item.qty).toFixed(2).replace('.', ',')}</p>
+              <div class="flex items-center gap-2 mt-2">
+                <button onclick="changeQty('${item.id}', -1)" class="size-7 rounded-full bg-[#e8d9be] text-[#2f4a32] grid place-items-center font-bold text-xs hover:bg-[#dccdb2] dark:bg-white/10 dark:text-[#faf5ec]">-</button>
+                <span class="text-xs font-bold w-5 text-center">${item.qty}</span>
+                <button onclick="changeQty('${item.id}', 1)" class="size-7 rounded-full bg-[#e8d9be] text-[#2f4a32] grid place-items-center font-bold text-xs hover:bg-[#dccdb2] dark:bg-white/10 dark:text-[#faf5ec]">+</button>
+              </div>
             </div>
           </div>
         `).join('');
+      }
+    }
+
+    function setFulfillment(type) {
+      fulfillmentType = type;
+      const btnDel = document.getElementById('btn-receive-delivery');
+      const btnPick = document.getElementById('btn-receive-pickup');
+      const addrGroup = document.getElementById('delivery-address-group');
+      const pickBox = document.getElementById('pickup-info-box');
+      const feeRow = document.getElementById('cart-delivery-fee-row');
+
+      if (type === 'delivery') {
+        btnDel.className = 'py-3 px-3 rounded-xl border border-[#2f4a32] bg-[#2f4a32] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition';
+        btnPick.className = 'py-3 px-3 rounded-xl border border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] font-bold text-xs flex items-center justify-center gap-1.5 transition dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#faf5ec]';
+        addrGroup.classList.remove('hidden');
+        pickBox.classList.add('hidden');
+        feeRow.classList.remove('hidden');
+      } else {
+        btnPick.className = 'py-3 px-3 rounded-xl border border-[#2f4a32] bg-[#2f4a32] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition';
+        btnDel.className = 'py-3 px-3 rounded-xl border border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] font-bold text-xs flex items-center justify-center gap-1.5 transition dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#faf5ec]';
+        addrGroup.classList.add('hidden');
+        pickBox.classList.remove('hidden');
+        feeRow.classList.add('hidden');
+      }
+    }
+
+    function setPayment(method) {
+      paymentMethod = method;
+      const opts = {
+        'PIX': 'pay-opt-pix',
+        'Dinheiro': 'pay-opt-dinheiro',
+        'Cartão de crédito': 'pay-opt-credito',
+        'Cartão de débito': 'pay-opt-debito'
+      };
+
+      Object.entries(opts).forEach(([m, id]) => {
+        const el = document.getElementById(id);
+        if (m === method) {
+          el.className = 'py-2.5 px-3 rounded-xl border border-[#2f4a32] bg-[#2f4a32] text-white font-bold text-xs';
+        } else {
+          el.className = 'py-2.5 px-3 rounded-xl border border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] font-bold text-xs dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#faf5ec]';
+        }
+      });
+
+      const trocoGroup = document.getElementById('troco-group');
+      if (method === 'Dinheiro') {
+        trocoGroup.classList.remove('hidden');
+      } else {
+        trocoGroup.classList.add('hidden');
       }
     }
 
@@ -2435,23 +2697,95 @@
         alert("Adicione pelo menos um item ao carrinho!");
         return;
       }
-      const name = document.getElementById('customer-name').value.trim() || 'Cliente';
-      const address = document.getElementById('customer-address').value.trim() || 'Retirada no Balcão';
+      const name = document.getElementById('customer-name').value.trim();
+      if (!name) {
+        alert("Por favor, preencha o seu nome antes de finalizar.");
+        document.getElementById('customer-name').focus();
+        return;
+      }
+
+      let address = '';
+      let complement = '';
+      if (fulfillmentType === 'delivery') {
+        address = document.getElementById('customer-address').value.trim();
+        complement = document.getElementById('customer-complement').value.trim();
+        if (!address) {
+          alert("Por favor, informe a rua, número e bairro para a entrega.");
+          document.getElementById('customer-address').focus();
+          return;
+        }
+        if (!complement) {
+          alert("Por favor, informe um complemento ou ponto de referência para a entrega.");
+          document.getElementById('customer-complement').focus();
+          return;
+        }
+      }
+
+      const notes = document.getElementById('order-notes').value.trim();
+      const cashAmount = document.getElementById('cash-amount').value.trim();
       const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
 
-      let msg = `*🍕 NOVO PEDIDO - PIZZA DO JUCA*\n\n`;
-      msg += `*Nome:* ${name}\n`;
-      msg += `*Endereço:* ${address}\n\n`;
-      msg += `*ITENS DO PEDIDO:*\n`;
+      let msg = `🍕 *NOVO PEDIDO — PIZZA DO JUCA*
 
+`;
+      msg += `🛒 *PEDIDO*
+`;
       cart.forEach(i => {
-        msg += `• ${i.qty}x ${i.name} - R$ ${(i.price * i.qty).toFixed(2).replace('.', ',')}\n`;
+        msg += `${i.qty}x ${i.name} — R$ ${(i.price * i.qty).toFixed(2).replace('.', ',')}
+`;
+        if (i.details) {
+          i.details.split(' • ').forEach(d => {
+            msg += `   ↳ ${d}
+`;
+          });
+        }
       });
 
-      msg += `\n*TOTAL: R$ ${subtotal.toFixed(2).replace('.', ',')}*\n`;
-      msg += `\nPedido realizado através do cardápio digital oficial da Pizza do Juca!`;
+      msg += `
+💰 Produtos: R$ ${subtotal.toFixed(2).replace('.', ',')}
+`;
+      if (fulfillmentType === 'delivery') {
+        msg += `💰 Taxa de entrega: A combinar
+`;
+      }
+      msg += `💰 *Total:* R$ ${subtotal.toFixed(2).replace('.', ',')}
+`;
 
-      const url = `https://wa.me/5521973142264?text=${encodeURIComponent(msg)}`;
+      if (notes) {
+        msg += `
+📝 *Obs.:* ${notes}
+`;
+      }
+
+      msg += `
+👤 *CLIENTE*
+🙋 ${name}
+`;
+
+      msg += `
+✅ *RECEBIMENTO*
+`;
+      if (fulfillmentType === 'delivery') {
+        msg += `🛵 Entrega
+📍 ${address}
+📍 Complemento/Referência: ${complement}
+`;
+      } else {
+        msg += `🏪 Retirada no local
+📍 Av. Devanir José de Carvalho, 617 — Paciência, RJ
+`;
+      }
+
+      msg += `
+💳 *PAGAMENTO*
+${paymentMethod}
+`;
+      if (paymentMethod === 'Dinheiro' && cashAmount) {
+        msg += `💵 Paga com R$ ${cashAmount}
+`;
+      }
+
+      const url = `https://api.whatsapp.com/send?phone=5521973142264&text=${encodeURIComponent(msg)}`;
       window.open(url, '_blank');
     }
 

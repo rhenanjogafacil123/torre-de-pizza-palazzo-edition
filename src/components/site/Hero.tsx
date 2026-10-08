@@ -328,12 +328,12 @@ export function Hero() {
             <div className="grid place-items-center absolute bottom-[6%] left-[2%] z-20 size-[28%] min-h-24 min-w-24 rounded-full bg-[#faf5ec] text-[#2f4a32] shadow-2xl border-2 border-[#dccdb2]">
               <svg viewBox="0 0 200 200" className="absolute inset-0 size-full animate-girar [animation-duration:30s]" aria-hidden="true">
                 <defs>
-                  <path id="selo-torre" d="M100 100m-76 0a76 76 0 1 1 152 0a76 76 0 1 1 -152 0" />
+                  <path id="selo-juca" d="M100 100m-76 0a76 76 0 1 1 152 0a76 76 0 1 1 -152 0" />
                 </defs>
                 <circle cx="100" cy="100" r="97" fill="none" stroke="currentColor" strokeWidth="1.2" />
                 <circle cx="100" cy="100" r="58" fill="none" stroke="currentColor" strokeWidth="1" />
                 <text fill="currentColor" fontSize="14" fontWeight="700" letterSpacing="3" className="font-sans uppercase">
-                  <textPath href="#selo-torre" textLength="473.5" lengthAdjust="spacing">
+                  <textPath href="#selo-juca" textLength="473.5" lengthAdjust="spacing">
                     pizza do juca • SABOR E TRADIÇÃO • paciência • 
                   </textPath>
                 </text>
@@ -341,7 +341,7 @@ export function Hero() {
 
               <div className="relative grid size-[52%] place-items-center text-center">
                 <span className="leading-none">
-                  <span className="block font-display text-[clamp(1.1rem,2.6vw,1.8rem)] font-bold italic text-[#2f4a32]">4,2</span>
+                  <span className="block font-display text-[clamp(1.1rem,2.6vw,1.8rem)] font-bold italic text-[#2f4a32]">4,5</span>
                   <span className="mt-0.5 block text-[clamp(0.5rem,1vw,0.65rem)] font-bold tracking-[0.14em] uppercase text-[#b23a26]">nota</span>
                 </span>
               </div>

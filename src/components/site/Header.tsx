@@ -37,7 +37,7 @@ export function Header() {
 
   useEffect(() => {
     try {
-      const savedTheme = window.localStorage.getItem("torre-theme");
+      const savedTheme = window.localStorage.getItem("juca-theme");
       const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
       const shouldUseDark = savedTheme ? savedTheme === "dark" : prefersDark;
 
@@ -53,7 +53,7 @@ export function Header() {
       const next = !current;
       document.documentElement.classList.toggle("dark", next);
       try {
-        window.localStorage.setItem("torre-theme", next ? "dark" : "light");
+        window.localStorage.setItem("juca-theme", next ? "dark" : "light");
       } catch {
         // O tema continua funcionando mesmo se o navegador bloquear o localStorage.
       }
