@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Torre de Pizza | Pizzaria Artesanal em Campo Grande – RJ</title>
+  <meta name="description" content="Cardápio digital da Torre de Pizza: pizzas artesanais no forno a lenha, combos e sobremesas. Delivery, retirada e atendimento no local em Campo Grande – RJ.">
+  <link rel="icon" href="assets/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,600;1,9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            farinha: '#faf5ec',
+            trigo: '#e8d9be',
+            basilico: '#2f4a32',
+            pomodoro: '#b23a26',
+            torra: '#4e3220',
+            linha: '#dccdb2',
+            oliva: '#7a8450',
+          },
+          fontFamily: {
+            display: ['Fraunces', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @keyframes girar {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes flutuar {
+      0%, 100% { transform: translateY(0px) rotate(var(--giro, 0deg)); }
+      50% { transform: translateY(-14px) rotate(calc(var(--giro, 0deg) + 3deg)); }
+    }
+    @keyframes surgir {
+      from { opacity: 0; transform: translateY(22px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-girar {
+      animation: girar 38s linear infinite;
+    }
+    .animate-flutuar {
+      animation: flutuar 4.2s ease-in-out infinite;
+    }
+    .animate-surgir {
+      animation: surgir 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .padrao-marca {
+      background-image: url('assets/padrao.webp');
+      background-repeat: repeat;
+      background-size: 260px;
+    }
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 5rem;
+    }
+    body {
+      background-color: #faf5ec;
+      color: #4e3220;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .dark body {
+      background-color: #1a1412;
+      color: #faf5ec;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="selection:bg-[#b23a26] selection:text-white">
+
+  <!-- ==================== 1. HEADER ==================== -->
+  <header id="site-header" class="fixed inset-x-0 top-0 z-50 transition-all duration-300">
+    <div class="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-6 md:py-4">
+      <a href="#topo" class="flex min-w-0 items-center gap-3">
+        <span class="flex h-12 w-24 shrink-0 items-center justify-center md:h-14 md:w-28">
+          <img src="assets/logo.webp" alt="Torre de Pizza" class="h-full w-full object-contain" onerror="this.onerror=null; this.src='assets/logo.svg';">
+        </span>
+        <span class="min-w-0">
+          <span class="block truncate font-display text-base font-bold leading-tight text-[#2f4a32] md:text-lg dark:text-[#faf5ec]">
+            Torre de Pizza
+          </span>
+          <span class="hidden text-xs text-[#4e3220]/80 sm:block dark:text-[#c4b5a2]">
+            Pizzaria artesanal • Campo Grande – RJ
+          </span>
+        </span>
+      </a>
+
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <nav class="mr-2 hidden items-center gap-1 md:flex">
+          <a href="#cardapio" class="rounded-full px-3.5 py-1.5 text-sm font-semibold text-[#2f4a32] hover:bg-[#2f4a32]/10 transition dark:text-[#faf5ec]">
+            Cardápio
+          </a>
+          <a href="#sobre" class="rounded-full px-3.5 py-1.5 text-sm font-semibold text-[#2f4a32] hover:bg-[#2f4a32]/10 transition dark:text-[#faf5ec]">
+            Sobre
+          </a>
+          <a href="#contato" class="rounded-full px-3.5 py-1.5 text-sm font-semibold text-[#2f4a32] hover:bg-[#2f4a32]/10 transition dark:text-[#faf5ec]">
+            Contato
+          </a>
+        </nav>
+
+        <!-- Botão Alternar Tema Claro/Escuro -->
+        <button id="theme-toggle" type="button" aria-label="Alternar tema" class="relative h-7 w-[52px] shrink-0 rounded-full border border-sky-200 bg-sky-100 p-[2px] shadow-sm transition-all dark:border-slate-500/70 dark:bg-slate-700">
+          <span class="grid h-[22px] w-[22px] place-items-center rounded-full bg-yellow-300 shadow-sm transition-transform duration-300 dark:translate-x-[24px] dark:bg-slate-100">
+            <span class="text-xs">☀️</span>
+          </span>
+        </button>
+
+        <!-- Botão Abrir Carrinho -->
+        <button id="btn-open-cart" type="button" aria-label="Abrir carrinho" class="relative grid h-10 w-10 place-items-center rounded-full bg-[#2f4a32] text-[#faf5ec] shadow-sm hover:bg-[#243a26] transition active:scale-95">
+          <svg class="h-[18px] w-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+          </svg>
+          <span id="cart-counter" class="hidden absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-[#eab308] text-[#2f4a32] px-1 text-[11px] font-bold shadow">
+            0
+          </span>
+        </button>
+
+        <!-- Botão Menu Mobile -->
+        <button id="btn-toggle-menu" type="button" aria-label="Abrir menu" class="grid h-10 w-10 place-items-center rounded-full bg-[#2f4a32]/10 text-[#2f4a32] hover:bg-[#2f4a32]/20 transition md:hidden dark:bg-white/10 dark:text-[#faf5ec]">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu Dropdown -->
+    <div id="mobile-menu" class="hidden mx-4 mb-3 rounded-3xl border border-[#dccdb2] bg-[#faf5ec] p-3 shadow-xl md:hidden dark:bg-[#1a1412] dark:border-[#382b24]">
+      <a href="#cardapio" onclick="closeMobileMenu()" class="block rounded-2xl px-4 py-3 text-sm font-bold text-[#2f4a32] hover:bg-[#e8d9be]/60 transition dark:text-[#faf5ec]">
+        Cardápio
+      </a>
+      <a href="#sobre" onclick="closeMobileMenu()" class="block rounded-2xl px-4 py-3 text-sm font-bold text-[#2f4a32] hover:bg-[#e8d9be]/60 transition dark:text-[#faf5ec]">
+        Sobre
+      </a>
+      <a href="#contato" onclick="closeMobileMenu()" class="block rounded-2xl px-4 py-3 text-sm font-bold text-[#2f4a32] hover:bg-[#e8d9be]/60 transition dark:text-[#faf5ec]">
+        Contato
+      </a>
+      <a href="tel:+5521969902994" class="flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-semibold text-[#b23a26] hover:bg-[#b23a26]/10 transition">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+        </svg>
+        +55 21 96990-2994
+      </a>
+    </div>
+  </header>
+
+  <!-- ==================== 2. CAPA / HERO PALAZZO ==================== -->
+  <section id="topo" class="relative isolate min-h-[92svh] overflow-hidden bg-[#e8d9be] pt-24 pb-16 lg:min-h-[100svh] lg:pt-32 lg:pb-24 dark:bg-[#251d18]">
+    <!-- Textura de fundo suave e círculo verde basílico -->
+    <div class="padrao-marca pointer-events-none absolute inset-0 opacity-[0.20]"></div>
+    <div class="pointer-events-none absolute top-1/2 -right-[12%] hidden aspect-square w-[62%] -translate-y-1/2 rounded-full bg-[#2f4a32] lg:block shadow-2xl"></div>
+
+    <div class="relative mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:min-h-[660px] lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-8">
+      
+      <!-- Coluna Esquerda: Torre de Pizza Branding, Status, Badges & Botões Preservados do Print -->
+      <div class="relative z-10 animate-surgir">
+        
+        <!-- Top Branding & Status Tag -->
+        <div class="mb-4 flex flex-wrap items-center gap-3">
+          <div class="flex items-center gap-2.5">
+            <span class="grid size-12 shrink-0 place-items-center overflow-hidden rounded-full border-2 border-[#b23a26] bg-[#b23a26] shadow-md">
+              <img src="assets/logo.webp" alt="Torre de Pizza" class="h-full w-full object-cover" onerror="this.style.display='none';">
+            </span>
+            <div>
+              <h3 class="font-display text-lg font-bold leading-none text-[#2f4a32] dark:text-[#faf5ec]">Torre de Pizza</h3>
+              <span class="text-[11px] font-bold uppercase tracking-[0.20em] text-[#b23a26] dark:text-[#f87171]">Sabor e tradição • Desde sempre</span>
+            </div>
+          </div>
+
+          <!-- Status Aberto/Fechado com Ponto Verde Pulsante Dinâmico -->
+          <span id="hero-status-pill" class="inline-flex items-center gap-2 rounded-full bg-[#2f4a32]/10 px-3 py-1 text-xs font-semibold text-[#2f4a32] shadow-sm dark:bg-white/10 dark:text-[#faf5ec]">
+            <span class="relative flex size-2">
+              <span class="absolute inline-flex size-full animate-ping rounded-full bg-emerald-500 opacity-75"></span>
+              <span class="relative inline-flex size-2 rounded-full bg-emerald-600"></span>
+            </span>
+            <span id="hero-status-text">Aberto agora · Fecha às 00:00</span>
+          </span>
+        </div>
+
+        <!-- Headline com Estilo Italiano Palazzo -->
+        <h1 class="font-display text-[clamp(2.6rem,6.8vw,5.4rem)] leading-[0.98] font-semibold tracking-[-0.03em] text-[#2f4a32] dark:text-[#faf5ec]">
+          Sabor de verdade <em class="font-bold text-[#b23a26] not-italic dark:text-[#f87171]">em cada fatia.</em>
+        </h1>
+
+        <!-- Descrição -->
+        <p class="mt-5 max-w-xl text-base leading-relaxed text-[#4e3220]/90 sm:text-lg dark:text-[#e8d9be]/90">
+          Massa artesanal, ingredientes frescos e aquele sabor que transforma qualquer noite em Campo Grande.
+        </p>
+
+        <!-- Badges de Avaliação, Cidade e Horário (Preservados do Print da Torre de Pizza) -->
+        <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2.5 text-sm font-medium text-[#4e3220] dark:text-[#e8d9be]">
+          <span class="inline-flex items-center gap-1.5 font-bold text-[#b23a26] bg-[#faf5ec]/90 px-2.5 py-1 rounded-full shadow-sm dark:bg-[#1a1412] dark:text-[#f87171]">
+            <svg class="h-4 w-4 fill-current text-[#b23a26] dark:text-[#f87171]" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+            </svg>
+            4,2 <span class="font-normal text-[#6f6457] dark:text-[#a89985]">(265 avaliações)</span>
+          </span>
+          <span class="inline-flex items-center gap-1.5">
+            <svg class="h-4 w-4 text-[#7a8450]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            Campo Grande, Rio de Janeiro – RJ
+          </span>
+          <span class="inline-flex items-center gap-1.5">
+            <svg class="h-4 w-4 text-[#7a8450]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Todos os dias, das 18h às 00h
+          </span>
+        </div>
+
+        <!-- Chips de Serviços (Delivery, Retirada, No Local) -->
+        <div class="mt-5 flex flex-wrap gap-2">
+          <span class="inline-flex items-center gap-2 rounded-full border border-[#dccdb2] bg-[#faf5ec]/90 px-3.5 py-1.5 text-xs font-semibold text-[#2f4a32] shadow-sm backdrop-blur dark:bg-[#1a1412]/90 dark:text-[#faf5ec] dark:border-[#382b24]">
+            🛵 Delivery
+          </span>
+          <span class="inline-flex items-center gap-2 rounded-full border border-[#dccdb2] bg-[#faf5ec]/90 px-3.5 py-1.5 text-xs font-semibold text-[#2f4a32] shadow-sm backdrop-blur dark:bg-[#1a1412]/90 dark:text-[#faf5ec] dark:border-[#382b24]">
+            🛍️ Retirada
+          </span>
+          <span class="inline-flex items-center gap-2 rounded-full border border-[#dccdb2] bg-[#faf5ec]/90 px-3.5 py-1.5 text-xs font-semibold text-[#2f4a32] shadow-sm backdrop-blur dark:bg-[#1a1412]/90 dark:text-[#faf5ec] dark:border-[#382b24]">
+            🏪 Atendimento no local
+          </span>
+        </div>
+
+        <!-- ================= BOTÕES PRESERVADOS DO PRINT ================= -->
+        <div class="mt-8 flex flex-col gap-3.5 sm:flex-row sm:items-center">
+          <!-- Botão 1: "Ver cardápio" -->
+          <a href="#cardapio" class="group inline-flex items-center justify-center gap-3 rounded-full bg-[#eab308] hover:bg-[#ca8a04] px-8 py-4 text-base font-bold text-[#2f4a32] shadow-[0_12px_28px_rgba(202,138,4,0.35)] transition-all hover:scale-[1.02] active:scale-95">
+            <span>Ver cardápio</span>
+            <span class="grid size-7 place-items-center rounded-full bg-black/10 transition-transform group-hover:translate-x-1">
+              →
+            </span>
+          </a>
+
+          <!-- Botão 2: "ⓘ Informações" (Abre o Modal Completo) -->
+          <button id="btn-open-info" type="button" class="inline-flex items-center justify-center gap-2.5 rounded-full border-2 border-[#2f4a32]/30 bg-[#faf5ec]/80 hover:bg-[#faf5ec] hover:border-[#2f4a32] px-7 py-3.5 text-base font-bold text-[#2f4a32] transition-all shadow-sm active:scale-95 dark:bg-[#1a1412]/80 dark:border-white/20 dark:text-[#faf5ec] dark:hover:bg-[#1a1412]">
+            <svg class="h-5 w-5 text-[#b23a26] dark:text-[#f87171]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Informações</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Coluna Direita: Assinatura Visual Palazzo (Pizza 360°, Manjericão, Tomates e Selo SVG) -->
+      <div class="relative order-first mx-auto aspect-square w-[82%] max-w-[26rem] sm:max-w-[34rem] lg:order-none lg:w-full lg:max-w-none">
+        
+        <!-- Círculo de fundo verde manjericão em telas menores -->
+        <div class="pointer-events-none absolute top-1/2 left-1/2 aspect-square w-[104%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#2f4a32] lg:hidden shadow-2xl"></div>
+
+        <!-- Manjericão Flutuante (animate-flutuar) -->
+        <img alt="Folhas de manjericão fresco" class="absolute -top-3 left-0 z-20 w-[24%] animate-flutuar drop-shadow-xl" style="--giro: -20deg;" src="assets/manjericao.webp">
+
+        <!-- Tomates Frescos Flutuantes (animate-flutuar) -->
+        <img alt="Tomates frescos selecionados" class="absolute right-0 bottom-3 z-20 w-[27%] animate-flutuar drop-shadow-xl" style="--giro: 15deg; animation-delay: -2.5s;" src="assets/tomates.webp">
+
+        <!-- Pizza Artesanal em Rotação Contínua 360° (animate-girar) -->
+        <div class="absolute inset-[4%] animate-girar">
+          <img alt="Pizza artesanal da Torre de Pizza" class="size-full object-contain drop-shadow-[0_40px_50px_rgba(23,38,25,0.55)]" src="assets/hero-calabresa-catupiry.webp">
+        </div>
+
+        <!-- Selo Circular Artesanal Rotativo em SVG com Nota 4,2 -->
+        <div class="grid place-items-center absolute bottom-[6%] left-[2%] z-20 size-[28%] min-h-24 min-w-24 rounded-full bg-[#faf5ec] text-[#2f4a32] shadow-2xl border-2 border-[#dccdb2] dark:bg-[#1a1412] dark:text-[#faf5ec] dark:border-[#382b24]">
+          <svg viewBox="0 0 200 200" class="absolute inset-0 size-full animate-girar [animation-duration:30s]" aria-hidden="true">
+            <defs>
+              <path id="selo-torre" d="M100 100m-76 0a76 76 0 1 1 152 0a76 76 0 1 1 -152 0"></path>
+            </defs>
+            <circle cx="100" cy="100" r="97" fill="none" stroke="currentColor" stroke-width="1.2"></circle>
+            <circle cx="100" cy="100" r="58" fill="none" stroke="currentColor" stroke-width="1"></circle>
+            <text fill="currentColor" font-size="14" font-weight="700" letter-spacing="3" class="uppercase">
+              <textPath href="#selo-torre" textLength="473.5" lengthAdjust="spacing">
+                TORRE DE PIZZA • SABOR E TRADIÇÃO • CAMPO GRANDE • 
+              </textPath>
+            </text>
+          </svg>
+
+          <div class="relative grid size-[52%] place-items-center text-center">
+            <span class="leading-none">
+              <span class="block font-display text-[clamp(1.1rem,2.6vw,1.8rem)] font-bold italic text-[#2f4a32] dark:text-[#faf5ec]">4,2</span>
+              <span class="mt-0.5 block text-[clamp(0.5rem,1vw,0.65rem)] font-bold tracking-[0.14em] uppercase text-[#b23a26] dark:text-[#f87171]">nota</span>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== 3. CARDÁPIO TORRE DE PIZZA LOGO ABAIXO ==================== -->
+  <section id="cardapio" class="py-16 sm:py-24 max-w-6xl mx-auto px-4 sm:px-6">
+    <!-- Cabeçalho do Cardápio -->
+    <div class="text-center max-w-2xl mx-auto mb-8">
+      <span class="text-xs font-bold uppercase tracking-[0.28em] text-[#b23a26] dark:text-[#f87171]">Cardápio Torre de Pizza</span>
+      <h2 class="mt-2 font-display text-3xl sm:text-4xl font-bold text-[#2f4a32] dark:text-[#faf5ec]">Escolha o seu pedido</h2>
+      <p class="mt-3 text-sm text-[#6f6457] dark:text-[#c4b5a2]">
+        Pizzas artesanais, hambúrgueres, Sub Torre, combos, pastéis, calzones, porções, bebidas e gelados.
+      </p>
+    </div>
+
+    <!-- Campo de Busca Instantâneo -->
+    <div class="relative mx-auto mb-6 max-w-xl">
+      <svg class="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-[#7a8450]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+      <input
+        id="search-input"
+        type="search"
+        oninput="handleSearch(this.value)"
+        placeholder="Buscar no cardápio..."
+        aria-label="Buscar no cardápio"
+        class="w-full rounded-full border border-[#dccdb2] bg-[#faf5ec] py-4 pl-14 pr-5 text-sm text-[#2f4a32] shadow-sm outline-none transition focus:border-[#2f4a32] focus:ring-4 focus:ring-[#2f4a32]/10 dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#faf5ec]"
+      >
+    </div>
+
+    <!-- Navegação de Todas as Categorias da Torre de Pizza -->
+    <div class="no-scrollbar -mx-4 mb-7 flex gap-2 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0">
+      <button onclick="filterCategory('pizzas')" class="cat-btn active shrink-0 rounded-full border px-5 py-2.5 text-sm font-bold transition border-transparent bg-[#2f4a32] text-[#faf5ec] shadow-md">
+        Pizzas
+      </button>
+      <button onclick="filterCategory('hamburgueres')" class="cat-btn shrink-0 rounded-full border px-5 py-2.5 text-sm font-bold transition border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] hover:border-[#2f4a32]/40 hover:bg-[#e8d9be]/50 dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#c4b5a2]">
+        Hambúrgueres
+      </button>
+      <button onclick="filterCategory('subtorre')" class="cat-btn shrink-0 rounded-full border px-5 py-2.5 text-sm font-bold transition border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] hover:border-[#2f4a32]/40 hover:bg-[#e8d9be]/50 dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#c4b5a2]">
+        Sub Torre
+      </button>
+      <button onclick="filterCategory('combos')" class="cat-btn shrink-0 rounded-full border px-5 py-2.5 text-sm font-bold transition border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] hover:border-[#2f4a32]/40 hover:bg-[#e8d9be]/50 dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#c4b5a2]">
+        Combos
+      </button>
+      <button onclick="filterCategory('pasteis')" class="cat-btn shrink-0 rounded-full border px-5 py-2.5 text-sm font-bold transition border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] hover:border-[#2f4a32]/40 hover:bg-[#e8d9be]/50 dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#c4b5a2]">
+        Pastéis Chineses
+      </button>
+      <button onclick="filterCategory('calzones')" class="cat-btn shrink-0 rounded-full border px-5 py-2.5 text-sm font-bold transition border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] hover:border-[#2f4a32]/40 hover:bg-[#e8d9be]/50 dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#c4b5a2]">
+        Calzones
+      </button>
+      <button onclick="filterCategory('porcoes')" class="cat-btn shrink-0 rounded-full border px-5 py-2.5 text-sm font-bold transition border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] hover:border-[#2f4a32]/40 hover:bg-[#e8d9be]/50 dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#c4b5a2]">
+        Porções
+      </button>
+      <button onclick="filterCategory('bebidas')" class="cat-btn shrink-0 rounded-full border px-5 py-2.5 text-sm font-bold transition border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] hover:border-[#2f4a32]/40 hover:bg-[#e8d9be]/50 dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#c4b5a2]">
+        Bebidas
+      </button>
+      <button onclick="filterCategory('gelados')" class="cat-btn shrink-0 rounded-full border px-5 py-2.5 text-sm font-bold transition border-[#dccdb2] bg-[#faf5ec] text-[#4e3220] hover:border-[#2f4a32]/40 hover:bg-[#e8d9be]/50 dark:bg-[#1a1412] dark:border-[#382b24] dark:text-[#c4b5a2]">
+        Gelados
+      </button>
+    </div>
+
+    <!-- Banner Oficial de Informações das Pizzas Torre de Pizza -->
+    <div id="pizza-notice-box" class="mb-7 rounded-3xl border border-[#dccdb2] bg-[#e8d9be]/30 p-5 dark:bg-white/5 dark:border-[#382b24]">
+      <div class="flex items-start gap-3">
+        <svg class="mt-0.5 h-5 w-5 shrink-0 text-[#b23a26] dark:text-[#f87171]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div>
+          <p class="text-sm font-bold text-[#2f4a32] dark:text-[#faf5ec]">Informações das pizzas</p>
+          <div class="mt-1.5 space-y-1">
+            <p class="text-xs leading-relaxed text-[#6f6457] dark:text-[#c4b5a2]">• Pizza Grande (40 cm) acompanha refrigerante 2L Kuat ou Convenção.</p>
+            <p class="text-xs leading-relaxed text-[#6f6457] dark:text-[#c4b5a2]">• Acréscimo de Catupiry ou Cheddar: R$ 6,00.</p>
+            <p class="text-xs leading-relaxed text-[#6f6457] dark:text-[#c4b5a2]">• Linha Premium — Catupiry, Cheddar ou Cream Cheese: R$ 8,00.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid de Produtos -->
+    <div id="products-grid" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <!-- Inserido dinamicamente via JS -->
+    </div>
+  </section>
+
+  <!-- ==================== 4. SOBRE ==================== -->
+  <section id="sobre" class="mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24">
+    <div class="grid items-center gap-10 md:grid-cols-2 md:gap-14">
+      <div class="relative">
+        <img src="assets/about-pizzeria.webp" alt="Preparo artesanal na Torre de Pizza" class="w-full rounded-[2rem] object-cover shadow-2xl">
+        <div class="absolute -bottom-6 left-6 rounded-2xl bg-[#faf5ec] px-5 py-4 shadow-xl border border-[#dccdb2] dark:bg-[#1a1412] dark:border-[#382b24]">
+          <p class="font-display text-2xl font-bold text-[#b23a26] dark:text-[#f87171]">+265</p>
+          <p class="text-xs font-medium text-[#6f6457] dark:text-[#c4b5a2]">avaliações públicas</p>
+        </div>
+      </div>
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.28em] text-[#b23a26] dark:text-[#f87171]">Sobre a Torre de Pizza</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-[#2f4a32] sm:text-4xl dark:text-[#faf5ec]">Tradição de bairro, sabor de verdade</h2>
+        <p class="mt-4 text-base leading-relaxed text-[#6f6457] dark:text-[#c4b5a2]">
+          A Torre de Pizza, localizada em Campo Grande, no Rio de Janeiro, oferece uma experiência gastronômica saborosa e prática para quem deseja pedir em casa via delivery, retirar no balcão ou saborear no nosso salão.
+        </p>
+        <div class="mt-8 space-y-4">
+          <div class="flex items-start gap-4">
+            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[#e8d9be] text-[#2f4a32] text-xl">✨</span>
+            <div>
+              <p class="font-bold text-[#2f4a32] dark:text-[#faf5ec]">Ingredientes de verdade</p>
+              <p class="text-sm text-[#6f6457] dark:text-[#c4b5a2]">Massa de fermentação lenta, molho de tomate fresco e queijos selecionados.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[#e8d9be] text-[#2f4a32] text-xl">🤝</span>
+            <div>
+              <p class="font-bold text-[#2f4a32] dark:text-[#faf5ec]">Acolhimento</p>
+              <p class="text-sm text-[#6f6457] dark:text-[#c4b5a2]">Atendimento acolhedor de bairro, com a atenção e carinho que você merece.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <span class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[#e8d9be] text-[#2f4a32] text-xl">⏱️</span>
+            <div>
+              <p class="font-bold text-[#2f4a32] dark:text-[#faf5ec]">Praticidade</p>
+              <p class="text-sm text-[#6f6457] dark:text-[#c4b5a2]">Delivery ágil, retirada rápida no balcão ou mesa confortável na casa.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 5. CONTATO / LOCALIZAÇÃO ==================== -->
+  <section id="contato" class="mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24">
+    <div class="overflow-hidden rounded-[2.5rem] bg-[#2f4a32] p-8 shadow-2xl sm:p-12 text-[#faf5ec]">
+      <div class="grid gap-10 md:grid-cols-2 md:items-center">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.28em] text-[#eab308]">Onde nos encontrar</p>
+          <h2 class="mt-3 font-display text-3xl font-bold sm:text-4xl text-[#faf5ec]">Venha, retire ou receba em casa</h2>
+          <div class="mt-6 space-y-4 text-[#e8d9be]/90">
+            <p class="flex items-start gap-3 text-sm leading-relaxed">
+              <svg class="mt-0.5 h-5 w-5 shrink-0 text-[#eab308]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              </svg>
+              R. Domingos Alves Ribeiro, 28 — Campo Grande, Rio de Janeiro – RJ
+            </p>
+            <p class="flex items-center gap-3 text-sm">
+              <svg class="h-5 w-5 shrink-0 text-[#eab308]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+              +55 21 96990-2994
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-3.5">
+          <a href="https://www.google.com/maps/dir/?api=1&destination=R.+Domingos+Alves+Ribeiro,+28,+Campo+Grande,+Rio+de+Janeiro,+RJ" target="_blank" rel="noreferrer" class="inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-[#faf5ec] px-6 py-4 text-base font-bold text-[#2f4a32] shadow-lg hover:bg-[#e8d9be] transition">
+            <svg class="h-5 w-5 text-[#b23a26]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+            </svg>
+            Abrir Rota no Google Maps
+          </a>
+          <a href="https://wa.me/5521969902994?text=Ol%C3%A1!%20Gostaria%20de%20fazer%20um%20pedido%20na%20Torre%20de%20Pizza." target="_blank" rel="noreferrer" class="inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-[#25D366] px-6 py-4 text-base font-bold text-white shadow-lg hover:brightness-95 transition">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M20.4 11.6a8.4 8.4 0 0 1-12.5 7.35L3 20.5l1.5-4.75A8.4 8.4 0 1 1 20.4 11.6Z" />
+            </svg>
+            Pedir pelo WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 6. FOOTER ==================== -->
+  <footer class="border-t border-[#dccdb2] bg-[#faf5ec] py-10 dark:bg-[#1a1412] dark:border-[#382b24]">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6">
+      <div class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
+        <div class="flex min-w-0 items-center gap-3">
+          <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#2f4a32] text-lg text-white">🍕</span>
+          <div class="min-w-0">
+            <p class="truncate font-display font-bold text-[#2f4a32] dark:text-[#faf5ec]">Torre de Pizza</p>
+            <p class="truncate text-xs text-[#6f6457] dark:text-[#c4b5a2]">Todos os dias, das 18h às 00h</p>
+          </div>
+        </div>
+        <p class="text-right text-xs text-[#6f6457] dark:text-[#c4b5a2]">
+          © 2026 Torre de Pizza. Todos os direitos reservados.
+        </p>
+      </div>
+
+      <!-- Assinatura do Desenvolvedor Rhenan -->
+      <div class="mt-8 pt-6 border-t border-[#dccdb2]/60 text-center dark:border-[#382b24]">
+        <p class="flex items-center justify-center gap-2 text-[15px] text-[#6f6457] dark:text-[#c4b5a2]">
+          <span class="font-mono text-lg font-black text-[#b23a26]">&lt;/&gt;</span>
+          <span>Desenvolvido por <strong class="font-bold text-[#b23a26]">Rhenan</strong></span>
+        </p>
+
+        <a href="https://wa.me/5521973152056?text=Ol%C3%A1%2C%20Rhenan!%20Vi%20o%20site%20que%20voc%C3%AA%20desenvolveu%20para%20a%20Torre%20de%20Pizza%20e%20gostaria%20de%20conversar%20sobre%20um%20projeto." target="_blank" rel="noopener noreferrer" class="mx-auto mt-3 flex min-h-[58px] w-full max-w-[340px] items-center justify-center gap-3 rounded-2xl border border-[#25D366] px-5 py-2.5 text-left transition hover:bg-[#25D366]/10">
+          <span class="flex h-8 w-8 shrink-0 items-center justify-center text-[#25D366]">
+            <svg class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M20.4 11.6a8.4 8.4 0 0 1-12.5 7.35L3 20.5l1.5-4.75A8.4 8.4 0 1 1 20.4 11.6Z" />
+            </svg>
+          </span>
+          <span class="flex min-h-10 flex-col justify-center leading-none">
+            <strong class="block text-base font-extrabold leading-none text-[#2f4a32] dark:text-[#faf5ec]">(21) 97315-2056</strong>
+            <small class="mt-1 block text-xs leading-none text-[#6f6457] dark:text-[#c4b5a2]">Fale comigo no WhatsApp</small>
+          </span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== MODAL DE INFORMAÇÕES (DO PRINT) ==================== -->
+  <div id="info-modal" class="hidden fixed inset-0 z-[100] flex items-end justify-center p-4 sm:items-center">
+    <div onclick="closeInfoModal()" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+
+    <div role="dialog" aria-modal="true" class="animate-surgir relative z-10 max-h-[90vh] w-full max-w-md overflow-y-auto rounded-[2rem] border border-[#dccdb2] bg-[#faf5ec] p-5 text-[#4e3220] shadow-2xl sm:p-6 dark:bg-[#1a1412] dark:text-[#faf5ec] dark:border-[#382b24]">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.24em] text-[#7a8450]">Contato e localização</p>
+          <h2 class="mt-2 font-display text-2xl font-bold text-[#2f4a32] dark:text-[#faf5ec]">
+            Informações
+          </h2>
+          <p class="mt-2 text-sm leading-relaxed text-[#6f6457] dark:text-[#c4b5a2]">
+            Fale com a Torre de Pizza, acesse o Instagram ou abra a rota direto no Google Maps.
+          </p>
+        </div>
+
+        <button type="button" onclick="closeInfoModal()" aria-label="Fechar" class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#e8d9be] text-[#2f4a32] hover:bg-[#dccdb2] transition dark:bg-white/10 dark:text-[#faf5ec]">
+          ✕
+        </button>
+      </div>
+
+      <div class="mt-6 space-y-3">
+        <!-- WhatsApp Oficial Torre de Pizza -->
+        <a href="https://wa.me/5521969902994?text=Ol%C3%A1!%20Gostaria%20de%20mais%20informa%C3%A7%C3%B5es%20sobre%20a%20Torre%20de%20Pizza." target="_blank" rel="noreferrer" class="flex items-center gap-4 rounded-2xl border border-[#dccdb2] bg-[#f1e7d5]/50 p-4 transition hover:border-[#2f4a32]/40 hover:bg-[#e8d9be]/50 dark:border-[#382b24] dark:bg-white/5">
+          <span class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[#2f4a32] text-[#faf5ec]">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M20.4 11.6a8.4 8.4 0 0 1-12.5 7.35L3 20.5l1.5-4.75A8.4 8.4 0 1 1 20.4 11.6Z" />
+            </svg>
+          </span>
+          <span class="min-w-0 flex-1">
+            <span class="block text-sm font-bold text-[#2f4a32] dark:text-[#faf5ec]">WhatsApp</span>
+            <span class="block truncate text-sm text-[#6f6457] dark:text-[#c4b5a2]">+55 21 96990-2994</span>
+          </span>
+          <span class="text-xs font-bold text-[#2f4a32] dark:text-[#faf5ec]">Abrir →</span>
+        </a>
+
+        <!-- Instagram Oficial -->
+        <a href="https://www.instagram.com/torredepizzacg/" target="_blank" rel="noreferrer" class="flex items-center gap-4 rounded-2xl border border-[#dccdb2] bg-[#f1e7d5]/50 p-4 transition hover:border-[#2f4a32]/40 hover:bg-[#e8d9be]/50 dark:border-[#382b24] dark:bg-white/5">
+          <span class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[#b23a26] text-[#faf5ec]">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </span>
+          <span class="min-w-0 flex-1">
+            <span class="block text-sm font-bold text-[#2f4a32] dark:text-[#faf5ec]">Instagram</span>
+            <span class="block truncate text-sm text-[#6f6457] dark:text-[#c4b5a2]">@torredepizzacg</span>
+          </span>
+          <span class="text-xs font-bold text-[#2f4a32] dark:text-[#faf5ec]">Abrir →</span>
+        </a>
+
+        <!-- Como chegar Google Maps -->
+        <a href="https://www.google.com/maps/dir/?api=1&destination=R.+Domingos+Alves+Ribeiro,+28,+Campo+Grande,+Rio+de+Janeiro,+RJ" target="_blank" rel="noreferrer" class="flex items-center gap-4 rounded-2xl border border-[#dccdb2] bg-[#f1e7d5]/50 p-4 transition hover:border-[#2f4a32]/40 hover:bg-[#e8d9be]/50 dark:border-[#382b24] dark:bg-white/5">
+          <span class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[#7a8450] text-[#faf5ec]">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+            </svg>
+          </span>
+          <span class="min-w-0 flex-1">
+            <span class="block text-sm font-bold text-[#2f4a32] dark:text-[#faf5ec]">Como chegar</span>
+            <span class="block truncate text-sm text-[#6f6457] dark:text-[#c4b5a2]">Campo Grande, Rio de Janeiro - RJ</span>
+          </span>
+          <span class="text-xs font-bold text-[#2f4a32] dark:text-[#faf5ec]">Rota →</span>
+        </a>
+      </div>
+
+      <!-- Linha do Desenvolvedor Rhenan -->
+      <div class="mt-5 border-t border-[#dccdb2] pt-4 dark:border-[#382b24]">
+        <div class="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#25D366]/40 bg-[#25D366]/10 px-3.5 py-3">
+          <div class="flex min-w-0 items-center gap-3">
+            <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-[#25D366] text-white font-bold text-sm">
+              &lt;/&gt;
+            </span>
+            <div class="min-w-0">
+              <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-[#159447] dark:text-[#4ade80]">Desenvolvedor do site</p>
+              <p class="truncate text-sm font-bold text-[#2f4a32] dark:text-[#faf5ec]">Rhenan</p>
+            </div>
+          </div>
+
+          <a href="https://wa.me/5521973152056?text=Ol%C3%A1%2C%20Rhenan!%20Vi%20o%20site%20que%20voc%C3%AA%20desenvolveu%20para%20a%20Torre%20de%20Pizza%20e%20gostaria%20de%20conversar%20sobre%20um%20design%20baseado%20na%20identidade%20visual%20da%20minha%20empresa%20gratuitamente!" target="_blank" rel="noopener noreferrer" class="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-full bg-[#25D366] px-3.5 py-2 text-xs font-bold text-white transition hover:brightness-95 shadow-sm">
+            WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL DE ESCOLHA DE TAMANHO / OPÇÃO ==================== -->
+  <div id="product-modal" class="hidden fixed inset-0 z-[100] flex items-end justify-center p-4 sm:items-center">
+    <div onclick="closeProductModal()" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+    <div class="animate-surgir relative z-10 w-full max-w-lg rounded-[2rem] border border-[#dccdb2] bg-[#faf5ec] p-6 shadow-2xl dark:bg-[#1a1412] dark:border-[#382b24]">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <span id="modal-category-badge" class="text-xs font-bold uppercase tracking-wider text-[#b23a26]">Pizzas</span>
+          <h3 id="modal-product-name" class="font-display text-2xl font-bold text-[#2f4a32] dark:text-[#faf5ec]">Nome da Pizza</h3>
+          <p id="modal-product-desc" class="mt-1 text-xs text-[#6f6457] dark:text-[#c4b5a2]">Descrição</p>
+        </div>
+        <button onclick="closeProductModal()" class="h-9 w-9 rounded-full bg-[#e8d9be] text-[#2f4a32] grid place-items-center font-bold dark:bg-white/10 dark:text-[#faf5ec]">✕</button>
+      </div>
+
+      <div id="modal-variants-section" class="mt-5">
+        <p class="text-xs font-bold uppercase tracking-wider text-[#6f6457] dark:text-[#c4b5a2] mb-2.5">Escolha o tamanho:</p>
+        <div id="modal-variants-list" class="grid grid-cols-3 gap-2"></div>
+      </div>
+
+      <div id="modal-refri-bonus" class="hidden mt-4 flex items-center gap-2.5 rounded-2xl bg-[#e8d9be]/40 px-3.5 py-2.5 border border-[#dccdb2] dark:bg-white/5 dark:border-[#382b24]">
+        <span class="text-xl">🎁</span>
+        <div>
+          <p class="text-xs font-bold text-[#2f4a32] dark:text-[#faf5ec]">Pizza GRANDE ganha Refri 2L!</p>
+          <p class="text-[11px] text-[#6f6457] dark:text-[#c4b5a2]">Kuat ou Convenção gelado</p>
+        </div>
+      </div>
+
+      <div class="mt-6 pt-4 border-t border-[#dccdb2] dark:border-[#382b24] flex items-center justify-between">
+        <div>
+          <span class="block text-xs text-[#6f6457] dark:text-[#c4b5a2]">Total</span>
+          <span id="modal-total-price" class="font-display text-2xl font-bold text-[#b23a26] dark:text-[#f87171]">R$ 0,00</span>
+        </div>
+        <button onclick="confirmModalAddToCart()" class="px-6 py-3 rounded-full bg-[#2f4a32] text-[#faf5ec] font-bold text-sm shadow hover:bg-[#243a26] transition active:scale-95">
+          Adicionar ao Carrinho
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CARRINHO DRAWER LATERAL ==================== -->
+  <div id="cart-drawer-overlay" class="hidden fixed inset-0 z-[90] bg-black/60 backdrop-blur-sm" onclick="closeCart()"></div>
+  <aside id="cart-drawer" class="fixed top-0 right-0 z-[100] h-full w-full max-w-md transform translate-x-full transition-transform duration-300 ease-in-out bg-[#faf5ec] border-l border-[#dccdb2] shadow-2xl flex flex-col dark:bg-[#1a1412] dark:border-[#382b24]">
+    <div class="p-5 border-b border-[#dccdb2] flex items-center justify-between dark:border-[#382b24]">
+      <div class="flex items-center gap-2">
+        <span class="text-xl">🛍️</span>
+        <h3 class="font-display text-xl font-bold text-[#2f4a32] dark:text-[#faf5ec]">Seu Pedido</h3>
+      </div>
+      <button onclick="closeCart()" class="h-9 w-9 rounded-full bg-[#e8d9be] text-[#2f4a32] grid place-items-center font-bold hover:bg-[#dccdb2] transition dark:bg-white/10 dark:text-[#faf5ec]">
+        ✕
+      </button>
+    </div>
+
+    <div id="cart-items" class="flex-1 overflow-y-auto p-5 space-y-4">
+      <div id="cart-empty-state" class="text-center py-12">
+        <span class="text-5xl">🍕</span>
+        <p class="mt-4 font-bold text-[#2f4a32] dark:text-[#faf5ec]">Seu carrinho está vazio</p>
+        <p class="mt-1 text-xs text-[#6f6457] dark:text-[#c4b5a2]">Escolha itens deliciosos no cardápio!</p>
+      </div>
+    </div>
+
+    <div id="cart-footer" class="p-5 border-t border-[#dccdb2] bg-[#f1e7d5]/40 space-y-4 dark:border-[#382b24] dark:bg-white/5">
+      <div class="flex justify-between items-center text-sm font-bold text-[#2f4a32] dark:text-[#faf5ec]">
+        <span>Subtotal:</span>
+        <span id="cart-subtotal" class="font-display text-lg font-bold text-[#b23a26] dark:text-[#f87171]">R$ 0,00</span>
+      </div>
+
+      <div class="space-y-2">
+        <input id="customer-name" type="text" placeholder="Seu nome" class="w-full px-4 py-2.5 rounded-xl border border-[#dccdb2] bg-[#faf5ec] text-sm text-[#2f4a32] outline-none focus:border-[#2f4a32] dark:bg-[#251d18] dark:border-[#382b24] dark:text-[#faf5ec]">
+        <input id="customer-address" type="text" placeholder="Endereço para entrega (ou 'Retirada no balcão')" class="w-full px-4 py-2.5 rounded-xl border border-[#dccdb2] bg-[#faf5ec] text-sm text-[#2f4a32] outline-none focus:border-[#2f4a32] dark:bg-[#251d18] dark:border-[#382b24] dark:text-[#faf5ec]">
+      </div>
+
+      <button onclick="checkoutWhatsApp()" class="w-full py-4 rounded-full bg-[#25D366] hover:brightness-95 text-white font-bold text-base flex items-center justify-center gap-2 shadow-lg transition active:scale-95">
+        <span>Finalizar Pedido no WhatsApp</span>
+        <span>→</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ==================== CATÁLOGO COMPLETO TORRE DE PIZZA ==================== -->
+  <script>
+    const allProducts = [
+      // PIZZAS (Broto / Média / Grande)
+      { id: "pizza-calabresa", name: "Calabresa", category: "pizzas", desc: "Molho, mussarela, cebola, calabresa e orégano.", prices: { broto: 22, media: 32, grande: 47 }, image: "assets/hero-calabresa-catupiry.webp", badge: "Mais Pedida" },
+      { id: "pizza-frango-catupiry", name: "Frango c/ Catupiry", category: "pizzas", desc: "Molho, mussarela, frango desfiado, Catupiry original e orégano.", prices: { broto: 24, media: 35, grande: 52 }, image: "assets/fatia-calabresa-catupiry.webp", badge: "Favorita" },
+      { id: "pizza-mussarela", name: "Mussarela", category: "pizzas", desc: "Molho especial, mussarela generosa, tomate fresco e orégano.", prices: { broto: 22, media: 32, grande: 47 }, image: "assets/hero-calabresa-catupiry.webp" },
+      { id: "pizza-portuguesa", name: "Portuguesa", category: "pizzas", desc: "Molho, mussarela, presunto, tomate, pimentão, cebola, ervilha, milho, ovo e orégano.", prices: { broto: 24, media: 35, grande: 52 }, image: "assets/hero-calabresa-catupiry.webp" },
+      { id: "pizza-4-queijos", name: "4 Queijos", category: "pizzas", desc: "Molho, mussarela, provolone, Catupiry, Cheddar e orégano.", prices: { broto: 27, media: 38, grande: 55 }, image: "assets/hero-calabresa-catupiry.webp" },
+      { id: "pizza-marguerita", name: "Marguerita", category: "pizzas", desc: "Molho especial, mussarela, fatias de tomate fresco, manjericão e orégano.", prices: { broto: 24, media: 35, grande: 52 }, image: "assets/hero-calabresa-catupiry.webp" },
+      { id: "pizza-carne-seca", name: "Carne Seca", category: "pizzas", desc: "Molho, mussarela, carne seca desfiada temperada, cebola e orégano.", prices: { broto: 29, media: 40, grande: 57 }, image: "assets/hero-calabresa-catupiry.webp" },
+      { id: "pizza-chocolate", name: "Chocolate com Morango", category: "pizzas", desc: "Mussarela, chocolate ao leite cremoso e morangos frescos selecionados.", prices: { broto: 26, media: 37, grande: 55 }, image: "assets/fatia-calabresa-catupiry.webp" },
+
+      // HAMBÚRGUERES
+      { id: "big-torre", name: "Big Torre", category: "hamburgueres", desc: "2 hambúrgueres de carne, alface, 2 queijos, molho especial, cebola, picles, bacon e pão com gergelim.", price: 16.50, image: "assets/ingredientes.webp", badge: "Destaque" },
+      { id: "torre-picanha", name: "Torre Picanha", category: "hamburgueres", desc: "4 hambúrgueres de carne, alface, 3 queijos, molho especial, cebola, picles, bacon e pão com gergelim.", price: 27.00, image: "assets/ingredientes.webp", badge: "Campeão" },
+      { id: "duplo-torre-picanha", name: "Duplo Torre Picanha", category: "hamburgueres", desc: "2 hambúrgueres de carne, alface, 2 queijos, molho especial, cebola, picles, tomate, bacon e gergelim.", price: 22.00, image: "assets/ingredientes.webp" },
+      { id: "quatro-queijos-torre", name: "Quatro Queijos Torre", category: "hamburgueres", desc: "2 hambúrgueres de carne, Catupiry, Cheddar cremoso, provolone, Cheddar fatiado, molho especial.", price: 18.00, image: "assets/ingredientes.webp" },
+      { id: "cheeseburguer", name: "Cheeseburguer", category: "hamburgueres", desc: "Pão fresquinho, hambúrguer de carne suculento e queijo derretido.", price: 8.00, image: "assets/ingredientes.webp" },
+
+      // SUB TORRE
+      { id: "sub-torre-carne", name: "Sub Torre Carne", category: "subtorre", desc: "Carne, cebola, picles, alface, Cheddar ou mussarela, tomate, azeitona, pimentão e molho Billy Jack.", price: 21.00, image: "assets/ingredientes.webp" },
+      { id: "sub-torre-frango", name: "Sub Torre Frango", category: "subtorre", desc: "Frango, cebola, picles, alface, Cheddar ou mussarela, tomate, azeitona, pimentão e molho Billy Jack.", price: 21.00, image: "assets/ingredientes.webp" },
+
+      // COMBOS
+      { id: "torre-feliz", name: "Torre Feliz", category: "combos", desc: "Cheeseburguer + batata frita crocante + refrigerante 250 ml.", price: 17.00, image: "assets/combo-calabresa-guarana.webp", badge: "Kids & Rápido" },
+      { id: "combo-bom-demais", name: "Combo Bom Demais", category: "combos", desc: "2 hambúrgueres Torre Mas Que Bem + Kuat 2L + batata com bacon e Cheddar.", price: 60.00, image: "assets/combo-calabresa-guarana.webp", badge: "Super Combo" },
+      { id: "promocao-super-casado", name: "Promoção Super Casado", category: "combos", desc: "2 Casados + Guaraná Antarctica 1L + batata com bacon e Cheddar.", price: 42.00, image: "assets/combo-calabresa-guarana.webp", badge: "Promoção" },
+      { id: "combo-amigos", name: "Combo Amigos & Família", category: "combos", desc: "2 Pizzas Grandes 40cm Tradicionais + 2 Refrigerantes 2L gelados.", price: 119.90, image: "assets/amigos-palazzo.webp", badge: "Destaque" },
+
+      // PASTÉIS CHINESES
+      { id: "pastel-carne", name: "Pastel de Carne", category: "pasteis", desc: "Massa crocante sequinha recheada com carne moída bem temperada.", price: 14.00, image: "assets/ingredientes.webp" },
+      { id: "pastel-queijo", name: "Pastel de Queijo Mussarela", category: "pasteis", desc: "Queijo mussarela derretido com toque especial de orégano.", price: 13.00, image: "assets/ingredientes.webp" },
+      { id: "pastel-frango-catupiry", name: "Pastel Frango c/ Catupiry", category: "pasteis", desc: "Frango desfiado temperado com Catupiry cremoso.", price: 15.00, image: "assets/ingredientes.webp" },
+
+      // CALZONES
+      { id: "calzone-4-queijos", name: "Calzone 4 Queijos", category: "calzones", desc: "Massa de pizza fechada recheada com mussarela, provolone, Catupiry, Cheddar e orégano.", price: 17.00, image: "assets/hero-calabresa-catupiry.webp" },
+      { id: "calzone-ascoly", name: "Calzone Ascoly", category: "calzones", desc: "Mussarela, provolone, linguiça calabresa e orégano.", price: 17.00, image: "assets/hero-calabresa-catupiry.webp" },
+
+      // PORÇÕES
+      { id: "batata-bacon-cheddar", name: "Batata c/ Bacon e Cheddar", category: "porcoes", desc: "Porção generosa de batata frita coberta com Cheddar derretido e bacon crocante.", price: 35.00, image: "assets/ingredientes.webp", badge: "Top Pedida" },
+      { id: "porcao-fritas", name: "Porção de Fritas Tradicional", category: "porcoes", desc: "Porção de batatas fritas crocantes por fora e macias por dentro.", price: 25.00, image: "assets/ingredientes.webp" },
+      { id: "nuggets-20", name: "Nuggets (20 unidades)", category: "porcoes", desc: "20 empanados de frango crocantes com molho especial.", price: 26.00, image: "assets/ingredientes.webp" },
+
+      // BEBIDAS
+      { id: "guarana-2l", name: "Guaraná Antarctica 2L", category: "bebidas", desc: "Refrigerante 2 Litros geladíssimo.", price: 12.00, image: "assets/combo-calabresa-guarana.webp" },
+      { id: "coca-cola-2l", name: "Coca-Cola 2L", category: "bebidas", desc: "Refrigerante Coca-Cola 2 Litros gelado.", price: 14.00, image: "assets/combo-calabresa-guarana.webp" },
+      { id: "suco-natural", name: "Sucos Naturais 500ml", category: "bebidas", desc: "Morango, Abacaxi, Manga, Maracujá ou Acerola.", price: 7.00, image: "assets/combo-calabresa-guarana.webp" },
+
+      // GELADOS
+      { id: "milkshake-500", name: "Milk-shake 500ml", category: "gelados", desc: "Ovomaltine, Morango, Chocolate, Creme ou Coco com calda especial.", price: 15.00, image: "assets/combo-calabresa-guarana.webp" },
+      { id: "acai-500", name: "Açaí no Copo 500ml", category: "gelados", desc: "Açaí cremoso com calda, leite condensado, paçoca e guloseimas.", price: 16.00, image: "assets/combo-calabresa-guarana.webp" }
+    ];
+
+    let currentCategory = 'pizzas';
+    let currentSearch = '';
+    let cart = [];
+    let modalProduct = null;
+    let selectedSize = 'grande';
+
+    function renderProducts() {
+      const grid = document.getElementById('products-grid');
+      const noticeBox = document.getElementById('pizza-notice-box');
+
+      const filtered = allProducts.filter(p => {
+        const matchesCategory = currentSearch ? true : p.category === currentCategory;
+        const matchesSearch = !currentSearch || p.name.toLowerCase().includes(currentSearch.toLowerCase()) || p.desc.toLowerCase().includes(currentSearch.toLowerCase());
+        return matchesCategory && matchesSearch;
+      });
+
+      if (noticeBox) {
+        if (!currentSearch && currentCategory === 'pizzas') {
+          noticeBox.classList.remove('hidden');
+        } else {
+          noticeBox.classList.add('hidden');
+        }
+      }
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full mx-auto max-w-md rounded-3xl border border-dashed border-[#dccdb2] bg-[#faf5ec] px-8 py-14 text-center shadow-sm dark:bg-[#1a1412] dark:border-[#382b24]">
+            <span class="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-2xl bg-[#e8d9be] text-2xl text-[#2f4a32]">🍽️</span>
+            <h3 class="font-display text-xl font-bold text-[#2f4a32] dark:text-[#faf5ec]">Nenhum item encontrado</h3>
+            <p class="mt-2 text-xs text-[#6f6457] dark:text-[#c4b5a2]">Tente buscar com outra palavra ou selecione outra categoria.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => {
+        const isPizza = Boolean(p.prices);
+        const displayPrice = isPizza ? p.prices.grande : p.price;
+        const priceLabel = isPizza ? 'A partir de R$ ' + p.prices.broto.toFixed(2).replace('.', ',') : 'R$ ' + p.price.toFixed(2).replace('.', ',');
+
+        return `
+          <article class="flex flex-col rounded-3xl border border-[#dccdb2] bg-[#faf5ec] p-5 shadow-lg transition-all duration-300 hover:shadow-2xl dark:bg-[#1a1412] dark:border-[#382b24]">
+            <div class="relative aspect-video w-full overflow-hidden rounded-2xl bg-[#e8d9be]/30 dark:bg-white/5">
+              <img src="${p.image}" alt="${p.name}" class="h-full w-full object-cover transition-transform duration-500 hover:scale-105" loading="lazy">
+              ${p.badge ? `<span class="absolute top-3 right-3 rounded-full bg-[#b23a26] px-3 py-1 text-[11px] font-bold text-white shadow">${p.badge}</span>` : ''}
+            </div>
+
+            <div class="mt-4 flex-1 flex flex-col">
+              <h3 class="font-display text-lg font-bold text-[#2f4a32] dark:text-[#faf5ec]">${p.name}</h3>
+              <p class="mt-1.5 text-xs text-[#6f6457] line-clamp-2 dark:text-[#c4b5a2] flex-1">${p.desc}</p>
+              
+              ${isPizza ? `
+                <div class="mt-3 flex items-center gap-2 rounded-xl bg-[#e8d9be]/40 px-3 py-1.5 border border-[#dccdb2] dark:bg-white/5 dark:border-[#382b24]">
+                  <span class="text-sm">🎁</span>
+                  <p class="text-[11px] font-bold text-[#2f4a32] dark:text-[#faf5ec]">Pizza GRANDE ganha Refri 2L!</p>
+                </div>
+              ` : ''}
+
+              <div class="mt-4 flex items-end justify-between pt-3 border-t border-[#dccdb2]/60 dark:border-[#382b24]">
+                <div>
+                  <span class="block text-[11px] text-[#6f6457] dark:text-[#c4b5a2]">${isPizza ? 'A partir de' : 'Valor'}</span>
+                  <span class="font-display text-xl font-bold text-[#b23a26] dark:text-[#f87171]">${priceLabel}</span>
+                </div>
+                <button onclick="handleItemClick('${p.id}')" class="rounded-full bg-[#2f4a32] hover:bg-[#243a26] px-4 py-2.5 text-xs font-bold text-[#faf5ec] shadow transition active:scale-95 flex items-center gap-1.5">
+                  <span>+ ${isPizza ? 'Escolher tamanho' : 'Adicionar'}</span>
+                </button>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function filterCategory(cat) {
+      currentCategory = cat;
+      currentSearch = '';
+      document.getElementById('search-input').value = '';
+
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.classList.remove('border-transparent', 'bg-[#2f4a32]', 'text-[#faf5ec]', 'shadow-md', 'active');
+        btn.classList.add('border-[#dccdb2]', 'bg-[#faf5ec]', 'text-[#4e3220]');
+      });
+      event.target.classList.remove('border-[#dccdb2]', 'bg-[#faf5ec]', 'text-[#4e3220]');
+      event.target.classList.add('border-transparent', 'bg-[#2f4a32]', 'text-[#faf5ec]', 'shadow-md', 'active');
+
+      renderProducts();
+    }
+
+    function handleSearch(val) {
+      currentSearch = val.trim();
+      renderProducts();
+    }
+
+    function handleItemClick(productId) {
+      const p = allProducts.find(item => item.id === productId);
+      if (!p) return;
+
+      if (p.prices) {
+        // Abrir modal de tamanho para pizzas
+        modalProduct = p;
+        selectedSize = 'grande';
+        document.getElementById('modal-product-name').textContent = p.name;
+        document.getElementById('modal-product-desc').textContent = p.desc;
+        renderModalSizes();
+        document.getElementById('product-modal').classList.remove('hidden');
+      } else {
+        // Item direto
+        addToCartDirect({
+          id: p.id,
+          name: p.name,
+          price: p.price,
+          image: p.image,
+          details: ''
+        });
+      }
+    }
+
+    function renderModalSizes() {
+      const container = document.getElementById('modal-variants-list');
+      const bonus = document.getElementById('modal-refri-bonus');
+      const totalEl = document.getElementById('modal-total-price');
+
+      const sizes = [
+        { key: 'broto', label: 'Broto (25cm)', price: modalProduct.prices.broto },
+        { key: 'media', label: 'Média (35cm)', price: modalProduct.prices.media },
+        { key: 'grande', label: 'Grande (40cm)', price: modalProduct.prices.grande },
+      ];
+
+      container.innerHTML = sizes.map(s => `
+        <button onclick="selectModalSize('${s.key}')" class="p-2.5 rounded-2xl border text-center transition ${selectedSize === s.key ? 'border-[#2f4a32] bg-[#2f4a32] text-white shadow' : 'border-[#dccdb2] bg-[#faf5ec] text-[#4e3220]'}">
+          <span class="block text-[11px] font-bold">${s.label}</span>
+          <span class="block text-xs font-extrabold mt-0.5">R$ ${s.price.toFixed(2).replace('.', ',')}</span>
+        </button>
+      `).join('');
+
+      if (selectedSize === 'grande') {
+        bonus.classList.remove('hidden');
+      } else {
+        bonus.classList.add('hidden');
+      }
+
+      totalEl.textContent = `R$ ${modalProduct.prices[selectedSize].toFixed(2).replace('.', ',')}`;
+    }
+
+    function selectModalSize(sizeKey) {
+      selectedSize = sizeKey;
+      renderModalSizes();
+    }
+
+    function closeProductModal() {
+      document.getElementById('product-modal').classList.add('hidden');
+    }
+
+    function confirmModalAddToCart() {
+      if (!modalProduct) return;
+      const sizeNames = { broto: 'Broto (25cm)', media: 'Média (35cm)', grande: 'Grande (40cm) + Refri 2L Grátis' };
+      addToCartDirect({
+        id: `${modalProduct.id}-${selectedSize}`,
+        name: `${modalProduct.name} [${sizeNames[selectedSize]}]`,
+        price: modalProduct.prices[selectedSize],
+        image: modalProduct.image,
+        details: sizeNames[selectedSize]
+      });
+      closeProductModal();
+    }
+
+    function addToCartDirect(itemObj) {
+      const existing = cart.find(i => i.id === itemObj.id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ ...itemObj, qty: 1 });
+      }
+      updateCartUI();
+      openCart();
+    }
+
+    function changeQty(itemId, delta) {
+      const item = cart.find(i => i.id === itemId);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(i => i.id !== itemId);
+      }
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const totalQty = cart.reduce((acc, i) => acc + i.qty, 0);
+      const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+      const counter = document.getElementById('cart-counter');
+      const itemsContainer = document.getElementById('cart-items');
+      const subtotalEl = document.getElementById('cart-subtotal');
+
+      if (totalQty > 0) {
+        counter.textContent = totalQty;
+        counter.classList.remove('hidden');
+      } else {
+        counter.classList.add('hidden');
+      }
+
+      subtotalEl.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+
+      if (cart.length === 0) {
+        itemsContainer.innerHTML = `
+          <div id="cart-empty-state" class="text-center py-12">
+            <span class="text-5xl">🍕</span>
+            <p class="mt-4 font-bold text-[#2f4a32] dark:text-[#faf5ec]">Seu carrinho está vazio</p>
+            <p class="mt-1 text-xs text-[#6f6457] dark:text-[#c4b5a2]">Escolha pizzas deliciosas no cardápio!</p>
+          </div>
+        `;
+      } else {
+        itemsContainer.innerHTML = cart.map(item => `
+          <div class="flex items-center gap-3 rounded-2xl border border-[#dccdb2] bg-[#faf5ec] p-3 dark:bg-[#251d18] dark:border-[#382b24]">
+            <img src="${item.image}" alt="${item.name}" class="size-14 rounded-xl object-cover">
+            <div class="flex-1 min-w-0">
+              <h4 class="font-bold text-sm truncate text-[#2f4a32] dark:text-[#faf5ec]">${item.name}</h4>
+              <p class="text-xs font-bold text-[#b23a26] dark:text-[#f87171]">R$ ${(item.price * item.qty).toFixed(2).replace('.', ',')}</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="changeQty('${item.id}', -1)" class="size-7 rounded-full bg-[#e8d9be] text-[#2f4a32] grid place-items-center font-bold dark:bg-white/10 dark:text-[#faf5ec]">-</button>
+              <span class="text-xs font-bold">${item.qty}</span>
+              <button onclick="changeQty('${item.id}', 1)" class="size-7 rounded-full bg-[#e8d9be] text-[#2f4a32] grid place-items-center font-bold dark:bg-white/10 dark:text-[#faf5ec]">+</button>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function openCart() {
+      document.getElementById('cart-drawer-overlay').classList.remove('hidden');
+      document.getElementById('cart-drawer').classList.remove('translate-x-full');
+    }
+
+    function closeCart() {
+      document.getElementById('cart-drawer-overlay').classList.add('hidden');
+      document.getElementById('cart-drawer').classList.add('translate-x-full');
+    }
+
+    function checkoutWhatsApp() {
+      if (cart.length === 0) {
+        alert("Adicione pelo menos um item ao carrinho!");
+        return;
+      }
+      const name = document.getElementById('customer-name').value.trim() || 'Cliente';
+      const address = document.getElementById('customer-address').value.trim() || 'Retirada no Balcão';
+      const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+
+      let msg = `*🍕 NOVO PEDIDO - TORRE DE PIZZA*\n\n`;
+      msg += `*Nome:* ${name}\n`;
+      msg += `*Endereço:* ${address}\n\n`;
+      msg += `*ITENS DO PEDIDO:*\n`;
+
+      cart.forEach(i => {
+        msg += `• ${i.qty}x ${i.name} - R$ ${(i.price * i.qty).toFixed(2).replace('.', ',')}\n`;
+      });
+
+      msg += `\n*TOTAL: R$ ${subtotal.toFixed(2).replace('.', ',')}*\n`;
+      msg += `\nPedido realizado através do cardápio digital da Torre de Pizza!`;
+
+      const url = `https://wa.me/5521969902994?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+    }
+
+    // Modal de Informações do Print
+    const infoModal = document.getElementById('info-modal');
+    document.getElementById('btn-open-info').onclick = () => infoModal.classList.remove('hidden');
+    function closeInfoModal() { infoModal.classList.add('hidden'); }
+
+    // Carrinho Drawer
+    document.getElementById('btn-open-cart').onclick = openCart;
+
+    // Menu Mobile
+    const mobileMenu = document.getElementById('mobile-menu');
+    document.getElementById('btn-toggle-menu').onclick = () => {
+      mobileMenu.classList.toggle('hidden');
+    };
+    function closeMobileMenu() { mobileMenu.classList.add('hidden'); }
+
+    // Navbar Scroll Blur Effect
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('site-header');
+      if (window.scrollY > 30) {
+        header.classList.add('bg-[#faf5ec]/95', 'backdrop-blur-md', 'border-b', 'border-[#dccdb2]', 'shadow-sm', 'dark:bg-[#1a1412]/95', 'dark:border-[#382b24]');
+      } else {
+        header.classList.remove('bg-[#faf5ec]/95', 'backdrop-blur-md', 'border-b', 'border-[#dccdb2]', 'shadow-sm', 'dark:bg-[#1a1412]/95', 'dark:border-[#382b24]');
+      }
+    });
+
+    // Dark Mode Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.onclick = () => {
+      document.documentElement.classList.toggle('dark');
+    };
+
+    // Horário de Funcionamento Dinâmico (18h às 00h)
+    function updateOpenStatus() {
+      const now = new Date();
+      const h = now.getHours();
+      const isOpen = h >= 18 || h < 1;
+      const statusText = document.getElementById('hero-status-text');
+      if (isOpen) {
+        statusText.textContent = "Aberto agora · Fecha às 00:00";
+      } else {
+        statusText.textContent = "Fechado agora · Abre às 18:00";
+      }
+    }
+    updateOpenStatus();
+    setInterval(updateOpenStatus, 60000);
+
+    // Inicializar cardápio na categoria padrão 'pizzas'
+    renderProducts();
+  </script>
+</body>
+</html>
